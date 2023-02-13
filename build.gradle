@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group 'edu.upc.essi.dtim'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation group: 'org.apache.jena', name: 'apache-jena-libs', version: '4.1.0', ext: 'pom'
+    implementation group: 'org.apache.jena', name: 'jena-querybuilder', version: '4.1.0'
+
+    implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
+    implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4'
+    implementation group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+
+}
+
+test {
+    useJUnitPlatform()
+}

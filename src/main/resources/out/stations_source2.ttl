@@ -1,0 +1,51 @@
+@prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
+@prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/stations/> .
+@prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
+
+nextiaSchema:nationality
+        rdf:type       json:Key ;
+        rdfs:label     "nationality" ;
+        json:hasValue  json:String .
+
+nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
+
+nextiaSchema:web_url  rdf:type  json:Key ;
+        rdfs:label     "web_url" ;
+        json:hasValue  json:String .
+
+nextiaSchema:full_name
+        rdf:type       json:Key ;
+        rdfs:label     "full_name" ;
+        json:hasValue  json:String .
+
+nextiaSchema:Object_2
+        rdf:type     json:Object ;
+        rdfs:label   "Array_1" ;
+        json:hasKey  nextiaSchema:nationality , nextiaSchema:full_name .
+
+nextiaSchema:title  rdf:type  json:Key ;
+        rdfs:label     "title" ;
+        json:hasValue  json:String .
+
+nextiaSchema:creator  rdf:type  json:Key ;
+        rdfs:label     "has creator" ;
+        json:hasValue  nextiaSchema:Array_1 , nextiaSchema:Object_2 .
+
+nextiaDataSource:stations
+        rdf:type               <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
+        rdfs:label             "stations.json" ;
+        nextiaDataSource:path  "src/main/resources/prueba_presentacion.json" .
+
+nextiaSchema:Array_1  rdf:type  json:Array ;
+        rdfs:label  "creator" .
+
+nextiaSchema:stations.json
+        rdf:type  json:Document .
+
+nextiaSchema:Object_1
+        rdf:type     json:Object ;
+        rdfs:label   "stations.json" ;
+        json:hasKey  nextiaSchema:creator , nextiaSchema:web_url , nextiaSchema:title .
