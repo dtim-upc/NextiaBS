@@ -32,6 +32,11 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 
 	@Override
 	public Graph bootstrapSchema() throws IOException {
+		return bootstrapSchema(false);
+	}
+
+	@Override
+	public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
 		G_target = new Graph();
 		this.id = id;
 
@@ -51,14 +56,11 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 
 		String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
 		wrapper = "SELECT " + select  + " FROM " + name;
-		generateMetadata();
+
+		if(generateMetadata)
+			generateMetadata();
 		G_target.setPrefixes(prefixes);
 		return G_target;
-	}
-
-	@Override
-	public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
-		return null;
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 
 		String pathcsv = "src/main/resources/artworks.csv";
 		CSVBootstrap csv = new CSVBootstrap("12","artworks", pathcsv);
-		Graph m =csv.bootstrapSchema();
+		Graph m =csv.bootstrapSchema(true);
 		m.write(System.out, "Turtle");
 	}
 
