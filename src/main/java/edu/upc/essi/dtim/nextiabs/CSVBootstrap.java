@@ -2,7 +2,6 @@ package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.nextiabs.utils.Graph;
-import edu.upc.essi.dtim.nextiabs.utils.IBootstrap;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
 import org.apache.commons.csv.CSVFormat;
@@ -64,17 +63,17 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 
 	@Override
 	public void generateMetadata(){
-		String ds = DataSourceVocabulary.DataSource.val() +"/" + name;
+		String ds = DataSourceVocabulary.DataSource.getURI() +"/" + name;
 		if (!id.equals("")){
-			ds = DataSourceVocabulary.DataSource.val() +"/" + id;
-			G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.val(), id);
+			ds = DataSourceVocabulary.DataSource.getURI() +"/" + id;
+			G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.getURI(), id);
 		}
-		G_target.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.val() );
-		G_target.addLiteral( ds , DataSourceVocabulary.HAS_PATH.val(), path);
+		G_target.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.getURI() );
+		G_target.addLiteral( ds , DataSourceVocabulary.HAS_PATH.getURI(), path);
 		G_target.addLiteral( ds , RDFS.label.getURI(),  name );
 
-		G_target.addLiteral( ds , DataSourceVocabulary.HAS_FORMAT.val(), Formats.CSV.val());
-		G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.val(), wrapper);
+		G_target.addLiteral( ds , DataSourceVocabulary.HAS_FORMAT.getURI(), Formats.CSV.val());
+		G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
 	}
 
 	public void write(String file, String lang){

@@ -12,7 +12,7 @@ public enum Namespaces {
         this.element = element;
     }
 
-    public String val() {
+    public String getURI() {
         return element;
     }
 

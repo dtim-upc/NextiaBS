@@ -3,15 +3,22 @@ package edu.upc.essi.dtim.nextiabs.vocabulary;
 
 public enum DataSourceVocabulary {
 
-    DataSource(Namespaces.NextiaDI.val() +"DataSource"),
+    DataSource(Namespaces.NextiaDI.getURI() +"DataSource"),
 
-    Schema( DataSource.val() + "/Schema/" ),
-    HAS_SEPARATOR(DataSource.val()+"/separator"),
-    HAS_PATH(DataSource.val()+"/path"),
-    HAS_FORMAT(DataSource.val()+"/format"),
-    HAS_ID(DataSource.val() + "/id"),
-    ALIAS(DataSource.val() + "/alias"),
-    HAS_WRAPPER(DataSource.val() + "/wrapper");
+    HAS_FORMAT(DataSource.getURI()+"/format"),
+    HAS_ID(DataSource.getURI() + "/id"),
+    HAS_WRAPPER(DataSource.getURI() + "/wrapper"),
+    HAS_PATH(DataSource.getURI()+"/path"),
+
+    DESCRIPTION(DataSource.getURI()+"/description"),
+    HAS_FILE_SIZE(DataSource.getURI()+"/hasFileSize"),
+    HAS_FILE_NAME(DataSource.getURI()+"/hasFileName"),
+
+    Schema( DataSource.getURI() + "/Schema/" ),
+
+    HAS_SEPARATOR(DataSource.getURI()+"/separator"),
+    ALIAS(DataSource.getURI() + "/alias");
+
 
     private String element;
 
@@ -19,7 +26,7 @@ public enum DataSourceVocabulary {
         this.element = element;
     }
 
-    public String val() {
+    public String getURI() {
         return element;
     }
 

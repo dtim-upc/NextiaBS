@@ -3,7 +3,6 @@ package edu.upc.essi.dtim.nextiabs;
 import edu.upc.essi.dtim.nextiabs.metamodels.JSON_MM;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.nextiabs.utils.Graph;
-import edu.upc.essi.dtim.nextiabs.utils.IBootstrap;
 import edu.upc.essi.dtim.nextiabs.utils.JSON_Aux;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
@@ -11,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
@@ -95,21 +93,21 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
     @Override
     public void generateMetadata() {
-        String ds = DataSourceVocabulary.DataSource.val() +"/" + name;
+        String ds = DataSourceVocabulary.DataSource.getURI() +"/" + name;
         if (!id.equals("")){
-            ds = DataSourceVocabulary.DataSource.val() +"/" + id;
-            G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.val(), id);
+            ds = DataSourceVocabulary.DataSource.getURI() +"/" + id;
+            G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.getURI(), id);
         }
-        G_source.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.val() );
-        G_source.addLiteral( ds , DataSourceVocabulary.HAS_PATH.val(), path);
+        G_source.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.getURI() );
+        G_source.addLiteral( ds , DataSourceVocabulary.HAS_PATH.getURI(), path);
         G_source.addLiteral( ds , RDFS.label.getURI(),  name );
 
-        G_target.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.val() );
-        G_target.addLiteral( ds , DataSourceVocabulary.HAS_PATH.val(), path);
+        G_target.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.getURI() );
+        G_target.addLiteral( ds , DataSourceVocabulary.HAS_PATH.getURI(), path);
         G_target.addLiteral( ds , RDFS.label.getURI(),  name );
 
-        G_target.addLiteral( ds , DataSourceVocabulary.HAS_FORMAT.val(), Formats.JSON.val());
-        G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.val(), wrapper);
+        G_target.addLiteral( ds , DataSourceVocabulary.HAS_FORMAT.getURI(), Formats.JSON.val());
+        G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
     }
 
 

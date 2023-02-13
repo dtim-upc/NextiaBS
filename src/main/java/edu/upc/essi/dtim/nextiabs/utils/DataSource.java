@@ -20,6 +20,7 @@ public abstract class DataSource implements IDataSource {
 
     public String id;
     public String name;
+    public String description;
 //    dataSourceName
     public Map<String, String> prefixes;
 
@@ -32,18 +33,18 @@ public abstract class DataSource implements IDataSource {
 
     public String createIRI(String name){
         if(id.equals("")){
-            return DataSourceVocabulary.Schema.val() + name;
+            return DataSourceVocabulary.Schema.getURI() + name;
         }
-        return DataSourceVocabulary.Schema.val() + id+"/"+ name;
+        return DataSourceVocabulary.Schema.getURI() + id+"/"+ name;
     }
 
     public void setPrefixes(){
 
         if(id.equals(""))
-            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.val());
+            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI());
         else
-            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.val()+id+"/");
-        prefixes.put("nextiaDataSource", DataSourceVocabulary.DataSource.val() +"/");
+            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI()+id+"/");
+        prefixes.put("nextiaDataSource", DataSourceVocabulary.DataSource.getURI() +"/");
         prefixes.put("rdf", RDF.getURI());
         prefixes.put("rdfs", RDFS.getURI());
         prefixes.put("xsd", XSD.getURI());
