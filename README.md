@@ -77,7 +77,7 @@ Model schema_graph_based = b.bootstrapSchema();
 
 To extend this library with new supported data sources, you only need to create a class at the package `edu.upc.essi.dtim.nextiabs`. To create this class use the following nomenclature: `<Data source format in uppercase> + Bootstrap`. Moreover, this class should extends `DataSource`class and implements `IBootstrap<Graph>`
 
-To extend this library with new supported data sources, you only need to create a class at the package `edu.upc.essi.dtim.nextiabs`. To create this class use the following nomenclature: `<Data source format in uppercase> + Bootstrap`. Moreover, this class should extends `DataSource`class and implements IBootstrap<Graph>`interface.
+To extend this library with new supported data sources, you only need to create a class at the package `edu.upc.essi.dtim.nextiabs`. To create this class use the following nomenclature: `<Data source format in uppercase> + Bootstrap`. Moreover, this class should extends `DataSource`class and implements `IBootstrap<Graph>`interface.
 
 The class `DataSouce` provides the required attributes and implemented logic to generate resources for the data source elements via the method `createIRI(String name)`. 
 
