@@ -6,6 +6,7 @@ import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.http.client.cache.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
@@ -44,17 +45,11 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 //    [&propertyName2][=propertyValue2]...
 
         try {
-//            System.out.println("ConectionIni");
             conn = DriverManager.getConnection(connectionUrl, "postgres", "1234");
-//            System.out.println("Conection OK - preparing statement");
-//
-//
 //            Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-//
-//            System.out.println("statement OK - preparing query");
+
 //            ResultSet rs;
 //            rs = stmt.executeQuery("SELECT * FROM tabla1");
-//            System.out.println("Query OK: ");
 //            System.out.println("| atrib1  |  atrib2 |");
 //            while(rs.next()) {
 //                System.out.println(rs.getString("atrib1") + "  |   " + rs.getString("atrib2"));
@@ -91,6 +86,8 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         G_target = new Graph();
         this.id = id;
         List<String> tables = new ArrayList();
+        G_target.add(createIRI(name), RDF.type, RDFS.Class);
+        G_target.addLiteral(createIRI(name), RDFS.label, name);
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT table_name\n" +
@@ -102,6 +99,8 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
             }
             for (String t: tables) {
                 System.out.println(t);
+                G_target.add(createIRI(t), RDF.type, RDFS.Class);
+                G_target.addLiteral(createIRI(t), RDFS.label, t);
                 Map<String, String> columns = new HashMap<String, String>();
                 rs = stmt.executeQuery("SELECT *\n" +
                         "  FROM information_schema.columns\n" +
@@ -113,10 +112,13 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
                     columns.put(ColumnNamei, DataTypei);
                 }
                 for (Map.Entry<String, String> set : columns.entrySet()) {
-
                     // Printing all elements of a Map
-                    System.out.println(set.getKey() + " = "
-                            + set.getValue());
+//                    System.out.println(set.getKey() + " = " + set.getValue());
+                    G_target.add(createIRI(set.getKey()), RDF.type, RDF.Property);
+                    G_target.add(createIRI(set.getKey()),RDFS.domain,createIRI(t));
+                    G_target.add(createIRI(set.getKey()),RDFS.range,DBTypeToRDFSType(set.getValue()));
+                    G_target.addLiteral(createIRI(set.getKey()), RDFS.label,set.getKey());
+
                 }
                 System.out.println("");
             }
@@ -124,29 +126,19 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
             throw new RuntimeException(e);
         }
 
-
-
-//        BufferedReader br = new BufferedReader(new FileReader(path));
-//        CSVParser parser = CSVParser.parse(br, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-
-//        G_target.add(createIRI(name), RDF.type, RDFS.Class);
-//        G_target.addLiteral(createIRI(name), RDFS.label, name);
-//        parser.getHeaderNames().forEach(h -> {
-//            String h2 = h.replace("\"", "").trim();
-////			System.out.println(h2);
-//            G_target.add(createIRI(h2),RDF.type,RDF.Property);
-//            G_target.add(createIRI(h2),RDFS.domain,createIRI(name));
-//            G_target.add(createIRI(h2),RDFS.range,XSD.xstring);
-//            G_target.addLiteral(createIRI(h2), RDFS.label,h2 );
-//        });
-//
 //        String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
 //        wrapper = "SELECT " + select  + " FROM " + name;
 //
 //        if(generateMetadata)
 //            generateMetadata();
-//        G_target.setPrefixes(prefixes);
+
+        G_target.setPrefixes(prefixes);
         return G_target;
+    }
+
+    private org.apache.jena.rdf.model.Resource DBTypeToRDFSType(String type) {
+        if(type.equals("integer")) return XSD.xint;
+        return XSD.xstring;
     }
 
     @Override
@@ -178,7 +170,10 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 //        Graph m = sql.bootstrapSchema();
 //        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLPrueba1.ttl", "Turlte");
         SQLBootstrap sql = new SQLBootstrap("18","SQLPrueba1");
-        sql.bootstrapSchema();
+        Graph m = sql.bootstrapSchema();
+//      m.write(System.out, "turtle");
+        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLPrueba1.ttl", "Turlte");
+
     }
 
 
