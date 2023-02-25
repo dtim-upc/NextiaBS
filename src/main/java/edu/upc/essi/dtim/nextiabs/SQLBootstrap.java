@@ -1,25 +1,15 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import com.github.andrewoma.dexx.collection.Pair;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.nextiabs.utils.Graph;
-import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.http.client.cache.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 //import org.slf4j.impl.StaticLoggerBinder;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Generates an RDFS-compliant representation of a postgresSQL database
@@ -83,12 +73,20 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 
     @Override
     public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
+
+        //graph, llista de tables, llista de totes les columnes (per repetits),
         G_target = new Graph();
         this.id = id;
         List<String> tables = new ArrayList();
+        Map<String, Integer> allColumns = new HashMap<String, Integer>();
+        //Vector<Vector<String>> references = new Vector<Vector<String>>();
+        Map<Pair<String, String>, String> references = new HashMap<Pair<String, String>, String>();
+
         G_target.add(createIRI(name), RDF.type, RDFS.Class);
         G_target.addLiteral(createIRI(name), RDFS.label, name);
+
         try {
+            //llista de taules
             Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT table_name\n" +
                     "FROM INFORMATION_SCHEMA.TABLES\n" +
@@ -97,11 +95,33 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
                 String tableNamei = rs.getString("table_name");
                 if(!tableNamei.startsWith("pg_") && !tableNamei.startsWith("sql_")) tables.add(tableNamei);
             }
+
+            //llista de referencies entre taules
+            rs = stmt.executeQuery("select u.table_name as TablaDesti, u.column_name as ColumnaDesti, r.table_name as TablaOrigen, r.column_name as ColumnaOrigen\n" +
+                    "FROM information_schema.constraint_column_usage       u\n" +
+                    "INNER JOIN information_schema.referential_constraints fk\n" +
+                    "           ON u.constraint_catalog = fk.unique_constraint_catalog\n" +
+                    "               AND u.constraint_schema = fk.unique_constraint_schema\n" +
+                    "               AND u.constraint_name = fk.unique_constraint_name\n" +
+                    "INNER JOIN information_schema.key_column_usage        r\n" +
+                    "           ON r.constraint_catalog = fk.constraint_catalog\n" +
+                    "               AND r.constraint_schema = fk.constraint_schema\n" +
+                    "               AND r.constraint_name = fk.constraint_name;");
+
+
+            while(rs.next()){
+                Pair<String, String> tmp = new Pair<String, String>(rs.getString("TablaOrigen"),rs.getString("ColumnaOrigen"));
+                references.put(tmp,rs.getString("TablaDesti"));
+                System.out.println("REFERENCIA: \n"+tmp + "  " + rs.getString("TablaDesti"));
+            }
+
+            //per cada taula
             for (String t: tables) {
-                System.out.println(t);
                 G_target.add(createIRI(t), RDF.type, RDFS.Class);
                 G_target.addLiteral(createIRI(t), RDFS.label, t);
                 Map<String, String> columns = new HashMap<String, String>();
+
+                //llista de columnes de cada taula
                 rs = stmt.executeQuery("SELECT *\n" +
                         "  FROM information_schema.columns\n" +
                         "   WHERE table_name   = '"+t+"';"
@@ -109,18 +129,33 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
                 while(rs.next()) {
                     String ColumnNamei = rs.getString("column_name");
                     String DataTypei = rs.getString("data_type");
-                    columns.put(ColumnNamei, DataTypei);
+                    if(allColumns.containsKey(ColumnNamei)){
+                        allColumns.put(ColumnNamei, allColumns.get(ColumnNamei)+1);
+                        columns.put(ColumnNamei+"("+allColumns.get(ColumnNamei).toString()+")", DataTypei);
+                    }
+                    else{
+                        allColumns.put(ColumnNamei, 0);
+                        columns.put(ColumnNamei, DataTypei);
+                    }
                 }
                 for (Map.Entry<String, String> set : columns.entrySet()) {
-                    // Printing all elements of a Map
-//                    System.out.println(set.getKey() + " = " + set.getValue());
+
                     G_target.add(createIRI(set.getKey()), RDF.type, RDF.Property);
+//NO SE PUEDE -->   G_target.add(createIRI(t+"/"+set.getKey()), RDF.type, RDF.Property);
+//NO ME DEJA -->         if(!G_target.contains(createIRI(set.getKey()),RDFS.domain,createIRI(t))) G_target.add(createIRI(set.getKey()),RDFS.domain,createIRI(t));
                     G_target.add(createIRI(set.getKey()),RDFS.domain,createIRI(t));
-                    G_target.add(createIRI(set.getKey()),RDFS.range,DBTypeToRDFSType(set.getValue()));
+                    if(references.containsKey(new Pair<String, String>(t, columnOriginal(set.getKey())))){
+                        System.out.println(" ==== Table: "+t+" y columna: "+set.getKey());
+                        G_target.add(createIRI(set.getKey()),RDFS.range, createIRI(references.get(new Pair<String, String>(t, columnOriginal(set.getKey())))));
+                    }
+                    else{
+                        G_target.add(createIRI(set.getKey()),RDFS.range,DBTypeToRDFSType(set.getValue()));
+                    }
                     G_target.addLiteral(createIRI(set.getKey()), RDFS.label,set.getKey());
 
                 }
-                System.out.println("");
+
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -134,6 +169,13 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 
         G_target.setPrefixes(prefixes);
         return G_target;
+    }
+
+    private String columnOriginal(String key) {
+        if(key.matches(".*\\(\\d+\\)$")){
+            return key.replaceAll("\\(\\d+\\)$", "");
+        }
+        return key;
     }
 
     private org.apache.jena.rdf.model.Resource DBTypeToRDFSType(String type) {
@@ -164,15 +206,10 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 
     public static void main(String[] args) throws IOException {
 
-//		String pathcsv = "src/main/resources/artworks.csv";
-//        String pathcsv = "C:\\Users\\juane\\Documents\\NEXTIA-PrivateDatasets\\SWDev.csv";
-//        SQLBootstrap sql = new SQLBootstrap("18","SQLPrueba1");
-//        Graph m = sql.bootstrapSchema();
-//        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLPrueba1.ttl", "Turlte");
-        SQLBootstrap sql = new SQLBootstrap("18","SQLPrueba1");
+        SQLBootstrap sql = new SQLBootstrap("18","SQLPrueba2");
         Graph m = sql.bootstrapSchema();
 //      m.write(System.out, "turtle");
-        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLPrueba1.ttl", "Turlte");
+        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLPrueba2.ttl", "Turlte");
 
     }
 
