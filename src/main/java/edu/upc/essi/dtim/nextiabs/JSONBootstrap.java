@@ -14,6 +14,11 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -80,6 +85,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             if (p.getKey().equals(p.getValue().getKey())) return p.getValue().getPath();
             return  p.getValue().getPath() + " AS " + p.getValue().getLabel();
         }).collect(Collectors.joining(","));
+
 
         String FROM = name;
         String LATERAL = lateralViews.stream().map(p -> "LATERAL VIEW explode("+p.getLeft()+") AS "+p.getRight()).collect(Collectors.joining("\n"));
@@ -204,6 +210,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         }
     }
 
+
     private void instantiateMetamodel() {
         G_source.add(JSON_MM.Number.getURI(), RDF.type, JSON_MM.Primitive);
         G_source.add(JSON_MM.String.getURI(), RDF.type, JSON_MM.Primitive);
@@ -214,6 +221,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         setObjectCounter(getObjectCounter()+1);
         return "Object_"+getObjectCounter();
     }
+
 
     private String freshAttribute( String attribute ) {
         String att = attribute;
@@ -324,12 +332,16 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
 
     public static void main(String[] args) throws IOException {
-        String D = "stations.json";
-        JSONBootstrap j = new JSONBootstrap("stations", D,"src/main/resources/prueba_presentacion.json");
+        String D = "stations";
+//        String path = "src/main/resources/prueba2.json";
+        String path = "src/main/resources/prueba_presentacion.json";
+        String nameDataset = "dataset1";
+        JSONBootstrap j = new JSONBootstrap("1234", nameDataset,path);
 
 
 //		Model M = j.bootstrapSchema("ds1", D,"/Users/javierflores/Documents/upc/projects/newODIN/datasources/survey_prueba/selected/tate_artist_picasso-pablo-1767.json");
         Graph M = j.bootstrapSchema();
+        M.write("src/main/resources/out/target.ttl");
 
         Graph G = new Graph();
         java.nio.file.Path temp = Files.createTempFile("bootstrap",".ttl");
@@ -370,6 +382,38 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
         j.getG_source().write("src/main/resources/out/stations_source2.ttl", Lang.TURTLE);
         j.getG_target().write("src/main/resources/out/stations_target2.ttl", Lang.TURTLE);
+
+
+        SparkConf conf = new SparkConf()
+                .setAppName("Java Spark SQL basic example")
+                .setMaster("local[*]");
+//                .set("spark.driver.bindAddress", sparkBindAddress)
+//                .set("spark.driver.memory", sparkDriverMemory  )
+//                .set("spark.testing.memory", sparkTestingMemory  );
+
+
+
+
+
+        SparkSession spark = SparkSession
+                .builder()
+                .sparkContext(new JavaSparkContext(conf).sc())
+                .appName("spark")
+                .getOrCreate();
+
+        spark.sparkContext().setLogLevel("ERROR");
+
+        Dataset<Row> dataset = spark.read().option("multiline",true).json(path);
+        dataset.createOrReplaceTempView(nameDataset);
+
+
+//        String sql = "SELECT country,`type Of Vehicle` AS type_Of_vehicle,type FROM dataset1";
+        System.out.println("Wrapper is : "+ j.getWrapper());
+        Dataset<Row> namesDF = spark.sql(j.getWrapper());
+//        Dataset<Row> namesDF = spark.sql(sql);
+        namesDF.show();
+
+
     }
 
 }

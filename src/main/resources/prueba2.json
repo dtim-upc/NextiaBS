@@ -1,0 +1,10 @@
+{
+  "type":1,
+  "typeOfVehicle":"BIKE",
+  "country":"ES",
+  "object" :{
+    "type": 2
+  }
+}
+
+
