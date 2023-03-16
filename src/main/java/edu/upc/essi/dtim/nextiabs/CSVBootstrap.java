@@ -79,7 +79,7 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 	}
 
 	public void write(String file, String lang){
-		G_target.write(file,lang);
+		//G_target.write(file,lang);
 	}
 
 	public static void main(String[] args) throws IOException {

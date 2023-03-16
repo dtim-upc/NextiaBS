@@ -24,6 +24,7 @@ public class JSON_MM {
     public static final Resource Array      = Init.Array();
     public static final Resource Number     = Init.Number();
     public static final Resource String     = Init.String();
+    public static final Resource Boolean    = Init.Boolean();
 
 
     public static final Property hasValue   = Init.hasValue();
@@ -39,6 +40,7 @@ public class JSON_MM {
         public static Resource Array()       { return resource( "Array"); }
         public static Resource Number()        { return resource( "Number"); }
         public static Resource String()        { return resource( "String"); }
+        public static Resource Boolean()       { return resource("Boolean"); }
 
         public static Property hasValue()        { return property( "hasValue"); }
         public static Property hasKey()         { return property( "hasKey"); }
@@ -58,6 +60,7 @@ public class JSON_MM {
         public static final Node Array      = Init.Array().asNode();
         public static final Node Number      = Init.Number().asNode();
         public static final Node String      = Init.String().asNode();
+        public static final Node Boolean     = Init.Boolean().asNode();
 
         public static final Node hasValue   = Init.hasValue().asNode();
         public static final Node hasKey     = Init.hasKey().asNode();

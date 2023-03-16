@@ -42,7 +42,6 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
     public String path;
 
-    protected List<Pair<String,String>> sourceAttributes;
     protected HashMap<String, JSON_Aux> attributesSWJ;
     protected List<String> resourcesLabelSWJ;
     protected List<Pair<String,String>> lateralViews;
@@ -60,7 +59,6 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         ObjectCounter = 0;
         ArrayCounter = 0;
 
-        sourceAttributes = Lists.newArrayList();
         attributesSWJ = new HashMap<>();
         resourcesLabelSWJ = new ArrayList<>();
         lateralViews = Lists.newArrayList();
@@ -200,21 +198,15 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             G_source.add(createIRI(p.getLabel()),JSON_MM.hasValue,JSON_MM.Number);
             attributesSWJ.put(p.getLabel(),p);
         }
-        // Boolean does not exist in the library
-        //else if (D.getValueType() == JsonValue.ValueType.BOOLEAN) {
-        //			G_source.add(createIRI(p),JSON_MM.hasValue,JSON_MM.Boolean);
-        //		}
+
+        else if ((D.getValueType() == JsonValue.ValueType.TRUE) || (D.getValueType() == JsonValue.ValueType.FALSE)) {
+            G_source.add(createIRI(p.getLabel()),JSON_MM.hasValue,JSON_MM.Boolean);
+            attributesSWJ.put(p.getLabel(),p);
+        }
         else {
             G_source.add(createIRI(p.getLabel()),JSON_MM.hasValue,JSON_MM.String);
             attributesSWJ.put(p.getLabel(),p);
         }
-    }
-
-
-    private void instantiateMetamodel() {
-        G_source.add(JSON_MM.Number.getURI(), RDF.type, JSON_MM.Primitive);
-        G_source.add(JSON_MM.String.getURI(), RDF.type, JSON_MM.Primitive);
-        //G_source.add(JSON_MM.Boolean.getURI(), RDF.type, JSON_MM.Primitive);
     }
 
     private String freshObject() {
@@ -238,10 +230,6 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         return "Array_"+getArrayCounter();
     }
 
-    public void prueba(){}
-
-
-
 
     private void productionRules_JSON_to_RDFS() {
         // Rule 1. Instances of J:Object are translated to instances of rdfs:Class .
@@ -250,12 +238,6 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             G_target.addLiteral(res.getResource("o").getURI(),RDFS.label, res.getLiteral("label") );
             System.out.println("#1 - "+res.getResource("o").getURI()+", "+RDF.type+", "+RDFS.Class);
         });
-
-        // Rule 2. Instances of J:Array are translated to instances of rdfs:Class and rdf:Seq .
-//		G_source.runAQuery("SELECT ?a WHERE { ?a <"+RDF.type+"> <"+JSON_MM.Array+"> }").forEachRemaining(res -> {
-//			G_target.add(res.getResource("a").getURI(),RDF.type,RDFS.Class); System.out.println("#2 - "+res.getResource("a").getURI()+", "+RDF.type+", "+RDFS.Class);
-//			G_target.add(res.getResource("a").getURI(),RDF.type,RDF.Seq); System.out.println("#2 - "+res.getResource("a").getURI()+", "+RDF.type+", "+RDF.Seq);
-//		});
 
         // Rule 2. Instances of J:Key are translated to instances of rdf:Property . Additionally, this requires defining the rdfs:domain
         //of such newly defined instance of rdf:Property .
@@ -271,13 +253,20 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         });
 
         //Rule 4. Range of primitives.
-        G_source.runAQuery("SELECT ?k ?v WHERE { ?k <"+JSON_MM.hasValue+">+ <"+JSON_MM.String+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
-//			G_target.add(res.getResource("k").getURI(),RDF.type,RDF.Property); System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDF.type+", "+RDF.Property);
-            G_target.add(res.getResource("k").getURI(),RDFS.range, XSD.xstring); System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xstring);
+        //String case
+        G_source.runAQuery("SELECT ?k WHERE { ?k <"+JSON_MM.hasValue+">+ <"+JSON_MM.String+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(),RDFS.range, XSD.xstring);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xstring);
         });
-        G_source.runAQuery("SELECT ?k ?v WHERE { ?k <"+JSON_MM.hasValue+">+ <"+JSON_MM.Number+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
-//			G_target.add(res.getResource("k").getURI(),RDF.type,RDF.Property); System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDF.type+", "+RDF.Property);
-            G_target.add(res.getResource("k").getURI(),RDFS.range,XSD.xint); System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xint);
+        //Number case
+        G_source.runAQuery("SELECT ?k WHERE { ?k <"+JSON_MM.hasValue+">+ <"+JSON_MM.Number+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(),RDFS.range,XSD.xint);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xint);
+        });
+        //Boolean case
+        G_source.runAQuery("SELECT ?k WHERE { ?k <"+JSON_MM.hasValue+">+ <"+JSON_MM.Boolean+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xboolean);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xboolean);
         });
 
         //Rule 5. Range of objects.
@@ -333,8 +322,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
     public static void main(String[] args) throws IOException {
         String D = "stations";
-//        String path = "src/main/resources/prueba2.json";
-        String path = "src/main/resources/prueba_presentacion.json";
+        String path = "src/main/resources/pruebaDos.json";
         String nameDataset = "dataset1";
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset,path);
 
@@ -350,9 +338,6 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
         System.out.println("Attributes");
         System.out.println(j.getAttributesSWJ());
-
-        System.out.println("Source attributes");
-        System.out.println(j.getSourceAttributes());
 
         System.out.println("Lateral views");
         System.out.println(j.getLateralViews());

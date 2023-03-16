@@ -1,49 +1,34 @@
 @prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
 @prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
-@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/stations/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/1234/> .
 @prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
-nextiaSchema:nationality
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_2 ;
-        rdfs:label   "nationality" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:web_url  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "web_url" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_2
-        rdf:type    rdfs:Class ;
-        rdfs:label  "Array_1" .
-
-nextiaSchema:full_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_2 ;
-        rdfs:label   "full_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:title  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "title" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:creator  rdf:type  rdfs:ContainerMembershipProperty , rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has creator" ;
-        rdfs:range   nextiaSchema:Object_2 .
-
-nextiaDataSource:stations
-        rdf:type                  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
-        rdfs:label                "stations.json" ;
-        nextiaDataSource:format   "JSON" ;
-        nextiaDataSource:id       "stations" ;
-        nextiaDataSource:path     "src/main/resources/prueba_presentacion.json" ;
-        nextiaDataSource:wrapper  "SELECT creator_view.full_name,web_url,creator_view.nationality,title FROM stations.json LATERAL VIEW explode(creator) AS creator_view" .
-
 nextiaSchema:Object_1
         rdf:type    rdfs:Class ;
-        rdfs:label  "stations.json" .
+        rdfs:label  "dataset1" .
+
+nextiaSchema:index  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "index" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:id_  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "id_" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:available
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "available" ;
+        rdfs:range   xsd:boolean .
+
+nextiaDataSource:1234
+        rdf:type                  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
+        rdfs:label                "dataset1" ;
+        nextiaDataSource:format   "JSON" ;
+        nextiaDataSource:id       "1234" ;
+        nextiaDataSource:path     "src/main/resources/pruebaDos.json" ;
+        nextiaDataSource:wrapper  "SELECT id_,available,index FROM dataset1 " .

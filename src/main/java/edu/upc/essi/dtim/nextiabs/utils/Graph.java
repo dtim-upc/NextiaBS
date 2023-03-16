@@ -233,7 +233,7 @@ public class Graph {
         }
     }
 
-    public void write(String file, String lang) {
+    public void write(String file) {
         try {
             RDFDataMgr.write(new FileOutputStream(file), model, Lang.TURTLE);
         } catch (FileNotFoundException e) {
