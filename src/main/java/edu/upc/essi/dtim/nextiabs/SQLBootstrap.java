@@ -4,14 +4,14 @@ import com.github.andrewoma.dexx.collection.Pair;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.nextiabs.utils.Graph;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
+//import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 //import org.slf4j.impl.StaticLoggerBinder;
 import java.io.IOException;
-import java.io.WriteAbortedException;
-import java.sql.*;
+//import java.io.WriteAbortedException;
+//import java.sql.*;
 import java.util.*;
 
 /**
@@ -19,11 +19,6 @@ import java.util.*;
  * @author juane
  */
 public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
-
-    //! public Class.forName("com.mysql.jdbc.Driver");
-//    public Connection conn = null;
-//!    private String sDriver = "com.mysql.jdbc.Driver";
-//!    private String sURL = "jdbc:mysql://localhost:3306";
 
     private IDatabaseSystem Database;
     private HashMap<String, SQLMetamodelTable> Metamodel;
@@ -54,6 +49,7 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         Database.connect(hostname, username, password);
         Metamodel = Database.getMetamodel();
         String tableName = "tabla1";
+
         setPrefixes();
 
         //? productionRules_SQL_to_RDFS(); //este sería para convertir todo el metamodelo, incluidas relaciones
@@ -62,16 +58,13 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         productionRules_SQL_to_RDFS(tableName); //setea G_target;
 
         //? generateWrapper(); //el wrapper sería un "SELECT * FROM TABLE"
-        //        String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
-        //        wrapper = "SELECT " + select  + " FROM " + name;
-
-
-        if(generateMetadata)
-            generateMetadata();
-
-
         wrapper = "SELECT * from "+tableName;
-//        System.out.println(wrapper);
+        // System.out.println(wrapper);
+
+        if(generateMetadata) {
+            generateMetadata();
+        }
+
         G_target.setPrefixes(prefixes);
         return G_target;
     }
@@ -80,16 +73,16 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         //Rule 1 Instances of sql:Table are translated to instances of rdfs:Class.
         // ∀t(〈t, rdf:type, sql:Table〉(G))=⇒∃c(〈c, rdf:type, rdfs:Class〉(G′)∧c=t)
         G_target.add(createIRI(tableName), RDF.type, RDFS.Class);
-        G_target.addLiteral(createIRI(tableName), RDFS.label, tableName);
+        G_target.addLiteral(createIRI(tableName), RDFS.label, name);
 
         //Rule 2 Instances of sql:Column are translated to instances of rdf:Property. Also, it's required to define the rdfs:domain of said rdf:Property.
         //∀t, a (〈t, sql:hasColumn, a〉(G))=⇒∃c,p(〈p, rdf:type, rdf:Property〉(G′)∧〈p, rdfs:domain, c〉(G′)∧p=a∧c=t)
         SQLMetamodelTable tableOrigin = Metamodel.get(tableName);
         for(Pair<String, String> col: tableOrigin.getColumns()) {
-            G_target.add(createIRI(tableName+"/"+col.component1()), RDF.type, RDF.Property);
-            G_target.add(createIRI(tableName+"/"+col.component1()), RDFS.domain, createIRI(tableName));
-            G_target.add(createIRI(tableName+"/"+col.component1()), RDFS.range, DBTypeToRDFSType(col.component2()));
-            G_target.addLiteral(createIRI(tableName+"/"+col.component1()), RDFS.label,col.component1());
+            G_target.add(createIRI(tableName+"."+col.component1()), RDF.type, RDF.Property);
+            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.domain, createIRI(tableName));
+            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.range, DBTypeToRDFSType(col.component2()));
+            G_target.addLiteral(createIRI(tableName+"."+col.component1()), RDFS.label,col.component1());
         }
 
         //! l'he fet dalt
@@ -101,43 +94,65 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 
     }
 
-    private String UnionAllTables(List<String> tables) {
-        String result = "";
-        for(int i = 0; i < tables.size(); ++i){
-         result += (tables.get(i));
-         if(i < tables.size()-1) result += " UNION ";
-        }
-        return result;
-    }
 
-    private String columnOriginal(String key) {
-        if(key.matches(".*\\(\\d+\\)$")){
-            return key.replaceAll("\\(\\d+\\)$", "");
-        }
-        return key;
-    }
 
     private org.apache.jena.rdf.model.Resource DBTypeToRDFSType(String type) {
-        if(type.equals("integer")) return XSD.xint;
-        return XSD.xstring;
+        switch (type.toUpperCase()) {
+            case "CHAR":
+            case "VARCHAR":
+            case "LONGVARCHAR":
+            case "NCHAR":
+            case "NVARCHAR":
+            case "LONGNVARCHAR":
+            case "INTERVAL DAY-TIME":
+            case "INTERVAL YEAR-MONTH":
+                return XSD.xstring;
+            case "BINARY":
+            case "VARBINARY":
+            case "LONGVARBINARY":
+                return XSD.base64Binary;
+            case "BOOLEAN":
+                return XSD.xboolean;
+            case "SMALLINT":
+                return XSD.xshort;
+            case "INTEGER":
+                return XSD.xint;
+            case "BIGINT":
+                return XSD.xlong;
+            case "DECIMAL":
+            case "NUMERIC":
+                return XSD.decimal;
+            case "FLOAT":
+            case "REAL":
+                return XSD.xfloat;
+            case "DOUBLE PRECISION":
+                return XSD.xdouble;
+            case "DATE":
+                return XSD.date;
+            case "TIME":
+                return XSD.time;
+            case "TIMESTAMP":
+                return XSD.dateTimeStamp;
+            default:
+                return XSD.xstring;
+        }
     }
 
     @Override
     public void generateMetadata(){
-//        String ds = DataSourceVocabulary.DataSource.getURI() +"/" + name;
-//        if (!id.equals("")){
-//            ds = DataSourceVocabulary.DataSource.getURI() +"/" + id;
-//            G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.getURI(), id);
-//        }
+        String ds = DataSourceVocabulary.DataSource.getURI() +"/" + name;
+        if (!id.equals("")){
+            ds = DataSourceVocabulary.DataSource.getURI() +"/" + id;
+            G_target.addLiteral( ds , DataSourceVocabulary.HAS_ID.getURI(), id);
+        }
 //
 //        G_target.add( ds , RDF.type.getURI(),  DataSourceVocabulary.DataSource.getURI() );
 ////        G_target.addLiteral( ds , DataSourceVocabulary.HAS_PATH.getURI(), path);
 //        G_target.addLiteral( ds , RDFS.label.getURI(),  name );
 //
 //        G_target.addLiteral( ds , DataSourceVocabulary.HAS_FORMAT.getURI(), Formats.JSON.val());
-//        G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
 
-       // G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
+        G_target.addLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
     }
 
     public void write(String file, String lang){
