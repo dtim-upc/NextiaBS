@@ -1,0 +1,22 @@
+{
+  "id_": "640a21",
+  "index2": {},
+  "place of work": null,
+  "friend": {
+    "place of work": "Tarragona",
+    "id_": "1234etr",
+    "index": 1,
+    "friend of friend": {
+      "place of work": "Badalona",
+      "id_": "gsgag231",
+      "index": 2,
+      "friend of 1st person": true,
+      "friend of friend of friend": {
+        "place of work": "Girona",
+        "id_": "jjrethjw43",
+        "index": 3,
+        "friend of everyone": false
+      }
+    }
+  }
+}

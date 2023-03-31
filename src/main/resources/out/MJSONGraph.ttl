@@ -5,309 +5,242 @@
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
-nextiaSchema:movements_movement2_id
+nextiaSchema:dateRange_endYear
         rdf:type       json:Key ;
-        rdfs:label     "movements_movement2_id" ;
+        rdfs:label     "dateRange_endYear" ;
         json:hasValue  json:Number .
 
-nextiaSchema:activePlaces_activePlace2
+nextiaSchema:foreignTitle
         rdf:type       json:Key ;
-        rdfs:label     "has activePlaces_activePlace2" ;
-        json:hasValue  nextiaSchema:Object_4 .
+        rdfs:label     "foreignTitle" ;
+        json:hasValue  json:String .
 
-nextiaSchema:Object_7
-        rdf:type     json:Object ;
-        rdfs:label   "time" ;
-        json:hasKey  nextiaSchema:birth_time_startYear .
+nextiaSchema:contributors_contributor_1_id
+        rdf:type       json:Key ;
+        rdfs:label     "contributors_contributor_1_id" ;
+        json:hasValue  json:Number .
+
+nextiaSchema:dateRange_text
+        rdf:type       json:Key ;
+        rdfs:label     "dateRange_text" ;
+        json:hasValue  json:String .
+
+nextiaSchema:height  rdf:type  json:Key ;
+        rdfs:label     "height" ;
+        json:hasValue  json:String .
 
 nextiaSchema:url  rdf:type  json:Key ;
         rdfs:label     "url" ;
         json:hasValue  json:String .
 
-nextiaSchema:activePlaces_activePlace1_placeName
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace1_placeName" ;
-        json:hasValue  json:String .
-
-nextiaSchema:movements_movement1_era_id
-        rdf:type       json:Key ;
-        rdfs:label     "movements_movement1_era_id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:birth_place_placeName
-        rdf:type       json:Key ;
-        rdfs:label     "birth_place_placeName" ;
-        json:hasValue  json:String .
-
 nextiaSchema:Object_1
         rdf:type     json:Object ;
         rdfs:label   "dataset1" ;
-        json:hasKey  nextiaSchema:url , nextiaSchema:startLetter , nextiaSchema:id , nextiaSchema:activePlaceCount , nextiaSchema:gender , nextiaSchema:mda , nextiaSchema:movements , nextiaSchema:birth , nextiaSchema:totalWorks , nextiaSchema:death , nextiaSchema:fc , nextiaSchema:date , nextiaSchema:activePlaces , nextiaSchema:birthYear .
+        json:hasKey  nextiaSchema:dateText , nextiaSchema:url , nextiaSchema:height , nextiaSchema:contributorCount , nextiaSchema:units , nextiaSchema:id , nextiaSchema:width , nextiaSchema:medium , nextiaSchema:title , nextiaSchema:subjects , nextiaSchema:creditLine , nextiaSchema:inscription , nextiaSchema:classification , nextiaSchema:subjectCount , nextiaSchema:catalogueGroup , nextiaSchema:groupTitle , nextiaSchema:depth , nextiaSchema:thumbnailCopyright , nextiaSchema:acno , nextiaSchema:movementCount , nextiaSchema:all_artists , nextiaSchema:dimensions , nextiaSchema:foreignTitle , nextiaSchema:dateRange , nextiaSchema:thumbnailUrl , nextiaSchema:acquisitionYear , nextiaSchema:contributors .
 
-nextiaSchema:death_place_name
+nextiaSchema:contributors_contributor_1_displayOrder
         rdf:type       json:Key ;
-        rdfs:label     "death_place_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:birth_place_name
-        rdf:type       json:Key ;
-        rdfs:label     "birth_place_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:birth_time
-        rdf:type       json:Key ;
-        rdfs:label     "has birth_time" ;
-        json:hasValue  nextiaSchema:Object_7 .
-
-nextiaSchema:death_time_startYear
-        rdf:type       json:Key ;
-        rdfs:label     "death_time_startYear" ;
+        rdfs:label     "contributors_contributor_1_displayOrder" ;
         json:hasValue  json:Number .
 
-nextiaSchema:movements_movement1_id
+nextiaSchema:classification
         rdf:type       json:Key ;
-        rdfs:label     "movements_movement1_id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:Object_13
-        rdf:type     json:Object ;
-        rdfs:label   "era" ;
-        json:hasKey  nextiaSchema:movements_movement1_era_name , nextiaSchema:movements_movement1_era_id .
-
-nextiaSchema:activePlaceCount
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaceCount" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:movements
-        rdf:type       json:Key ;
-        rdfs:label     "has movements" ;
-        json:hasValue  nextiaSchema:Object_11 .
-
-nextiaSchema:fc  rdf:type  json:Key ;
-        rdfs:label     "fc" ;
+        rdfs:label     "classification" ;
         json:hasValue  json:String .
 
-nextiaSchema:birth_place_placeType
+nextiaSchema:contributors_contributor_1_startLetter
         rdf:type       json:Key ;
-        rdfs:label     "birth_place_placeType" ;
+        rdfs:label     "contributors_contributor_1_startLetter" ;
         json:hasValue  json:String .
 
-nextiaSchema:activePlaces
+nextiaSchema:contributors_contributor_1_gender
         rdf:type       json:Key ;
-        rdfs:label     "has activePlaces" ;
-        json:hasValue  nextiaSchema:Object_2 .
+        rdfs:label     "contributors_contributor_1_gender" ;
+        json:hasValue  json:String .
 
-nextiaSchema:activePlaces_activePlace1
+nextiaSchema:dimensions
         rdf:type       json:Key ;
-        rdfs:label     "has activePlaces_activePlace1" ;
-        json:hasValue  nextiaSchema:Object_3 .
+        rdfs:label     "dimensions" ;
+        json:hasValue  json:String .
 
 nextiaSchema:Object_6
         rdf:type     json:Object ;
-        rdfs:label   "place" ;
-        json:hasKey  nextiaSchema:birth_place_placeType , nextiaSchema:birth_place_placeName , nextiaSchema:birth_place_name .
+        rdfs:label   "subjects" ;
+        json:hasKey  nextiaSchema:subjects_name , nextiaSchema:subjects_id .
 
-nextiaSchema:activePlaces_activePlace2_placeName
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace2_placeName" ;
+nextiaSchema:units  rdf:type  json:Key ;
+        rdfs:label     "units" ;
         json:hasValue  json:String .
 
-nextiaSchema:movements_movement1_name
+nextiaSchema:contributors
         rdf:type       json:Key ;
-        rdfs:label     "movements_movement1_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:movements_movement1_era_name
-        rdf:type       json:Key ;
-        rdfs:label     "movements_movement1_era_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:movements_movement2_era_id
-        rdf:type       json:Key ;
-        rdfs:label     "movements_movement2_era_id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:Object_12
-        rdf:type     json:Object ;
-        rdfs:label   "movement1" ;
-        json:hasKey  nextiaSchema:movements_movement1_name , nextiaSchema:movements_movement1_id , nextiaSchema:movements_movement1_era .
+        rdfs:label     "has contributors" ;
+        json:hasValue  nextiaSchema:Object_3 .
 
 nextiaSchema:dataset1
         rdf:type  json:Document .
 
-nextiaSchema:death  rdf:type  json:Key ;
-        rdfs:label     "has death" ;
-        json:hasValue  nextiaSchema:Object_8 .
-
-nextiaSchema:activePlaces_activePlace2_placeType
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace2_placeType" ;
-        json:hasValue  json:String .
-
-nextiaSchema:gender  rdf:type  json:Key ;
-        rdfs:label     "gender" ;
+nextiaSchema:title  rdf:type  json:Key ;
+        rdfs:label     "title" ;
         json:hasValue  json:String .
 
 nextiaSchema:Object_5
         rdf:type     json:Object ;
-        rdfs:label   "birth" ;
-        json:hasKey  nextiaSchema:birth_time , nextiaSchema:birth_place .
-
-nextiaSchema:birth  rdf:type  json:Key ;
-        rdfs:label     "has birth" ;
-        json:hasValue  nextiaSchema:Object_5 .
+        rdfs:label   "dateRange" ;
+        json:hasKey  nextiaSchema:dateRange_text , nextiaSchema:dateRange_startYear , nextiaSchema:dateRange_endYear .
 
 nextiaDataSource:1234
         rdf:type               <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
         rdfs:label             "dataset1" ;
-        nextiaDataSource:path  "src/main/resources/systematic_testing/pruebaGrandeDos.json" .
+        nextiaDataSource:path  "src/main/resources/systematic_testing/pruebaGrandeCuatro.json" .
 
-nextiaSchema:activePlaces_activePlace1_name
+nextiaSchema:groupTitle
         rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace1_name" ;
+        rdfs:label     "groupTitle" ;
         json:hasValue  json:String .
 
-nextiaSchema:activePlaces_activePlace1_placeType
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace1_placeType" ;
+nextiaSchema:medium  rdf:type  json:Key ;
+        rdfs:label     "medium" ;
         json:hasValue  json:String .
 
-nextiaSchema:movements_movement2_name
+nextiaSchema:all_artists
         rdf:type       json:Key ;
-        rdfs:label     "movements_movement2_name" ;
+        rdfs:label     "all_artists" ;
         json:hasValue  json:String .
 
-nextiaSchema:Object_11
-        rdf:type     json:Object ;
-        rdfs:label   "movements" ;
-        json:hasKey  nextiaSchema:movements_movement2 , nextiaSchema:movements_movement1 .
-
-nextiaSchema:death_place_placeName
+nextiaSchema:subjectCount
         rdf:type       json:Key ;
-        rdfs:label     "death_place_placeName" ;
-        json:hasValue  json:String .
-
-nextiaSchema:totalWorks
-        rdf:type       json:Key ;
-        rdfs:label     "totalWorks" ;
+        rdfs:label     "subjectCount" ;
         json:hasValue  json:Number .
 
-nextiaSchema:death_place
+nextiaSchema:subjects_name
         rdf:type       json:Key ;
-        rdfs:label     "has death_place" ;
-        json:hasValue  nextiaSchema:Object_9 .
+        rdfs:label     "subjects_name" ;
+        json:hasValue  json:String .
+
+nextiaSchema:contributors_contributor_1_role
+        rdf:type       json:Key ;
+        rdfs:label     "contributors_contributor_1_role" ;
+        json:hasValue  json:String .
+
+nextiaSchema:contributors_contributor_1_fc
+        rdf:type       json:Key ;
+        rdfs:label     "contributors_contributor_1_fc" ;
+        json:hasValue  json:String .
+
+nextiaSchema:thumbnailUrl
+        rdf:type       json:Key ;
+        rdfs:label     "thumbnailUrl" ;
+        json:hasValue  json:String .
 
 nextiaSchema:Object_4
         rdf:type     json:Object ;
-        rdfs:label   "activePlace2" ;
-        json:hasKey  nextiaSchema:activePlaces_activePlace2_placeType , nextiaSchema:activePlaces_activePlace2_placeName , nextiaSchema:activePlaces_activePlace2_name .
+        rdfs:label   "contributor 1" ;
+        json:hasKey  nextiaSchema:contributors_contributor_1_gender , nextiaSchema:contributors_contributor_1_role , nextiaSchema:contributors_contributor_1_date , nextiaSchema:contributors_contributor_1_startLetter , nextiaSchema:contributors_contributor_1_id , nextiaSchema:contributors_contributor_1_birthYear , nextiaSchema:contributors_contributor_1_displayOrder , nextiaSchema:contributors_contributor_1_fc , nextiaSchema:contributors_contributor_1_mda .
 
-nextiaSchema:birth_time_startYear
+nextiaSchema:subjects
         rdf:type       json:Key ;
-        rdfs:label     "birth_time_startYear" ;
-        json:hasValue  json:Number .
+        rdfs:label     "has subjects" ;
+        json:hasValue  nextiaSchema:Object_6 .
 
-nextiaSchema:birthYear
+nextiaSchema:catalogueGroup
         rdf:type       json:Key ;
-        rdfs:label     "birthYear" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:activePlaces_activePlace2_name
-        rdf:type       json:Key ;
-        rdfs:label     "activePlaces_activePlace2_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:death_place_placeType
-        rdf:type       json:Key ;
-        rdfs:label     "death_place_placeType" ;
-        json:hasValue  json:String .
+        rdfs:label     "has catalogueGroup" ;
+        json:hasValue  nextiaSchema:Object_2 .
 
 nextiaSchema:id  rdf:type  json:Key ;
         rdfs:label     "id" ;
         json:hasValue  json:Number .
 
-nextiaSchema:startLetter
+nextiaSchema:contributors_contributor_1_date
         rdf:type       json:Key ;
-        rdfs:label     "startLetter" ;
+        rdfs:label     "contributors_contributor_1_date" ;
         json:hasValue  json:String .
 
-nextiaSchema:movements_movement1_era
+nextiaSchema:acquisitionYear
         rdf:type       json:Key ;
-        rdfs:label     "has movements_movement1_era" ;
-        json:hasValue  nextiaSchema:Object_13 .
+        rdfs:label     "acquisitionYear" ;
+        json:hasValue  json:Number .
 
-nextiaSchema:mda  rdf:type  json:Key ;
-        rdfs:label     "mda" ;
+nextiaSchema:inscription
+        rdf:type       json:Key ;
+        rdfs:label     "inscription" ;
         json:hasValue  json:String .
 
-nextiaSchema:Object_10
-        rdf:type     json:Object ;
-        rdfs:label   "time" ;
-        json:hasKey  nextiaSchema:death_time_startYear .
-
-nextiaSchema:Object_9
-        rdf:type     json:Object ;
-        rdfs:label   "place" ;
-        json:hasKey  nextiaSchema:death_place_placeType , nextiaSchema:death_place_placeName , nextiaSchema:death_place_name .
-
-nextiaSchema:death_time
+nextiaSchema:contributors_contributor_1_mda
         rdf:type       json:Key ;
-        rdfs:label     "has death_time" ;
-        json:hasValue  nextiaSchema:Object_10 .
+        rdfs:label     "contributors_contributor_1_mda" ;
+        json:hasValue  json:String .
 
-nextiaSchema:movements_movement2_era
+nextiaSchema:contributors_contributor_1
         rdf:type       json:Key ;
-        rdfs:label     "has movements_movement2_era" ;
-        json:hasValue  nextiaSchema:Object_15 .
+        rdfs:label     "has contributors_contributor_1" ;
+        json:hasValue  nextiaSchema:Object_4 .
+
+nextiaSchema:dateText
+        rdf:type       json:Key ;
+        rdfs:label     "dateText" ;
+        json:hasValue  json:String .
 
 nextiaSchema:Object_3
         rdf:type     json:Object ;
-        rdfs:label   "activePlace1" ;
-        json:hasKey  nextiaSchema:activePlaces_activePlace1_placeType , nextiaSchema:activePlaces_activePlace1_placeName , nextiaSchema:activePlaces_activePlace1_name .
+        rdfs:label   "contributors" ;
+        json:hasKey  nextiaSchema:contributors_contributor_1 .
 
-nextiaSchema:movements_movement2
+nextiaSchema:dateRange_startYear
         rdf:type       json:Key ;
-        rdfs:label     "has movements_movement2" ;
-        json:hasValue  nextiaSchema:Object_14 .
+        rdfs:label     "dateRange_startYear" ;
+        json:hasValue  json:Number .
 
-nextiaSchema:movements_movement2_era_name
-        rdf:type       json:Key ;
-        rdfs:label     "movements_movement2_era_name" ;
+nextiaSchema:width  rdf:type  json:Key ;
+        rdfs:label     "width" ;
         json:hasValue  json:String .
 
-nextiaSchema:Object_15
-        rdf:type     json:Object ;
-        rdfs:label   "era" ;
-        json:hasKey  nextiaSchema:movements_movement2_era_name , nextiaSchema:movements_movement2_era_id .
+nextiaSchema:depth  rdf:type  json:Key ;
+        rdfs:label     "depth" ;
+        json:hasValue  json:String .
+
+nextiaSchema:acno  rdf:type  json:Key ;
+        rdfs:label     "acno" ;
+        json:hasValue  json:String .
 
 nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
 
-nextiaSchema:Object_8
-        rdf:type     json:Object ;
-        rdfs:label   "death" ;
-        json:hasKey  nextiaSchema:death_time , nextiaSchema:death_place .
-
-nextiaSchema:date  rdf:type  json:Key ;
-        rdfs:label     "date" ;
+nextiaSchema:thumbnailCopyright
+        rdf:type       json:Key ;
+        rdfs:label     "thumbnailCopyright" ;
         json:hasValue  json:String .
 
-nextiaSchema:birth_place
+nextiaSchema:contributors_contributor_1_birthYear
         rdf:type       json:Key ;
-        rdfs:label     "has birth_place" ;
-        json:hasValue  nextiaSchema:Object_6 .
+        rdfs:label     "contributors_contributor_1_birthYear" ;
+        json:hasValue  json:Number .
+
+nextiaSchema:creditLine
+        rdf:type       json:Key ;
+        rdfs:label     "creditLine" ;
+        json:hasValue  json:String .
+
+nextiaSchema:subjects_id
+        rdf:type       json:Key ;
+        rdfs:label     "subjects_id" ;
+        json:hasValue  json:Number .
+
+nextiaSchema:contributorCount
+        rdf:type       json:Key ;
+        rdfs:label     "contributorCount" ;
+        json:hasValue  json:Number .
 
 nextiaSchema:Object_2
-        rdf:type     json:Object ;
-        rdfs:label   "activePlaces" ;
-        json:hasKey  nextiaSchema:activePlaces_activePlace2 , nextiaSchema:activePlaces_activePlace1 .
+        rdf:type    json:Object ;
+        rdfs:label  "catalogueGroup" .
 
-nextiaSchema:movements_movement1
+nextiaSchema:dateRange
         rdf:type       json:Key ;
-        rdfs:label     "has movements_movement1" ;
-        json:hasValue  nextiaSchema:Object_12 .
+        rdfs:label     "has dateRange" ;
+        json:hasValue  nextiaSchema:Object_5 .
 
-nextiaSchema:Object_14
-        rdf:type     json:Object ;
-        rdfs:label   "movement2" ;
-        json:hasKey  nextiaSchema:movements_movement2_name , nextiaSchema:movements_movement2_id , nextiaSchema:movements_movement2_era .
+nextiaSchema:movementCount
+        rdf:type       json:Key ;
+        rdfs:label     "movementCount" ;
+        json:hasValue  json:Number .

@@ -5,338 +5,277 @@
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
-nextiaSchema:movements_movement2_id
+nextiaSchema:dateRange_endYear
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_14 ;
-        rdfs:label   "movements_movement2_id" ;
+        rdfs:domain  nextiaSchema:Object_5 ;
+        rdfs:label   "dateRange_endYear" ;
         rdfs:range   xsd:int .
 
-nextiaSchema:activePlaces_activePlace2
+nextiaSchema:foreignTitle
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_2 ;
-        rdfs:label   "has activePlaces_activePlace2" ;
-        rdfs:range   nextiaSchema:Object_4 .
-
-nextiaSchema:Object_7
-        rdf:type    rdfs:Class ;
-        rdfs:label  "time" .
-
-nextiaSchema:death_place_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_9 ;
-        rdfs:label   "death_place_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:activePlaces_activePlace1_placeName
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_3 ;
-        rdfs:label   "activePlaces_activePlace1_placeName" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:url  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "url" ;
+        rdfs:label   "foreignTitle" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:birth_place_placeName
+nextiaSchema:contributors_contributor_1_id
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_6 ;
-        rdfs:label   "birth_place_placeName" ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_id" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:dateRange_text
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_5 ;
+        rdfs:label   "dateRange_text" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:height  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "height" ;
         rdfs:range   xsd:string .
 
 nextiaSchema:Object_1
         rdf:type    rdfs:Class ;
         rdfs:label  "dataset1" .
 
-nextiaSchema:movements_movement1_era_id
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_13 ;
-        rdfs:label   "movements_movement1_era_id" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:birth_place_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_6 ;
-        rdfs:label   "birth_place_name" ;
+nextiaSchema:url  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "url" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:birth_time
+nextiaSchema:contributors_contributor_1_displayOrder
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_5 ;
-        rdfs:label   "has birth_time" ;
-        rdfs:range   nextiaSchema:Object_7 .
-
-nextiaSchema:death_time_startYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_10 ;
-        rdfs:label   "death_time_startYear" ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_displayOrder" ;
         rdfs:range   xsd:int .
 
-nextiaSchema:movements_movement1_id
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_12 ;
-        rdfs:label   "movements_movement1_id" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:Object_13
-        rdf:type    rdfs:Class ;
-        rdfs:label  "era" .
-
-nextiaSchema:activePlaceCount
+nextiaSchema:classification
         rdf:type     rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "activePlaceCount" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:movements
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has movements" ;
-        rdfs:range   nextiaSchema:Object_11 .
-
-nextiaSchema:fc  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "fc" ;
+        rdfs:label   "classification" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:activePlaces
+nextiaSchema:contributors_contributor_1_startLetter
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has activePlaces" ;
-        rdfs:range   nextiaSchema:Object_2 .
-
-nextiaSchema:birth_place_placeType
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_6 ;
-        rdfs:label   "birth_place_placeType" ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_startLetter" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:activePlaces_activePlace1
+nextiaSchema:contributors_contributor_1_gender
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_2 ;
-        rdfs:label   "has activePlaces_activePlace1" ;
-        rdfs:range   nextiaSchema:Object_3 .
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_gender" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:dimensions
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "dimensions" ;
+        rdfs:range   xsd:string .
 
 nextiaSchema:Object_6
         rdf:type    rdfs:Class ;
-        rdfs:label  "place" .
+        rdfs:label  "subjects" .
 
-nextiaSchema:activePlaces_activePlace2_placeName
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "activePlaces_activePlace2_placeName" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:movements_movement1_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_12 ;
-        rdfs:label   "movements_movement1_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:movements_movement1_era_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_13 ;
-        rdfs:label   "movements_movement1_era_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_12
-        rdf:type    rdfs:Class ;
-        rdfs:label  "movement1" .
-
-nextiaSchema:movements_movement2_era_id
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_15 ;
-        rdfs:label   "movements_movement2_era_id" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:death  rdf:type  rdf:Property ;
+nextiaSchema:units  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has death" ;
-        rdfs:range   nextiaSchema:Object_8 .
+        rdfs:label   "units" ;
+        rdfs:range   xsd:string .
 
-nextiaSchema:activePlaces_activePlace2_placeType
+nextiaSchema:contributors
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "activePlaces_activePlace2_placeType" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:gender  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "gender" ;
-        rdfs:range   xsd:string .
+        rdfs:label   "has contributors" ;
+        rdfs:range   nextiaSchema:Object_3 .
 
 nextiaSchema:Object_5
         rdf:type    rdfs:Class ;
-        rdfs:label  "birth" .
+        rdfs:label  "dateRange" .
 
-nextiaSchema:birth  rdf:type  rdf:Property ;
+nextiaSchema:title  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has birth" ;
-        rdfs:range   nextiaSchema:Object_5 .
+        rdfs:label   "title" ;
+        rdfs:range   xsd:string .
 
 nextiaDataSource:1234
         rdf:type                  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
         rdfs:label                "dataset1" ;
         nextiaDataSource:format   "JSON" ;
         nextiaDataSource:id       "1234" ;
-        nextiaDataSource:path     "src/main/resources/systematic_testing/pruebaGrandeDos.json" ;
-        nextiaDataSource:wrapper  "SELECT date,death.place.placeType AS death_place_placeType,gender,birth.place.placeName AS birth_place_placeName,activePlaceCount,death.place.name AS death_place_name,movements.movement1.id AS movements_movement1_id,movements.movement1.era.id AS movements_movement1_era_id,movements.movement2.era.id AS movements_movement2_era_id,activePlaces.activePlace1.placeName AS activePlaces_activePlace1_placeName,id,totalWorks,birth.place.name AS birth_place_name,movements.movement1.name AS movements_movement1_name,startLetter,death.time.startYear AS death_time_startYear,birth.time.startYear AS birth_time_startYear,birth.place.placeType AS birth_place_placeType,mda,movements.movement2.era.name AS movements_movement2_era_name,movements.movement2.id AS movements_movement2_id,url,activePlaces.activePlace1.name AS activePlaces_activePlace1_name,activePlaces.activePlace2.placeType AS activePlaces_activePlace2_placeType,movements.movement1.era.name AS movements_movement1_era_name,activePlaces.activePlace1.placeType AS activePlaces_activePlace1_placeType,birthYear,death.place.placeName AS death_place_placeName,movements.movement2.name AS movements_movement2_name,activePlaces.activePlace2.name AS activePlaces_activePlace2_name,activePlaces.activePlace2.placeName AS activePlaces_activePlace2_placeName,fc FROM dataset1 " .
+        nextiaDataSource:path     "src/main/resources/systematic_testing/pruebaGrandeCuatro.json" ;
+        nextiaDataSource:wrapper  "SELECT dateRange.endYear AS dateRange_endYear,contributors.`contributor 1`.date AS contributors_contributor_1_date,all_artists,contributors.`contributor 1`.role AS contributors_contributor_1_role,groupTitle,acquisitionYear,subjects.id AS subjects_id,contributors.`contributor 1`.id AS contributors_contributor_1_id,medium,units,thumbnailCopyright,title,foreignTitle,acno,movementCount,creditLine,subjects.name AS subjects_name,inscription,contributors.`contributor 1`.mda AS contributors_contributor_1_mda,id,dateRange.text AS dateRange_text,height,thumbnailUrl,dateText,contributors.`contributor 1`.displayOrder AS contributors_contributor_1_displayOrder,contributors.`contributor 1`.birthYear AS contributors_contributor_1_birthYear,contributors.`contributor 1`.fc AS contributors_contributor_1_fc,contributors.`contributor 1`.gender AS contributors_contributor_1_gender,dateRange.startYear AS dateRange_startYear,classification,url,contributors.`contributor 1`.startLetter AS contributors_contributor_1_startLetter,depth,width,contributorCount,dimensions,subjectCount FROM dataset1 " .
 
-nextiaSchema:activePlaces_activePlace1_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_3 ;
-        rdfs:label   "activePlaces_activePlace1_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:activePlaces_activePlace1_placeType
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_3 ;
-        rdfs:label   "activePlaces_activePlace1_placeType" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:movements_movement2_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_14 ;
-        rdfs:label   "movements_movement2_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_11
-        rdf:type    rdfs:Class ;
-        rdfs:label  "movements" .
-
-nextiaSchema:death_place_placeName
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_9 ;
-        rdfs:label   "death_place_placeName" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:totalWorks
+nextiaSchema:groupTitle
         rdf:type     rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "totalWorks" ;
+        rdfs:label   "groupTitle" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:medium  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "medium" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:all_artists
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "all_artists" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:subjectCount
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "subjectCount" ;
         rdfs:range   xsd:int .
 
-nextiaSchema:death_place
+nextiaSchema:subjects_name
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_8 ;
-        rdfs:label   "has death_place" ;
-        rdfs:range   nextiaSchema:Object_9 .
+        rdfs:domain  nextiaSchema:Object_6 ;
+        rdfs:label   "subjects_name" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:contributors_contributor_1_role
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_role" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:contributors_contributor_1_fc
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_fc" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:thumbnailUrl
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "thumbnailUrl" ;
+        rdfs:range   xsd:string .
 
 nextiaSchema:Object_4
         rdf:type    rdfs:Class ;
-        rdfs:label  "activePlace2" .
+        rdfs:label  "contributor 1" .
 
-nextiaSchema:birth_time_startYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_7 ;
-        rdfs:label   "birth_time_startYear" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:birthYear
+nextiaSchema:subjects
         rdf:type     rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "birthYear" ;
-        rdfs:range   xsd:int .
+        rdfs:label   "has subjects" ;
+        rdfs:range   nextiaSchema:Object_6 .
 
-nextiaSchema:activePlaces_activePlace2_name
+nextiaSchema:catalogueGroup
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "activePlaces_activePlace2_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:death_place_placeType
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_9 ;
-        rdfs:label   "death_place_placeType" ;
-        rdfs:range   xsd:string .
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "has catalogueGroup" ;
+        rdfs:range   nextiaSchema:Object_2 .
 
 nextiaSchema:id  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
         rdfs:label   "id" ;
         rdfs:range   xsd:int .
 
-nextiaSchema:movements_movement1_era
+nextiaSchema:contributors_contributor_1_date
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_12 ;
-        rdfs:label   "has movements_movement1_era" ;
-        rdfs:range   nextiaSchema:Object_13 .
-
-nextiaSchema:mda  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "mda" ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_date" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:startLetter
+nextiaSchema:acquisitionYear
         rdf:type     rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "startLetter" ;
+        rdfs:label   "acquisitionYear" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:inscription
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "inscription" ;
         rdfs:range   xsd:string .
 
-nextiaSchema:Object_10
-        rdf:type    rdfs:Class ;
-        rdfs:label  "time" .
-
-nextiaSchema:Object_9
-        rdf:type    rdfs:Class ;
-        rdfs:label  "place" .
-
-nextiaSchema:death_time
+nextiaSchema:contributors_contributor_1_mda
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_8 ;
-        rdfs:label   "has death_time" ;
-        rdfs:range   nextiaSchema:Object_10 .
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_mda" ;
+        rdfs:range   xsd:string .
 
-nextiaSchema:movements_movement2_era
+nextiaSchema:contributors_contributor_1
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_14 ;
-        rdfs:label   "has movements_movement2_era" ;
-        rdfs:range   nextiaSchema:Object_15 .
+        rdfs:domain  nextiaSchema:Object_3 ;
+        rdfs:label   "has contributors_contributor_1" ;
+        rdfs:range   nextiaSchema:Object_4 .
+
+nextiaSchema:dateText
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "dateText" ;
+        rdfs:range   xsd:string .
 
 nextiaSchema:Object_3
         rdf:type    rdfs:Class ;
-        rdfs:label  "activePlace1" .
+        rdfs:label  "contributors" .
 
-nextiaSchema:movements_movement2
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_11 ;
-        rdfs:label   "has movements_movement2" ;
-        rdfs:range   nextiaSchema:Object_14 .
-
-nextiaSchema:movements_movement2_era_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_15 ;
-        rdfs:label   "movements_movement2_era_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_15
-        rdf:type    rdfs:Class ;
-        rdfs:label  "era" .
-
-nextiaSchema:Object_8
-        rdf:type    rdfs:Class ;
-        rdfs:label  "death" .
-
-nextiaSchema:date  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "date" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:birth_place
+nextiaSchema:dateRange_startYear
         rdf:type     rdf:Property ;
         rdfs:domain  nextiaSchema:Object_5 ;
-        rdfs:label   "has birth_place" ;
-        rdfs:range   nextiaSchema:Object_6 .
+        rdfs:label   "dateRange_startYear" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:width  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "width" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:depth  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "depth" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:acno  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "acno" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:thumbnailCopyright
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "thumbnailCopyright" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:contributors_contributor_1_birthYear
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_4 ;
+        rdfs:label   "contributors_contributor_1_birthYear" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:creditLine
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "creditLine" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:contributorCount
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "contributorCount" ;
+        rdfs:range   xsd:int .
+
+nextiaSchema:subjects_id
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_6 ;
+        rdfs:label   "subjects_id" ;
+        rdfs:range   xsd:int .
 
 nextiaSchema:Object_2
         rdf:type    rdfs:Class ;
-        rdfs:label  "activePlaces" .
+        rdfs:label  "catalogueGroup" .
 
-nextiaSchema:movements_movement1
+nextiaSchema:dateRange
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_11 ;
-        rdfs:label   "has movements_movement1" ;
-        rdfs:range   nextiaSchema:Object_12 .
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "has dateRange" ;
+        rdfs:range   nextiaSchema:Object_5 .
 
-nextiaSchema:Object_14
-        rdf:type    rdfs:Class ;
-        rdfs:label  "movement2" .
+nextiaSchema:movementCount
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "movementCount" ;
+        rdfs:range   xsd:int .
