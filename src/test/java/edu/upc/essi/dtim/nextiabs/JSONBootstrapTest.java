@@ -103,7 +103,7 @@ class JSONBootstrapTest {
         MGood.loadModel(commonOutPath+"GRDFSp7.ttl");
         assertTrue(MGood.getModel().isIsomorphicWith(M.getModel()));
         assertEquals(1, j.getKeysWrongFormatted().size());
-        //check if wrapper is correct
+        //check if wrapper is  correct
         correctWrapper = "SELECT id_,`place of work` AS place_of_work,index FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
     }
