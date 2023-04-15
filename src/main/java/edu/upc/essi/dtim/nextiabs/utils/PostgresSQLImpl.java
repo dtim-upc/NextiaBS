@@ -1,4 +1,6 @@
-package edu.upc.essi.dtim.nextiabs;
+package edu.upc.essi.dtim.nextiabs.utils;
+
+import edu.upc.essi.dtim.nextiabs.SQLTableData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.List;
 
 public class PostgresSQLImpl implements IDatabaseSystem {
     Connection connection;
-    String hostname, username, password;
+    String hostname, username, password, tableName;
 
     @Override
     public void connect(String hostname, String username, String password) {
@@ -45,8 +47,8 @@ public class PostgresSQLImpl implements IDatabaseSystem {
     }
 
     @Override
-    public HashMap<String, SQLMetamodelTable> getMetamodel() {
-        HashMap<String, SQLMetamodelTable> resultMetamodel = new HashMap<String, SQLMetamodelTable>();
+    public HashMap<String, SQLTableData> getMetamodel() {
+        HashMap<String, SQLTableData> resultMetamodel = new HashMap<String, SQLTableData>();
 
         List<String> tables = new ArrayList<>();
 //        Map<String, Integer> allColumns = new HashMap<String, Integer>();
@@ -61,17 +63,19 @@ public class PostgresSQLImpl implements IDatabaseSystem {
 
             //? llista de taules guardades a 'tables'
             Statement stmt = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT table_name\n" +
-                    "FROM INFORMATION_SCHEMA.TABLES\n" +
-                    "WHERE table_type = 'BASE TABLE'");
-            while(rs.next()) {
-                String tableNamei = rs.getString("table_name");
-                //! treiem les del sistema (no es universal, solució temporal) // no pots tenir una taula que comenci per sql_ feta pel user
-                if(!tableNamei.startsWith("pg_") && !tableNamei.startsWith("sql_")){
-                    tables.add(tableNamei);
-                    resultMetamodel.put(tableNamei, new SQLMetamodelTable(tableNamei));
-                }
-            }
+            ResultSet rs;
+//          ResultSet rs = stmt.executeQuery("SELECT table_name\n" +
+//                    "FROM INFORMATION_SCHEMA.TABLES\n" +
+//                    "WHERE table_type = 'BASE TABLE'");
+
+//            while(rs.next()) {
+//                String tableNamei = rs.getString("table_name");
+//                //! treiem les del sistema (no es universal, solució temporal) // no pots tenir una taula que comenci per sql_ feta pel user
+//                if(!tableNamei.startsWith("pg_") && !tableNamei.startsWith("sql_")){
+//                    tables.add(tableNamei);
+//                    resultMetamodel.put(tableNamei, new SQLMetamodelTable(tableNamei));
+//                }
+//            }
 
             //? llista de referencies entre taules guardades a 'referencies'
 //            rs = stmt.executeQuery("select u.table_name as TablaDesti, u.column_name as ColumnaDesti, r.table_name as TablaOrigen, r.column_name as ColumnaOrigen\n" +
@@ -92,6 +96,7 @@ public class PostgresSQLImpl implements IDatabaseSystem {
 //                System.out.println("REFERENCIA: \n"+tmp + "  " + rs.getString("TablaDesti"));
 //            }
 
+            tables.add(tableName);
             //! per cada taula
             for (String t: tables) {
                 //* ja tenim el primer node del graph (SQLPruebaX) com a classe i amb label
@@ -171,7 +176,29 @@ public class PostgresSQLImpl implements IDatabaseSystem {
     }
 
     @Override
-    public SQLMetamodelTable getMetamodelSingleTable(String tablename) {
-        return null;
+    public SQLTableData getMetamodelSingleTable(String tableName) {
+        SQLTableData result = new SQLTableData(tableName);
+        try {
+
+            Statement stmt = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs;
+
+            //?llista de columnes de la taula
+            rs = stmt.executeQuery("SELECT *\n" +
+                    "  FROM information_schema.columns\n" +
+                    "   WHERE table_name   = '"+tableName+"';"
+            );
+
+            while(rs.next()) {
+                String columnNamei = rs.getString("column_name");
+                String dataTypei = rs.getString("data_type");
+                result.addColumn(columnNamei, dataTypei);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }

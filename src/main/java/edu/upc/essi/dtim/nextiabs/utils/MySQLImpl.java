@@ -1,4 +1,6 @@
-package edu.upc.essi.dtim.nextiabs;
+package edu.upc.essi.dtim.nextiabs.utils;
+
+import edu.upc.essi.dtim.nextiabs.SQLTableData;
 
 import java.util.HashMap;
 
@@ -11,12 +13,12 @@ public class MySQLImpl implements IDatabaseSystem {
     }
 
     @Override
-    public HashMap<String, SQLMetamodelTable> getMetamodel() {
+    public HashMap<String, SQLTableData> getMetamodel() {
         return null;
     }
 
     @Override
-    public SQLMetamodelTable getMetamodelSingleTable(String tablename) {
+    public SQLTableData getMetamodelSingleTable(String tablename) {
         return null;
     }
 }

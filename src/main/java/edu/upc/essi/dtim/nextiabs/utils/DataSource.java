@@ -1,5 +1,6 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
+import edu.upc.essi.dtim.nextiabs.metamodels.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.metamodels.JSON_MM;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 import lombok.Getter;
@@ -49,5 +50,6 @@ public abstract class DataSource implements IDataSource {
         prefixes.put("rdfs", RDFS.getURI());
         prefixes.put("xsd", XSD.getURI());
         prefixes.put("json", JSON_MM.getURI());
+        prefixes.put("dataFrame", DataFrame_MM.getURI());
     }
 }

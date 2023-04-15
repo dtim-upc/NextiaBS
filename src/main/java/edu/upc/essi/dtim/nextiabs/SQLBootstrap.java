@@ -1,38 +1,52 @@
 package edu.upc.essi.dtim.nextiabs;
 
 import com.github.andrewoma.dexx.collection.Pair;
-import edu.upc.essi.dtim.nextiabs.utils.DataSource;
-import edu.upc.essi.dtim.nextiabs.utils.Graph;
+import edu.upc.essi.dtim.nextiabs.metamodels.DataFrame_MM;
+import edu.upc.essi.dtim.nextiabs.utils.*;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 //import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
+import org.apache.jena.sparql.algebra.table.TableData;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 //import org.slf4j.impl.StaticLoggerBinder;
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 //import java.io.WriteAbortedException;
 //import java.sql.*;
-import java.util.*;
+
 
 /**
- * Generates an RDFS-compliant representation of a postgresSQL database
+ * Generates an instance of a DataFrame_Metamodel representation of a postgresSQL database
  * @author juane
  */
 public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 
-    private IDatabaseSystem Database;
-    private HashMap<String, SQLMetamodelTable> Metamodel;
-    private String hostname, username, password;
+    private final IDatabaseSystem Database;
+    //private HashMap<String, SQLMetamodelTable> Metamodel;
+    private SQLTableData tableData;
+    private final String hostname;
+    private final String username;
+    private final String password;
+    private String tableName;
 
     public SQLBootstrap(String id, String name, IDatabaseSystem DBType, String hostname, String username, String password) {
         super();
         this.id = id;
         this.name = name;
+        G_target = new Graph();
         this.Database = DBType;
         this.hostname = hostname;
         this.username = username;
         this.password = password;
-        this.Metamodel = new HashMap<String, SQLMetamodelTable>();
+        this.tableName = "empleats";
+        this.tableData = new SQLTableData(tableName);
+        //this.Metamodel = new HashMap<String, SQLMetamodelTable>();
 
     }
 
@@ -45,20 +59,21 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
     public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
 
         //* Graph, llista de tables, llista de totes les columnes (per si hi ha repetits), llista de refs. entre taules
-        G_target = new Graph();
+
         Database.connect(hostname, username, password);
-        Metamodel = Database.getMetamodel();
-        String tableName = "tabla1";
+
+        //Metamodel = Database.getMetamodel();
+        tableData = Database.getMetamodelSingleTable(tableName);
 
         setPrefixes();
 
         //? productionRules_SQL_to_RDFS(); //este sería para convertir todo el metamodelo, incluidas relaciones
 
         //este sería para una sola tabla a partir de un conjunto de tablas que estan en formato SQLMetamodelTable
-        productionRules_SQL_to_RDFS(tableName); //setea G_target;
+        productionRules_SQL_to_DF_MM(tableName); //setea G_target;
 
-        //? generateWrapper(); //el wrapper sería un "SELECT * FROM TABLE"
-        wrapper = "SELECT * from "+tableName;
+        //el wrapper sería un "SELECT * FROM TABLE"
+        wrapper = generateWrapper();
         // System.out.println(wrapper);
 
         if(generateMetadata) {
@@ -69,21 +84,61 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         return G_target;
     }
 
-    private void productionRules_SQL_to_RDFS(String tableName) {
+    private String generateWrapper() {
+        String wrapper = "SELECT ";
+        List<String> columns = new LinkedList<>();
+        for(Pair<String, String> col: tableData.getColumns())
+            columns.add(col.component1());
+        String columnNames = String.join(", ", columns);
+
+        wrapper += columnNames;
+        wrapper += " FROM ";
+        wrapper += tableName;
+        System.out.println("Generated wrapper: "+wrapper);
+        return wrapper;
+    }
+
+    private void productionRules_SQL_to_DF_MM(String tableName) {
+//      Rule 1 Instances of sql:Table are translated to instances of dfMM:DataFrame.
+//      ∀t(〈t, rdf:type, sql:Table〉(G))=⇒∃c(〈c, rdf:type, dfMM:DataFrame〉(G′)∧c=t)
+        G_target.add(createIRI(tableName), RDF.type, DataFrame_MM.DataFrame);
+        G_target.addLiteral(createIRI(tableName), RDFS.label, tableName);
+
         //Rule 1 Instances of sql:Table are translated to instances of rdfs:Class.
         // ∀t(〈t, rdf:type, sql:Table〉(G))=⇒∃c(〈c, rdf:type, rdfs:Class〉(G′)∧c=t)
-        G_target.add(createIRI(tableName), RDF.type, RDFS.Class);
-        G_target.addLiteral(createIRI(tableName), RDFS.label, name);
+//        G_target.add(createIRI(tableName), RDF.type, RDFS.Class);
+//        G_target.addLiteral(createIRI(tableName), RDFS.label, name);
 
         //Rule 2 Instances of sql:Column are translated to instances of rdf:Property. Also, it's required to define the rdfs:domain of said rdf:Property.
         //∀t, a (〈t, sql:hasColumn, a〉(G))=⇒∃c,p(〈p, rdf:type, rdf:Property〉(G′)∧〈p, rdfs:domain, c〉(G′)∧p=a∧c=t)
-        SQLMetamodelTable tableOrigin = Metamodel.get(tableName);
-        for(Pair<String, String> col: tableOrigin.getColumns()) {
-            G_target.add(createIRI(tableName+"."+col.component1()), RDF.type, RDF.Property);
-            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.domain, createIRI(tableName));
-            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.range, DBTypeToRDFSType(col.component2()));
+        //? ---------------- no, no?? -------------
+//        for(Pair<String, String> col: tableData.getColumns()) {
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDF.type, DataFrame_MM.Data);
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.domain, createIRI(tableName));
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.range, DBTypeToRDFSType(col.component2()));
+//            G_target.addLiteral(createIRI(tableName+"."+col.component1()), RDFS.label,col.component1());
+//        }
+
+        for(Pair<String, String> col: tableData.getColumns()){
+            G_target.add(createIRI(tableName+"."+col.component1()), RDF.type, DataFrame_MM.Data);
             G_target.addLiteral(createIRI(tableName+"."+col.component1()), RDFS.label,col.component1());
+            G_target.add(createIRI(tableName), DataFrame_MM.hasData,createIRI(tableName+"."+col.component1()));
+            System.out.println(col.component2());
+            if(col.component2().equals("integer"))
+                G_target.add(createIRI(tableName+"."+col.component1()),DataFrame_MM.hasDataType, DataFrame_MM.Number );
+            else
+                G_target.add(createIRI(tableName+"."+col.component1()),DataFrame_MM.hasDataType, DataFrame_MM.String );
         }
+
+        //Rule 2 Instances of sql:Column are translated to instances of rdf:Property. Also, it's required to define the rdfs:domain of said rdf:Property.
+        //∀t, a (〈t, sql:hasColumn, a〉(G))=⇒∃c,p(〈p, rdf:type, rdf:Property〉(G′)∧〈p, rdfs:domain, c〉(G′)∧p=a∧c=t)
+//        SQLTableData tableOrigin = tableData;
+//        for(Pair<String, String> col: tableOrigin.getColumns()) {
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDF.type, RDF.Property);
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.domain, createIRI(tableName));
+//            G_target.add(createIRI(tableName+"."+col.component1()), RDFS.range, DBTypeToRDFSType(col.component2()));
+//            G_target.addLiteral(createIRI(tableName+"."+col.component1()), RDFS.label,col.component1());
+//        }
 
         //! l'he fet dalt
         //Rule 3.
@@ -138,6 +193,10 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         }
     }
 
+    private org.apache.jena.rdf.model.Resource DBTypeToDF_MMType(String type) {
+        return DataFrame_MM.Primitive; //
+    }
+
     @Override
     public void generateMetadata(){
         String ds = DataSourceVocabulary.DataSource.getURI() +"/" + name;
@@ -167,8 +226,11 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         SQLBootstrap sql = new SQLBootstrap("18","SQLInterface1",new PostgresSQLImpl(),"localhost...", "user", "psswrd");
         Graph m = sql.bootstrapSchema(true);
 //      m.write(System.out, "turtle");
-        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\SQLInterface1.ttl", "Turlte");
-
+        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\withDataFrameSOURCE.ttl", "Turlte");
+        DF_MMtoRDFS translate = new DF_MMtoRDFS();
+        Graph x = translate.productionRulesDataframe_to_RDFS2(m);
+        x.setPrefixes(m.getModel().getNsPrefixMap());
+        x.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\withDataFrameTARGET.ttl", "Turlte");
     }
 
 

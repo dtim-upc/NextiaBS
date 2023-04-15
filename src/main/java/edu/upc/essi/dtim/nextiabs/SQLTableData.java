@@ -5,7 +5,7 @@ import com.github.andrewoma.dexx.collection.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLMetamodelTable {
+public class SQLTableData {
     private String name;
 
     //el datatype de les columnes hauria d'estar ja en RDFS? no tindria sentit, hauria d'estar en l'original
@@ -16,7 +16,7 @@ public class SQLMetamodelTable {
     private List<Pair<List<String>, String>> references;
 
 
-    SQLMetamodelTable(String name){
+    public SQLTableData(String name){
         this.name = name;
         this.columns = new ArrayList<>();
     }
@@ -32,7 +32,7 @@ public class SQLMetamodelTable {
         columns.add(column);
     }
 
-    void addColumn(String name, String dataType) {
+    public void addColumn(String name, String dataType) {
         columns.add(new Pair(name, dataType));
     }
 
