@@ -5,18 +5,13 @@ import edu.upc.essi.dtim.nextiabs.metamodels.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.utils.*;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 //import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
-import org.apache.jena.sparql.algebra.table.TableData;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 //import org.slf4j.impl.StaticLoggerBinder;
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 //import java.io.WriteAbortedException;
 //import java.sql.*;
 
@@ -228,7 +223,7 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
 //      m.write(System.out, "turtle");
         m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\withDataFrameSOURCE.ttl", "Turlte");
         DF_MMtoRDFS translate = new DF_MMtoRDFS();
-        Graph x = translate.productionRulesDataframe_to_RDFS2(m);
+        Graph x = translate.productionRulesDataframe_to_RDFS(m);
         x.setPrefixes(m.getModel().getNsPrefixMap());
         x.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\withDataFrameTARGET.ttl", "Turlte");
     }

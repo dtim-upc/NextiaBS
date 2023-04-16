@@ -1,7 +1,5 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
-import edu.upc.essi.dtim.nextiabs.SQLTableData;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;

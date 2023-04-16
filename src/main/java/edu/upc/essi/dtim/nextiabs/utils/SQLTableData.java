@@ -1,4 +1,4 @@
-package edu.upc.essi.dtim.nextiabs;
+package edu.upc.essi.dtim.nextiabs.utils;
 
 import com.github.andrewoma.dexx.collection.Pair;
 
@@ -21,7 +21,7 @@ public class SQLTableData {
         this.columns = new ArrayList<>();
     }
 
-    List<Pair<String, String>> getColumns(){
+    public List<Pair<String, String>> getColumns(){
         return columns;
     }
     void putColumns(List<Pair<String, String>> columns){

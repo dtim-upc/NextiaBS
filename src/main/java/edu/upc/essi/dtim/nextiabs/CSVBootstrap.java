@@ -39,6 +39,7 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 	public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
 		G_target = new Graph();
 		this.id = id;
+		setPrefixes();
 
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		CSVParser parser = CSVParser.parse(br, CSVFormat.DEFAULT.withFirstRecordAsHeader());
@@ -87,7 +88,7 @@ public class CSVBootstrap extends DataSource implements IBootstrap<Graph> {
 		String pathcsv = "src/main/resources/artworks.csv";
 		CSVBootstrap csv = new CSVBootstrap("12","artworks", pathcsv);
 		Graph m =csv.bootstrapSchema(true);
-		m.write(System.out, "Turtle");
+		m.write("src/main/resources/out/artwork.ttl", "Turtle");
 	}
 
 

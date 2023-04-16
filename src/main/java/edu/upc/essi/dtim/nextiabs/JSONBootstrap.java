@@ -341,7 +341,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
 //		Model M = j.bootstrapSchema("ds1", D,"/Users/javierflores/Documents/upc/projects/newODIN/datasources/survey_prueba/selected/tate_artist_picasso-pablo-1767.json");
         Graph M = j.bootstrapSchema();
-        M.write("src/main/resources/out/target.ttl");
+        M.write("src/main/resources/out/target.ttl", "lang.Trtle");
 
         Graph G = new Graph();
         java.nio.file.Path temp = Files.createTempFile("bootstrap",".ttl");

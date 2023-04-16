@@ -337,7 +337,7 @@ public class JSONBootstrap_with_DataFrame_MM extends DataSource implements IBoot
         Graph M = j.bootstrapSchema();
 
         DF_MMtoRDFS translate = new DF_MMtoRDFS();
-        Graph x = translate.productionRulesDataframe_to_RDFS2(M);
+        Graph x = translate.productionRulesDataframe_to_RDFS(M);
         x.setPrefixes(M.getModel().getNsPrefixMap());
         x.write("src/main/resources/out/stations_targetPRUEBA.ttl", "Lang.TURTLE");
 
