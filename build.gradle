@@ -32,6 +32,10 @@ dependencies {
 //    implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.24'
 
 
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
+    implementation 'org.apache.spark:spark-sql_2.13:3.3.2'
+
+
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 
