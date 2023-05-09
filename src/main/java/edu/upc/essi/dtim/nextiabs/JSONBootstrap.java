@@ -29,10 +29,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -147,6 +146,8 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
      * Creates the wrapper of the JSON that is being bootstrapped
      */
     private void createWrapper() {
+
+
         String SELECT = JSONPrimitives.entrySet().stream().map(p -> {
             if (p.getKey().equals(p.getValue().getKey())) return p.getValue().getPath();
             return p.getValue().getPath() + " AS " + p.getValue().getLabel();
@@ -157,6 +158,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         String LATERAL = lateralViews.stream()
                 .map(p -> "LATERAL VIEW explode(" + p.getLeft() + ") AS " + p.getRight()).collect(Collectors.joining("\n"));
         wrapper = "SELECT " + SELECT + " FROM " + FROM + " " + LATERAL;
+
     }
 
     /**
@@ -208,10 +210,10 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
      * @param value value of a pair key:value
      * @param keyInfo complete information of the key (original key name, label and path)
      */
-    private void DataType(JsonValue value, JSON_Aux keyInfo) {
+    private void DataType(JsonValue value, JSON_Aux keyInfo, boolean valueFromArray, String iri_key) {
         if (value.getValueType() == JsonValue.ValueType.OBJECT) Object((JsonObject) value, keyInfo);
-        else if (value.getValueType() == JsonValue.ValueType.ARRAY) Array((JsonArray) value, keyInfo);
-        else Primitive(value, keyInfo);
+        else if (value.getValueType() == JsonValue.ValueType.ARRAY) Array((JsonArray) value, keyInfo, iri_key);
+        else Primitive(value, keyInfo, valueFromArray);
     }
 
     /**
@@ -226,8 +228,13 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         G_source.add(iri_u_prime, RDF.type, JSON_MM.Object);
         G_source.addLiteral(iri_u_prime, RDFS.label, parentInfo.getKey());
 
+        boolean valueFromArray;
+        valueFromArray = parentInfo.getPath().contains("Array_");
+
         jsonObject.forEach((key,value)-> {
-            emptyJson = false;
+            if (value.getValueType() != JsonValue.ValueType.ARRAY && !parentInfo.getPath().contains("Array_")) {
+                emptyJson = false;
+            }
             String k_prime;
             if (!parentInfo.getPath().equals("")) {
                 k_prime = freshAttribute(key, parentInfo.getPath());
@@ -235,8 +242,10 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             String iri_k = createIRI(k_prime);
             G_source.add(iri_k, RDF.type, JSON_MM.Key);
 
-            if( value.getValueType() == JsonValue.ValueType.OBJECT || value.getValueType() == JsonValue.ValueType.ARRAY)
-                G_source.addLiteral(iri_k, RDFS.label,"has " + k_prime);
+            if (value.getValueType() == JsonValue.ValueType.OBJECT || value.getValueType() == JsonValue.ValueType.ARRAY) {
+                G_source.addLiteral(iri_k, RDFS.label, "has " + k_prime);
+                if (value.getValueType() == JsonValue.ValueType.ARRAY) k_prime = "has " + k_prime;
+            }
             else {
                 G_source.addLiteral(iri_k, RDFS.label, k_prime);
             }
@@ -252,44 +261,88 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
                 if (parentInfo.getPath().equals(""))
                     keyPath = key;
             }
-            DataType(value, new JSON_Aux(key, k_prime, keyPath));
+            DataType(value, new JSON_Aux(key, k_prime, keyPath), valueFromArray, iri_k);
         });
 
         G_source.add(createIRI(parentInfo.getLabel()), JSON_MM.hasValue, iri_u_prime);
     }
 
-    private String replaceLast(String string, String toReplace, String replacement) {
-        int pos = string.lastIndexOf(toReplace);
-        if (pos > -1) {
-            return string.substring(0, pos)
-                    + replacement
-                    + string.substring(pos + toReplace.length());
-        } else {
-            return string;
-        }
-    }
-
     /**
      * instantiates the J:Array with a fresh iri and checks the type of its elements
-     * @param jsonArray an homogeneous array that is either empty or its elements are of any of the types of JSON's ValueType
-     * @param keyInfo complete information of the key (original key name, label and path)
+     * @param jsonArray an homogeneous array that is either empty or its elements are of the types of JSON's ValueType
+     * @param parentInfo complete information of the key (original key name, label and path)
+     * @param parentIRI if the function is called from an opbject that is inside another array, this parameter is needed to make the association between that key and its
+     * array node.
      */
-    private void Array (JsonArray jsonArray, JSON_Aux keyInfo) {
-        String u_prime = freshArray();
-        String iri_u_prime = createIRI(u_prime);
 
-        G_source.add(iri_u_prime, RDF.type, JSON_MM.Array);
-        G_source.addLiteral(iri_u_prime, RDFS.label, keyInfo.getKey());
+    private void Array (JsonArray jsonArray, JSON_Aux parentInfo, String parentIRI) {
+        //boolean to know, in the case of a multidimensional array, if we are at the 1st level
+        boolean firstArray = false;
+        String u_prime_original = "";
+        String u_prime = "";
+        String u_label = "";
+        String u_path = "";
+        String iri_u_prime;
+        //if the parent is a Key, we are at the 1st level, hence we also restart the value of the arrayCounter
+        if (parentInfo.getLabel().contains("has ")) {
+            firstArray = true;
+            arrayCounter = 0;
+        }
+        //give a key, label and path to the array level we are at so that we can add it to the lateralViews structure
+        u_prime_original = freshArray();
+        //if the parent path has dots, they need to be replaced by a valid character
+        if (parentInfo.getPath().contains(".")) {
+            u_prime = parentInfo.getPath().replace('.', '_') + "_" + u_prime_original;
+        } else u_prime = parentInfo.getPath() + "_" + u_prime_original;
+        u_label = u_prime;
+        iri_u_prime = createIRI(u_prime);
+        if (parentInfo.getPath().equals("")) {
+            u_path = u_prime;
+        } else u_path = parentInfo.getPath() + "." + u_prime_original;
 
-        if (jsonArray.size() > 0) {
-            DataType(jsonArray.get(0), new JSON_Aux(u_prime, keyInfo.getLabel(), replaceLast(keyInfo.getPath(),keyInfo.getKey(),keyInfo.getKey()+"_view")));
-        } else {
-            // TODO: some ds have empty array, check below example images array
-            G_source.add(createIRI(keyInfo.getKey()), JSON_MM.hasValue, JSON_MM.String);
+        lateralViews.add(Pair.of(parentInfo.getKey(),parentInfo.getKey()+"_view"));
+
+        //if its the 1st level, then we also make the association between the key and the array node and we instantiate the array node ih the source graph
+        if (firstArray) {
+            G_source.add(iri_u_prime, RDF.type, JSON_MM.Array);
+            G_source.addLiteral(iri_u_prime, RDFS.label, u_label);
+            if (parentInfo.getLabel().contains("Array_")) {
+                G_source.add(parentIRI, JSON_MM.hasValue, iri_u_prime);
+            } else G_source.add(createIRI(parentInfo.getKey()), JSON_MM.hasValue, iri_u_prime);
         }
 
-        lateralViews.add(Pair.of(keyInfo.getKey(),keyInfo.getKey()+"_view"));
-        G_source.add(createIRI(keyInfo.getKey()), JSON_MM.hasValue, iri_u_prime);
+        //base case: the array is empty or is an array of primitives
+        if (jsonArray.size() == 0 || jsonArray.get(0).getValueType() == JsonValue.ValueType.NUMBER || jsonArray.get(0).getValueType() == JsonValue.ValueType.STRING || jsonArray.get(0).getValueType() == JsonValue.ValueType.TRUE || jsonArray.get(0).getValueType() == JsonValue.ValueType.FALSE) {
+            //assure that the array is homogeneus
+            for (int i = 0; i < jsonArray.size() - 1; i++) {
+                if (jsonArray.get(i).getValueType() != jsonArray.get(i+1).getValueType()) System.out.println("ERROR! The values of an array must be homogeneus.");
+            }
+            //Connect the primitive type node with the 1st level of the Array
+            if (firstArray) {
+                Primitive(jsonArray.get(0), new JSON_Aux(u_prime, u_label, u_path), true);
+            } else Primitive(jsonArray.get(0), parentInfo, true);
+
+        }
+        else {
+            //assure that the array is homogeneus
+            for (int i = 0; i < jsonArray.size() - 1; i++) {
+                if (jsonArray.get(i).getValueType() != jsonArray.get(i+1).getValueType()) System.out.println("ERROR! The values of an array must be homogeneus.");
+            }
+            //array of objects
+            if (jsonArray.get(0).getValueType() == JsonValue.ValueType.OBJECT) {
+                //Connect the object type node with the 1st level of the Array
+                if (firstArray) {
+                    Object((JsonObject) jsonArray.get(0), new JSON_Aux(u_prime, u_label, u_path));
+                } else Object((JsonObject) jsonArray.get(0), parentInfo);
+            }
+            //array of arrays
+            else {
+                //Connect the primitive type node with the 1st level of the Array
+                if (firstArray) {
+                    Array((JsonArray) jsonArray.get(0), new JSON_Aux(u_prime, u_label, u_path), "");
+                } else Array((JsonArray) jsonArray.get(0), parentInfo, "");
+            }
+        }
     }
 
     /**
@@ -297,18 +350,24 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
      * @param value value of a pair key:value
      * @param keyInfo complete information of the key (original key name, label and path)
      */
-    private void Primitive (JsonValue value, JSON_Aux keyInfo) {
+    private void Primitive (JsonValue value, JSON_Aux keyInfo, boolean valueFromArray) {
         if (value.getValueType() == JsonValue.ValueType.NUMBER) {
             G_source.add(createIRI(keyInfo.getLabel()), JSON_MM.hasValue, JSON_MM.Number);
-            JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            if (!valueFromArray) {
+                JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            }
         }
         else if ((value.getValueType() == JsonValue.ValueType.TRUE) || (value.getValueType() == JsonValue.ValueType.FALSE)) {
             G_source.add(createIRI(keyInfo.getLabel()), JSON_MM.hasValue, JSON_MM.Boolean);
-            JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            if (!valueFromArray) {
+                JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            }
         }
         else {
             G_source.add(createIRI(keyInfo.getLabel()), JSON_MM.hasValue, JSON_MM.String);
-            JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            if (!valueFromArray) {
+                JSONPrimitives.put(keyInfo.getLabel(), keyInfo);
+            }
         }
     }
 
@@ -393,32 +452,56 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xboolean);
             System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xboolean);
         });
+        //String Array case
+        G_source.runAQuery("SELECT ?k ?a WHERE { ?k <"+JSON_MM.hasValue+">+ ?a . ?a <"+JSON_MM.hasValue+">+ <"+JSON_MM.String+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?a <"+RDF.type+"> <"+JSON_MM.Array+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xstring);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xstring);
+        });
+        //Number Array case
+        G_source.runAQuery("SELECT ?k ?a WHERE { ?k <"+JSON_MM.hasValue+">+ ?a . ?a <"+JSON_MM.hasValue+">+ <"+JSON_MM.Number+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?a <"+RDF.type+"> <"+JSON_MM.Array+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xint);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xint);
+        });
+        //Boolean Array case
+        G_source.runAQuery("SELECT ?k ?a WHERE { ?k <"+JSON_MM.hasValue+">+ ?a . ?a <"+JSON_MM.hasValue+">+ <"+JSON_MM.Boolean+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?a <"+RDF.type+"> <"+JSON_MM.Array+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xboolean);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xboolean);
+        });
+        //Empty Array case --> here we take it as if it was String because there is no null xsd value
+        G_source.runAQuery("SELECT ?k ?a WHERE { ?k <"+JSON_MM.hasValue+">+ ?a . ?a <"+JSON_MM.hasValue+">+ <"+JSON_MM.Null+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?a <"+RDF.type+"> <"+JSON_MM.Array+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range,XSD.xstring);
+            System.out.println("#4 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+XSD.xstring);
+        });
 
         //Rule 5. Range of objects.
         G_source.runAQuery("SELECT ?k ?v WHERE { ?k <"+JSON_MM.hasValue+">+ ?v . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?v <"+RDF.type+"> <"+JSON_MM.Object+"> }").forEachRemaining(res -> {
-            G_target.add(res.getResource("k").getURI(),RDFS.range,res.getResource("v")); System.out.println("#5 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+res.getResource("v"));
+            G_target.add(res.getResource("k").getURI(),RDFS.range,res.getResource("v"));
+            System.out.println("#5 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+res.getResource("v"));
         });
-
-
-/**
- // Array of primitives
-
- // Array of arrays
-
- G_source.runAQuery("SELECT ?k ?v WHERE { ?k <"+JSON_MM.hasValue+"> ?v . ?v <"+RDF.type+"> <"+JSON_MM.Array+"> . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> }").forEachRemaining(res -> {
- //			G_target.add(res.getResource("k").getURI(),RDF.type,RDF.Property); System.out.println("#5 - "+res.getResource("k").getURI()+", "+RDF.type+", "+RDF.Property);
- //?			G_target.add(res.getResource("k").getURI(),RDFS.range,res.getResource("v")); System.out.println("#5 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+res.getResource("v"));
- });
-
- //Arrays of objects
- **/
+        //Range of objects of an Array.
+        G_source.runAQuery("SELECT ?k ?a ?v WHERE { ?k <"+JSON_MM.hasValue+">+ ?a . ?a <"+JSON_MM.hasValue+">+ ?v . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?a <"+RDF.type+"> <"+JSON_MM.Array+"> . ?v <"+RDF.type+"> <"+JSON_MM.Object+"> }").forEachRemaining(res -> {
+            G_target.add(res.getResource("k").getURI(), RDFS.range, res.getResource("v"));
+            System.out.println("#5 - "+res.getResource("k").getURI()+", "+RDFS.range+", "+res.getResource("v"));
+        });
     }
 
-
     public static void main(String[] args) throws IOException {
-        String path = "src/main/resources/systematic_testing/pruebaGrandeCuatro.json";
-        String nameDataset = "dataset1";
-        JSONBootstrap j = new JSONBootstrap("1234", nameDataset, path);
+        String path = "src/main/resources/systematic_testing/arrayTest2.json";
+
+        //the dataset name has the same name as the json that is going to be bootstrapped
+
+        String nameDataset = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
+
+        //the id is generated randomly
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        int length = random.nextInt(10);
+        for (int i = 0; i < length; i++) {
+            sb.append(random.nextInt(10));
+        }
+        String id_ = sb.toString();
+        JSONBootstrap j = new JSONBootstrap(id_, nameDataset, path);
 
         Graph M = j.bootstrapSchema();
 

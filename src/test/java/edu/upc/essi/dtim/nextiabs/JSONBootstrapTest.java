@@ -21,6 +21,7 @@ class JSONBootstrapTest {
     private String nameDataset;
     private String commonOutPath;
     private String correctWrapper;
+    private int correctNumPrimitives;
 
     @BeforeEach
     void setUp() {
@@ -33,8 +34,16 @@ class JSONBootstrapTest {
     void tearDown() {
     }
 
+    //para hacer los testings más correctos, mirar que exista id, el name del dataset, comprobar el numero de atributos
+
     //the following tests are done with JSONs that DO NOT have Arrays
 
+
+    //json with no boolean primitives
+    //example:
+    //{
+    //"name": "Carlos"
+    //}
     @Test
     void JSONBootstrap_object_with_non_boolean_primitives() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaUno.json");
@@ -48,8 +57,16 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT id_,index,guid FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 3;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json which contains boolean primitives
+    //example:
+    //{
+    //"name": "Carlos",
+    //"married": true
+    //}
     @Test
     void JSONBootstrap_object_with_boolean_primitives() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaDos.json");
@@ -63,8 +80,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT id_,available,index FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 3;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //example: {}
     @Test
     void JSONBootstrap_empty_JSON() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaCuatro.json");
@@ -75,8 +95,16 @@ class JSONBootstrapTest {
         Graph MGood = new Graph();
         MGood.loadModel(commonOutPath+"GRDFSp4.ttl");
         assertTrue(MGood.getModel().isIsomorphicWith(M.getModel()));
+        correctNumPrimitives = 0;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json that has an object which is empty
+    //example:
+    //{
+    //"name": "Carlos",
+    //"friends": {}
+    //}
     @Test
     void JSONBootstrap_empty_object() throws IOException{
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaCinco.json");
@@ -90,8 +118,16 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT id_,index FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 2;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json that has a key with spaces
+    //example:
+    //{
+    //"name": "Carlos",
+    //"place of work": "Tarragona"
+    //}
     @Test
     void JSONBootstrap_key_with_spaces() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaSiete.json");
@@ -106,8 +142,18 @@ class JSONBootstrapTest {
         //check if wrapper is  correct
         correctWrapper = "SELECT id_,`place of work` AS place_of_work,index FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 3;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json that has an object which contains a key with the same keyname as one of the keys of the father
+    //example:
+    //{
+    //"name": "Carlos",
+    //"friends": {
+    //  "name": "Miguel"
+    //}
+    //}
     @Test
     void JSONBootstrap_subobject_with_same_keyName() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaOcho.json");
@@ -122,8 +168,21 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT id_,`place of work` AS place_of_work,index,o2.`place of work` AS o2_place_of_work FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 4;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json that has an object which contains a key with the same keyname as one of the keys of the father, and also has an object with the same condition
+    //example:
+    //{
+    //"name": "Carlos",
+    //"friends": {
+    //  "name": "Miguel",
+    //  "friends: {
+    //      "name": "Lucas"
+    //  }
+    //}
+    //}
     @Test
     void JSONBootstrap_two_subobjects_with_same_keyName() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaNueve.json");
@@ -138,8 +197,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT o2.o3.`place of work` AS o2_o3_place_of_work,id_,`place of work` AS place_of_work,index,o2.`place of work` AS o2_place_of_work FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 5;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //json that contains a set of different objects and subobjects
     @Test
     void JSONBootstrap_different_subobjects() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaDiez.json");
@@ -154,7 +216,16 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT friend.`friend of friend`.`friend of friend of friend`.id_ AS friend_friend_of_friend_friend_of_friend_of_friend_id_,id_,friend.`friend of friend`.index AS friend_friend_of_friend_index,friend.`friend of friend`.`friend of 1st person` AS friend_friend_of_friend_friend_of_1st_person,friend.`friend of friend`.`friend of friend of friend`.`friend of everyone` AS friend_friend_of_friend_friend_of_friend_of_friend_friend_of_everyone,friend.id_ AS friend_id_,friend.`friend of friend`.`friend of friend of friend`.index AS friend_friend_of_friend_friend_of_friend_of_friend_index,`place of work` AS place_of_work,friend.index AS friend_index,friend.`friend of friend`.id_ AS friend_friend_of_friend_id_,friend.`friend of friend`.`friend of friend of friend`.`place of work` AS friend_friend_of_friend_friend_of_friend_of_friend_place_of_work,friend.`place of work` AS friend_place_of_work,friend.`friend of friend`.`place of work` AS friend_friend_of_friend_place_of_work FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 13;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
+
+    //a json that contains a key that has dots on its keyname
+    //example:
+    //{
+    //"name": "Carlos",
+    //"place.of.work": "Tarragona"
+    //}
 
     @Test
     void JSONBootstrap_key_with_dots() throws IOException {
@@ -170,8 +241,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT id_,`place.of.work` AS place_of_work,index FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 3;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //a json that is long, i.e. has a lot of pairs of key/value and objects/subobjects
     @Test
     void JSONBootstrap_long_JSON_1() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaGrandeUno.json");
@@ -185,8 +259,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT locations.location1.address AS locations_location1_address,url_force,locations.location1.name AS locations_location1_name,links.link2.title AS links_link2_title,centre.longitude AS centre_longitude,description,links.link1.title AS links_link1_title,contact_details.facebook AS contact_details_facebook,locations.location1.postcode AS locations_location1_postcode,locations.location1.type AS locations_location1_type,population,links.link1.url AS links_link1_url,contact_details.telephone AS contact_details_telephone,centre.latitude AS centre_latitude,contact_details.email AS contact_details_email,locations.location1.description AS locations_location1_description,name,id,links.link2.url AS links_link2_url,contact_details.twitter AS contact_details_twitter FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 20;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //a json that is long, i.e. has a lot of pairs of key/value and objects/subobjects
     @Test
     void JSONBootstrap_long_JSON_2() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaGrandeDos.json");
@@ -200,8 +277,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT date,death.place.placeType AS death_place_placeType,gender,birth.place.placeName AS birth_place_placeName,activePlaceCount,death.place.name AS death_place_name,movements.movement1.id AS movements_movement1_id,movements.movement1.era.id AS movements_movement1_era_id,movements.movement2.era.id AS movements_movement2_era_id,activePlaces.activePlace1.placeName AS activePlaces_activePlace1_placeName,id,totalWorks,birth.place.name AS birth_place_name,movements.movement1.name AS movements_movement1_name,startLetter,death.time.startYear AS death_time_startYear,birth.time.startYear AS birth_time_startYear,birth.place.placeType AS birth_place_placeType,mda,movements.movement2.era.name AS movements_movement2_era_name,movements.movement2.id AS movements_movement2_id,url,activePlaces.activePlace1.name AS activePlaces_activePlace1_name,activePlaces.activePlace2.placeType AS activePlaces_activePlace2_placeType,movements.movement1.era.name AS movements_movement1_era_name,activePlaces.activePlace1.placeType AS activePlaces_activePlace1_placeType,birthYear,death.place.placeName AS death_place_placeName,movements.movement2.name AS movements_movement2_name,activePlaces.activePlace2.name AS activePlaces_activePlace2_name,activePlaces.activePlace2.placeName AS activePlaces_activePlace2_placeName,fc FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 32;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //a json that is long, i.e. has a lot of pairs of key/value and objects/subobjects
     @Test
     void JSONBootstrap_long_JSON_3() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaGrandeTres.json");
@@ -216,8 +296,11 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT dateRange.endYear AS dateRange_endYear,contributors.`contributor 1`.date AS contributors_contributor_1_date,all_artists,contributors.`contributor 1`.role AS contributors_contributor_1_role,movements.`movement 1`.era.name AS movements_movement_1_era_name,groupTitle,acquisitionYear,contributors.`contributor 1`.id AS contributors_contributor_1_id,medium,units,title,acno,movementCount,creditLine,contributors.`contributor 1`.mda AS contributors_contributor_1_mda,id,dateRange.text AS dateRange_text,height,thumbnailUrl,dateText,movements.`movement 1`.name AS movements_movement_1_name,contributors.`contributor 1`.displayOrder AS contributors_contributor_1_displayOrder,contributors.`contributor 1`.birthYear AS contributors_contributor_1_birthYear,contributors.`contributor 1`.fc AS contributors_contributor_1_fc,contributors.`contributor 1`.gender AS contributors_contributor_1_gender,dateRange.startYear AS dateRange_startYear,classification,url,contributors.`contributor 1`.startLetter AS contributors_contributor_1_startLetter,movements.`movement 1`.era.id AS movements_movement_1_era_id,width,contributorCount,movements.`movement 1`.id AS movements_movement_1_id,dimensions FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 34;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 
+    //a json that is long, i.e. has a lot of pairs of key/value and objects/subobjects
     @Test
     void JSONBootstrap_long_JSON_4() throws IOException {
         JSONBootstrap j = new JSONBootstrap("1234", nameDataset, commonPath+"pruebaGrandeCuatro.json");
@@ -232,5 +315,7 @@ class JSONBootstrapTest {
         //check if wrapper is correct
         correctWrapper = "SELECT dateRange.endYear AS dateRange_endYear,contributors.`contributor 1`.date AS contributors_contributor_1_date,all_artists,contributors.`contributor 1`.role AS contributors_contributor_1_role,groupTitle,acquisitionYear,subjects.id AS subjects_id,contributors.`contributor 1`.id AS contributors_contributor_1_id,medium,units,thumbnailCopyright,title,foreignTitle,acno,movementCount,creditLine,subjects.name AS subjects_name,inscription,contributors.`contributor 1`.mda AS contributors_contributor_1_mda,id,dateRange.text AS dateRange_text,height,thumbnailUrl,dateText,contributors.`contributor 1`.displayOrder AS contributors_contributor_1_displayOrder,contributors.`contributor 1`.birthYear AS contributors_contributor_1_birthYear,contributors.`contributor 1`.fc AS contributors_contributor_1_fc,contributors.`contributor 1`.gender AS contributors_contributor_1_gender,dateRange.startYear AS dateRange_startYear,classification,url,contributors.`contributor 1`.startLetter AS contributors_contributor_1_startLetter,depth,width,contributorCount,dimensions,subjectCount FROM dataset1 ";
         assertEquals(correctWrapper, j.getWrapper());
+        correctNumPrimitives = 37;
+        assertEquals(correctNumPrimitives, j.getJSONPrimitives().size());
     }
 }

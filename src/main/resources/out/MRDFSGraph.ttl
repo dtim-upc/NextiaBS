@@ -1,281 +1,70 @@
 @prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
 @prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
-@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/1234/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/05/> .
 @prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
-
-nextiaSchema:dateRange_endYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_5 ;
-        rdfs:label   "dateRange_endYear" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:foreignTitle
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "foreignTitle" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_id
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_id" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:dateRange_text
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_5 ;
-        rdfs:label   "dateRange_text" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:height  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "height" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_1
-        rdf:type    rdfs:Class ;
-        rdfs:label  "dataset1" .
-
-nextiaSchema:url  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "url" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_displayOrder
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_displayOrder" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:classification
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "classification" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_startLetter
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_startLetter" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_gender
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_gender" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:dimensions
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "dimensions" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_6
-        rdf:type    rdfs:Class ;
-        rdfs:label  "subjects" .
-
-nextiaSchema:units  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "units" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has contributors" ;
-        rdfs:range   nextiaSchema:Object_3 .
-
-nextiaSchema:Object_5
-        rdf:type    rdfs:Class ;
-        rdfs:label  "dateRange" .
 
 nextiaSchema:title  rdf:type  rdf:Property ;
         rdfs:domain  nextiaSchema:Object_1 ;
         rdfs:label   "title" ;
         rdfs:range   xsd:string .
 
-nextiaDataSource:1234
-        rdf:type                  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
-        rdfs:label                "dataset1" ;
-        nextiaDataSource:format   "JSON" ;
-        nextiaDataSource:id       "1234" ;
-        nextiaDataSource:path     "src/main/resources/systematic_testing/pruebaGrandeCuatro.json" ;
-        nextiaDataSource:wrapper  "SELECT dateRange.endYear AS dateRange_endYear,contributors.`contributor 1`.date AS contributors_contributor_1_date,all_artists,contributors.`contributor 1`.role AS contributors_contributor_1_role,groupTitle,acquisitionYear,subjects.id AS subjects_id,contributors.`contributor 1`.id AS contributors_contributor_1_id,medium,units,thumbnailCopyright,title,foreignTitle,acno,movementCount,creditLine,subjects.name AS subjects_name,inscription,contributors.`contributor 1`.mda AS contributors_contributor_1_mda,id,dateRange.text AS dateRange_text,height,thumbnailUrl,dateText,contributors.`contributor 1`.displayOrder AS contributors_contributor_1_displayOrder,contributors.`contributor 1`.birthYear AS contributors_contributor_1_birthYear,contributors.`contributor 1`.fc AS contributors_contributor_1_fc,contributors.`contributor 1`.gender AS contributors_contributor_1_gender,dateRange.startYear AS dateRange_startYear,classification,url,contributors.`contributor 1`.startLetter AS contributors_contributor_1_startLetter,depth,width,contributorCount,dimensions,subjectCount FROM dataset1 " .
-
-nextiaSchema:groupTitle
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "groupTitle" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:medium  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "medium" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:all_artists
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "all_artists" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:subjectCount
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "subjectCount" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:subjects_name
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_6 ;
-        rdfs:label   "subjects_name" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_role
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_role" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_fc
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_fc" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:thumbnailUrl
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "thumbnailUrl" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_4
-        rdf:type    rdfs:Class ;
-        rdfs:label  "contributor 1" .
-
-nextiaSchema:subjects
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has subjects" ;
-        rdfs:range   nextiaSchema:Object_6 .
-
-nextiaSchema:catalogueGroup
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has catalogueGroup" ;
-        rdfs:range   nextiaSchema:Object_2 .
-
-nextiaSchema:id  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "id" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:contributors_contributor_1_date
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_date" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:acquisitionYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "acquisitionYear" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:inscription
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "inscription" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_mda
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_mda" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_3 ;
-        rdfs:label   "has contributors_contributor_1" ;
-        rdfs:range   nextiaSchema:Object_4 .
-
-nextiaSchema:dateText
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "dateText" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:Object_3
-        rdf:type    rdfs:Class ;
-        rdfs:label  "contributors" .
-
-nextiaSchema:dateRange_startYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_5 ;
-        rdfs:label   "dateRange_startYear" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:width  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "width" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:depth  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "depth" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:acno  rdf:type  rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "acno" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:thumbnailCopyright
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "thumbnailCopyright" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributors_contributor_1_birthYear
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_4 ;
-        rdfs:label   "contributors_contributor_1_birthYear" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:creditLine
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "creditLine" ;
-        rdfs:range   xsd:string .
-
-nextiaSchema:contributorCount
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "contributorCount" ;
-        rdfs:range   xsd:int .
-
-nextiaSchema:subjects_id
-        rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_6 ;
-        rdfs:label   "subjects_id" ;
+nextiaSchema:creator_Array_1_multidimensional
+        rdf:type     rdfs:ContainerMembershipProperty , rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_2 ;
+        rdfs:label   "has creator_Array_1_multidimensional" ;
         rdfs:range   xsd:int .
 
 nextiaSchema:Object_2
         rdf:type    rdfs:Class ;
-        rdfs:label  "catalogueGroup" .
+        rdfs:label  "creator_Array_1" .
 
-nextiaSchema:dateRange
+nextiaSchema:creator_Array_1_nationality
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "has dateRange" ;
-        rdfs:range   nextiaSchema:Object_5 .
+        rdfs:domain  nextiaSchema:Object_2 ;
+        rdfs:label   "creator_Array_1_nationality" ;
+        rdfs:range   xsd:string .
 
-nextiaSchema:movementCount
+nextiaSchema:Object_3
+        rdf:type    rdfs:Class ;
+        rdfs:label  "creator_Array_1_complexStuff_Array_1" .
+
+nextiaSchema:creator_Array_1_complexStuff_Array_1_k
         rdf:type     rdf:Property ;
-        rdfs:domain  nextiaSchema:Object_1 ;
-        rdfs:label   "movementCount" ;
+        rdfs:domain  nextiaSchema:Object_3 ;
+        rdfs:label   "creator_Array_1_complexStuff_Array_1_k" ;
         rdfs:range   xsd:int .
+
+nextiaDataSource:05  rdf:type     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
+        rdfs:label                "arrayTest2" ;
+        nextiaDataSource:format   "JSON" ;
+        nextiaDataSource:id       "05" ;
+        nextiaDataSource:path     "src/main/resources/systematic_testing/arrayTest2.json" ;
+        nextiaDataSource:wrapper  "SELECT complexStuff.k, creator_view.full_name AS creator_full_name, multidimensional, creator_view.nationality AS creator_nationality, title, web_url FROM arrayTest2 LATERAL VIEW explode(creator) AS creator_view LATERAL VIEW explode(creator_view.multidimensional) AS multidimensional_explode1 LATERAL VIEW explode(multidimensional_explode1) AS multidimensional LATERAL VIEW explode(creator_view.complexStuff) AS complexStuff_explode_1 LATERAL VIEW explode(complexStuff_explode_1) AS complexStuff_explode_2 LATERAL VIEW explode(complexStuff_explode_2) AS complexStuff" .
+
+nextiaSchema:creator  rdf:type  rdfs:ContainerMembershipProperty , rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "has creator" ;
+        rdfs:range   nextiaSchema:Object_2 .
+
+nextiaSchema:creator_Array_1_full_name
+        rdf:type     rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_2 ;
+        rdfs:label   "creator_Array_1_full_name" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:Object_1
+        rdf:type    rdfs:Class ;
+        rdfs:label  "arrayTest2" .
+
+nextiaSchema:web_url  rdf:type  rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_1 ;
+        rdfs:label   "web_url" ;
+        rdfs:range   xsd:string .
+
+nextiaSchema:creator_Array_1_complexStuff
+        rdf:type     rdfs:ContainerMembershipProperty , rdf:Property ;
+        rdfs:domain  nextiaSchema:Object_2 ;
+        rdfs:label   "has creator_Array_1_complexStuff" ;
+        rdfs:range   nextiaSchema:Object_3 .

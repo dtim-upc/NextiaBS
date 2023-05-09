@@ -25,11 +25,11 @@ public class JSON_MM {
     public static final Resource Number     = Init.Number();
     public static final Resource String     = Init.String();
     public static final Resource Boolean    = Init.Boolean();
+    public static final Resource Null       = Init.Null();
 
 
     public static final Property hasValue   = Init.hasValue();
     public static final Property hasKey     = Init.hasKey();
-    public static final Property hasMember  = Init.hasMember();
 
     public static class Init {
         public static Resource Document()          { return resource( "Document"); }
@@ -41,10 +41,10 @@ public class JSON_MM {
         public static Resource Number()        { return resource( "Number"); }
         public static Resource String()        { return resource( "String"); }
         public static Resource Boolean()       { return resource("Boolean"); }
+        public static Resource Null()          { return resource("Null");    }
 
         public static Property hasValue()        { return property( "hasValue"); }
         public static Property hasKey()         { return property( "hasKey"); }
-        public static Property hasMember()          { return property( "hasMember"); }
     }
 
     /**
@@ -61,10 +61,10 @@ public class JSON_MM {
         public static final Node Number      = Init.Number().asNode();
         public static final Node String      = Init.String().asNode();
         public static final Node Boolean     = Init.Boolean().asNode();
+        public static final Node Null        = Init.Null().asNode();
 
         public static final Node hasValue   = Init.hasValue().asNode();
         public static final Node hasKey     = Init.hasKey().asNode();
-        public static final Node hasMember  = Init.hasMember().asNode();
     }
 
     /**

@@ -1,246 +1,82 @@
 @prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
 @prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
-@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/1234/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/05/> .
 @prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
-nextiaSchema:dateRange_endYear
-        rdf:type       json:Key ;
-        rdfs:label     "dateRange_endYear" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:foreignTitle
-        rdf:type       json:Key ;
-        rdfs:label     "foreignTitle" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_id
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:dateRange_text
-        rdf:type       json:Key ;
-        rdfs:label     "dateRange_text" ;
-        json:hasValue  json:String .
-
-nextiaSchema:height  rdf:type  json:Key ;
-        rdfs:label     "height" ;
-        json:hasValue  json:String .
-
-nextiaSchema:url  rdf:type  json:Key ;
-        rdfs:label     "url" ;
-        json:hasValue  json:String .
-
-nextiaSchema:Object_1
-        rdf:type     json:Object ;
-        rdfs:label   "dataset1" ;
-        json:hasKey  nextiaSchema:dateText , nextiaSchema:url , nextiaSchema:height , nextiaSchema:contributorCount , nextiaSchema:units , nextiaSchema:id , nextiaSchema:width , nextiaSchema:medium , nextiaSchema:title , nextiaSchema:subjects , nextiaSchema:creditLine , nextiaSchema:inscription , nextiaSchema:classification , nextiaSchema:subjectCount , nextiaSchema:catalogueGroup , nextiaSchema:groupTitle , nextiaSchema:depth , nextiaSchema:thumbnailCopyright , nextiaSchema:acno , nextiaSchema:movementCount , nextiaSchema:all_artists , nextiaSchema:dimensions , nextiaSchema:foreignTitle , nextiaSchema:dateRange , nextiaSchema:thumbnailUrl , nextiaSchema:acquisitionYear , nextiaSchema:contributors .
-
-nextiaSchema:contributors_contributor_1_displayOrder
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_displayOrder" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:classification
-        rdf:type       json:Key ;
-        rdfs:label     "classification" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_startLetter
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_startLetter" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_gender
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_gender" ;
-        json:hasValue  json:String .
-
-nextiaSchema:dimensions
-        rdf:type       json:Key ;
-        rdfs:label     "dimensions" ;
-        json:hasValue  json:String .
-
-nextiaSchema:Object_6
-        rdf:type     json:Object ;
-        rdfs:label   "subjects" ;
-        json:hasKey  nextiaSchema:subjects_name , nextiaSchema:subjects_id .
-
-nextiaSchema:units  rdf:type  json:Key ;
-        rdfs:label     "units" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors
-        rdf:type       json:Key ;
-        rdfs:label     "has contributors" ;
-        json:hasValue  nextiaSchema:Object_3 .
-
-nextiaSchema:dataset1
-        rdf:type  json:Document .
+nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
 
 nextiaSchema:title  rdf:type  json:Key ;
         rdfs:label     "title" ;
         json:hasValue  json:String .
 
-nextiaSchema:Object_5
+nextiaSchema:creator_Array_1_multidimensional
+        rdf:type       json:Key ;
+        rdfs:label     "has creator_Array_1_multidimensional" ;
+        json:hasValue  nextiaSchema:creator_Array_1_multidimensional_Array_1 .
+
+nextiaSchema:Object_2
         rdf:type     json:Object ;
-        rdfs:label   "dateRange" ;
-        json:hasKey  nextiaSchema:dateRange_text , nextiaSchema:dateRange_startYear , nextiaSchema:dateRange_endYear .
+        rdfs:label   "creator_Array_1" ;
+        json:hasKey  nextiaSchema:creator_Array_1_complexStuff , nextiaSchema:creator_Array_1_multidimensional , nextiaSchema:creator_Array_1_nationality , nextiaSchema:creator_Array_1_full_name .
 
-nextiaDataSource:1234
-        rdf:type               <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
-        rdfs:label             "dataset1" ;
-        nextiaDataSource:path  "src/main/resources/systematic_testing/pruebaGrandeCuatro.json" .
+nextiaSchema:arrayTest2
+        rdf:type  json:Document .
 
-nextiaSchema:groupTitle
-        rdf:type       json:Key ;
-        rdfs:label     "groupTitle" ;
-        json:hasValue  json:String .
+nextiaSchema:creator_Array_1_complexStuff_Array_1
+        rdf:type       json:Array ;
+        rdfs:label     "creator_Array_1_complexStuff_Array_1" ;
+        json:hasValue  nextiaSchema:Object_3 .
 
-nextiaSchema:medium  rdf:type  json:Key ;
-        rdfs:label     "medium" ;
-        json:hasValue  json:String .
-
-nextiaSchema:all_artists
-        rdf:type       json:Key ;
-        rdfs:label     "all_artists" ;
-        json:hasValue  json:String .
-
-nextiaSchema:subjectCount
-        rdf:type       json:Key ;
-        rdfs:label     "subjectCount" ;
+nextiaSchema:creator_Array_1_multidimensional_Array_1
+        rdf:type       json:Array ;
+        rdfs:label     "creator_Array_1_multidimensional_Array_1" ;
         json:hasValue  json:Number .
 
-nextiaSchema:subjects_name
+nextiaSchema:creator_Array_1_nationality
         rdf:type       json:Key ;
-        rdfs:label     "subjects_name" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_role
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_role" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_fc
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_fc" ;
-        json:hasValue  json:String .
-
-nextiaSchema:thumbnailUrl
-        rdf:type       json:Key ;
-        rdfs:label     "thumbnailUrl" ;
-        json:hasValue  json:String .
-
-nextiaSchema:Object_4
-        rdf:type     json:Object ;
-        rdfs:label   "contributor 1" ;
-        json:hasKey  nextiaSchema:contributors_contributor_1_gender , nextiaSchema:contributors_contributor_1_role , nextiaSchema:contributors_contributor_1_date , nextiaSchema:contributors_contributor_1_startLetter , nextiaSchema:contributors_contributor_1_id , nextiaSchema:contributors_contributor_1_birthYear , nextiaSchema:contributors_contributor_1_displayOrder , nextiaSchema:contributors_contributor_1_fc , nextiaSchema:contributors_contributor_1_mda .
-
-nextiaSchema:subjects
-        rdf:type       json:Key ;
-        rdfs:label     "has subjects" ;
-        json:hasValue  nextiaSchema:Object_6 .
-
-nextiaSchema:catalogueGroup
-        rdf:type       json:Key ;
-        rdfs:label     "has catalogueGroup" ;
-        json:hasValue  nextiaSchema:Object_2 .
-
-nextiaSchema:id  rdf:type  json:Key ;
-        rdfs:label     "id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:contributors_contributor_1_date
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_date" ;
-        json:hasValue  json:String .
-
-nextiaSchema:acquisitionYear
-        rdf:type       json:Key ;
-        rdfs:label     "acquisitionYear" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:inscription
-        rdf:type       json:Key ;
-        rdfs:label     "inscription" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1_mda
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_mda" ;
-        json:hasValue  json:String .
-
-nextiaSchema:contributors_contributor_1
-        rdf:type       json:Key ;
-        rdfs:label     "has contributors_contributor_1" ;
-        json:hasValue  nextiaSchema:Object_4 .
-
-nextiaSchema:dateText
-        rdf:type       json:Key ;
-        rdfs:label     "dateText" ;
+        rdfs:label     "creator_Array_1_nationality" ;
         json:hasValue  json:String .
 
 nextiaSchema:Object_3
         rdf:type     json:Object ;
-        rdfs:label   "contributors" ;
-        json:hasKey  nextiaSchema:contributors_contributor_1 .
+        rdfs:label   "creator_Array_1_complexStuff_Array_1" ;
+        json:hasKey  nextiaSchema:creator_Array_1_complexStuff_Array_1_k .
 
-nextiaSchema:dateRange_startYear
+nextiaSchema:creator_Array_1_complexStuff_Array_1_k
         rdf:type       json:Key ;
-        rdfs:label     "dateRange_startYear" ;
+        rdfs:label     "creator_Array_1_complexStuff_Array_1_k" ;
         json:hasValue  json:Number .
 
-nextiaSchema:width  rdf:type  json:Key ;
-        rdfs:label     "width" ;
+nextiaDataSource:05  rdf:type  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
+        rdfs:label             "arrayTest2" ;
+        nextiaDataSource:path  "src/main/resources/systematic_testing/arrayTest2.json" .
+
+nextiaSchema:creator_Array_1_full_name
+        rdf:type       json:Key ;
+        rdfs:label     "creator_Array_1_full_name" ;
         json:hasValue  json:String .
 
-nextiaSchema:depth  rdf:type  json:Key ;
-        rdfs:label     "depth" ;
+nextiaSchema:creator  rdf:type  json:Key ;
+        rdfs:label     "has creator" ;
+        json:hasValue  nextiaSchema:creator_Array_1 .
+
+nextiaSchema:Object_1
+        rdf:type     json:Object ;
+        rdfs:label   "arrayTest2" ;
+        json:hasKey  nextiaSchema:creator , nextiaSchema:web_url , nextiaSchema:title .
+
+nextiaSchema:web_url  rdf:type  json:Key ;
+        rdfs:label     "web_url" ;
         json:hasValue  json:String .
 
-nextiaSchema:acno  rdf:type  json:Key ;
-        rdfs:label     "acno" ;
-        json:hasValue  json:String .
-
-nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
-
-nextiaSchema:thumbnailCopyright
+nextiaSchema:creator_Array_1_complexStuff
         rdf:type       json:Key ;
-        rdfs:label     "thumbnailCopyright" ;
-        json:hasValue  json:String .
+        rdfs:label     "has creator_Array_1_complexStuff" ;
+        json:hasValue  nextiaSchema:creator_Array_1_complexStuff_Array_1 .
 
-nextiaSchema:contributors_contributor_1_birthYear
-        rdf:type       json:Key ;
-        rdfs:label     "contributors_contributor_1_birthYear" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:creditLine
-        rdf:type       json:Key ;
-        rdfs:label     "creditLine" ;
-        json:hasValue  json:String .
-
-nextiaSchema:subjects_id
-        rdf:type       json:Key ;
-        rdfs:label     "subjects_id" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:contributorCount
-        rdf:type       json:Key ;
-        rdfs:label     "contributorCount" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:Object_2
-        rdf:type    json:Object ;
-        rdfs:label  "catalogueGroup" .
-
-nextiaSchema:dateRange
-        rdf:type       json:Key ;
-        rdfs:label     "has dateRange" ;
-        json:hasValue  nextiaSchema:Object_5 .
-
-nextiaSchema:movementCount
-        rdf:type       json:Key ;
-        rdfs:label     "movementCount" ;
-        json:hasValue  json:Number .
+nextiaSchema:creator_Array_1
+        rdf:type       json:Array ;
+        rdfs:label     "creator_Array_1" ;
+        json:hasValue  nextiaSchema:Object_2 .
