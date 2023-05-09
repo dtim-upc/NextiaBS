@@ -283,6 +283,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         String u_label = "";
         String u_path = "";
         String iri_u_prime;
+
         //if the parent is a Key, we are at the 1st level, hence we also restart the value of the arrayCounter
         if (parentInfo.getLabel().contains("has ")) {
             firstArray = true;
