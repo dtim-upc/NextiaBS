@@ -1,0 +1,19 @@
+{
+  "acquisitionYear":1927,
+  "all_artists":"Sir Edward Coley Burne-Jones, Bt",
+  "contributorCount":1,
+  "contributors":[
+    {
+      "birthYear":1833,
+      "fc":"Sir Edward Coley Burne-Jones, Bt",
+      "gender":"Male"
+    }
+  ],
+  "movements":[
+    {
+      "id":363,
+      "name":"Pre-Raphaelite Brotherhood"
+    }
+  ],
+  "title":"St Boniface"
+}

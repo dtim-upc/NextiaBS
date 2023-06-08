@@ -1,0 +1,14 @@
+{
+  "ObjectMultiArray": [
+    [
+      {
+        "name": "Alberto",
+        "Profession": "Doctor"
+      },
+      {
+        "name": "Jose",
+        "Profession": "Teacher"
+      }
+    ]
+  ]
+}

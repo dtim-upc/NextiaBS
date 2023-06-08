@@ -1,0 +1,21 @@
+{
+  "id" : 1,
+  "typeOfVehicle" : "BIKE",
+  "address" : {
+    "streetName" : "Gran Via...",
+    "streetNumber" : 760
+  },
+  "coordinates":["one","two"],
+  "nearbyStations" : [
+    {
+      "id" : 24,
+      "type" : "Metro",
+      "distance" : 500
+    },
+    {
+      "id" : 426,
+      "type" : "Bus",
+      "distance" : 367
+    }
+  ]
+}

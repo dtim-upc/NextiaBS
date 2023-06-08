@@ -1,0 +1,9 @@
+{
+  "calle": "c/ de Barcelona",
+  "localidad": "Alella",
+  "provincia": "Barcelona",
+  "vehiculos": [
+    ["BMW", "Ford", "Seat"],
+    ["Honda", "Yamaha", "Suzuki"]
+  ]
+}

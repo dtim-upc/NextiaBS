@@ -1,36 +1,36 @@
 {
   "activePlaceCount":2,
-  "activePlaces":{
-    "activePlace1": {
+  "activePlaces":[
+    {
       "name":"United States",
       "placeName":"United States",
       "placeType":"nation"
     },
-    "activePlace2": {
+    {
       "name":"München, Deutschland",
       "placeName":"München",
       "placeType":"inhabited_place"
     }
-  },
+  ],
   "birth": {
-    "place": {
+    "place":{
       "name":"Bottrop, Deutschland",
       "placeName":"Bottrop",
       "placeType":"inhabited_place"
     },
-    "time": {
+    "time":{
       "startYear":1888
     }
   },
   "birthYear":1888,
   "date":"1888–1976",
-  "death": {
-    "place": {
+  "death":{
+    "place":{
       "name":"New Haven, United States",
       "placeName":"New Haven",
       "placeType":"inhabited_place"
     },
-    "time": {
+    "time":{
       "startYear":1976
     }
   },
@@ -38,24 +38,25 @@
   "gender":"Male",
   "id":636,
   "mda":"Albers, Josef",
-  "movements": {
-    "movement1": {
-      "era": {
+  "movements":[
+    {
+      "era":{
         "id":8,
         "name":"20th century 1900-1945"
       },
       "id":294,
       "name":"Bauhaus"
     },
-    "movement2": {
-      "era": {
+    {
+      "era":
+      {
         "id":415,
         "name":"20th century post-1945"
       },
       "id":439,
       "name":"Post Painterly Abstraction"
     }
-  },
+  ],
   "startLetter":"A",
   "totalWorks":22,
   "url":"http://www.tate.org.uk/art/artists/josef-albers-636"

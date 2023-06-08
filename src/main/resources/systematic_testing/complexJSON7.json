@@ -1,0 +1,36 @@
+{
+  "centre": {
+    "latitude":"52.5891",
+    "longitude":"-1.207"
+  },
+  "contact_details":{
+    "email":"hinckleyandblaby.npa@leicestershire.pnn.police.uk",
+    "facebook":"http://www.facebook.com/blabypolice",
+    "telephone":"101",
+    "twitter":"http://www.twitter.com/BlabyPolice"
+  },
+  "description":"<p>This is the neighbourhood beat for the village of Enderby, Narborough, New Lubbersthorpe, Littlethorpe and Fosse Park. It is mainly residential but also covers large industrial estates in Enderby &amp; a number of primary &amp; secondary schools.\n\n</p><p>This neighbourhood beat also consists of the busy Fosse Park retail outlet. Fosse Park has approximately 40 stores and the neighbourhood team have developed close links with security staff to assist in the prevention of thefts and the identification of prolific shoplifters.</p>",
+  "id":"NH20",
+  "links":[
+    {
+      "title":"Leicestershire Villages - Blaby",
+      "url":"http://www.leicestershirevillages.com/blabydistrict/"
+    },
+    {
+      "title":"Blaby District Council",
+      "url":"http://www.blaby.gov.uk/ccm/portal/"
+    }
+  ],
+  "locations":[
+    {
+      "address":"Hallam Crescent East\n, Braunstone\n, Leicester",
+      "description":"<p>Largely residential with some industrial areas &amp; rural communities.</p>",
+      "name":"Braunstone Police Station",
+      "postcode":"LE3 1FF",
+      "type":"station"
+    }
+  ],
+  "name":"Enderby, Narborough, Littlethorpe and Fosse Park",
+  "population":"0",
+  "url_force":"http://www.leics.police.uk/local-policing/enderby-narborough-littlethorpe-and-fosse-park"
+}

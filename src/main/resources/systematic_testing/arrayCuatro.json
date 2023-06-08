@@ -1,5 +1,8 @@
 {
-  "EmptyArray": [
-
+  "ObjectArray": [
+    {
+      "name": "Jose",
+      "studies": "Computer Science"
+    }
   ]
 }

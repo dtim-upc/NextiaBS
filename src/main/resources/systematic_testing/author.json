@@ -1,12 +1,10 @@
 {
-  "id_": "640a21",
-  "index": 0,
-  "place of work": "Barcelona",
+  "DNI": "64012148X",
+  "age": 37,
+  "place_of_work": "Barcelona",
   "profession": "Author",
   "book_info": {
     "title": "The Magic Tree",
     "year": 2003
   }
 }
-
-

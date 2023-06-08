@@ -52,11 +52,15 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
     /**
      * structure that allows to transform arrays into rows when generating the wrapper
      */
-    protected List<Pair<String,String>> lateralViews;
+    protected String lateralViews;
     /**
      * structure that contains all the keys that are wrong formatted
      */
     protected HashSet<String> keysWrongFormatted;
+
+    protected List<String> fathers;
+
+    protected HashSet<String> primitiveArrays;
 
     private int objectCounter;
     private int arrayCounter;
@@ -81,8 +85,10 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         emptyJson = true;
 
         JSONPrimitives = new HashMap<>();
-        lateralViews = Lists.newArrayList();
+        lateralViews = "";
         keysWrongFormatted = new HashSet<>();
+        fathers = new ArrayList<>();
+        primitiveArrays = new HashSet<>();
     }
 
     /**
@@ -146,19 +152,24 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
      * Creates the wrapper of the JSON that is being bootstrapped
      */
     private void createWrapper() {
-
-
         String SELECT = JSONPrimitives.entrySet().stream().map(p -> {
             if (p.getKey().equals(p.getValue().getKey())) return p.getValue().getPath();
             return p.getValue().getPath() + " AS " + p.getValue().getLabel();
         }).collect(Collectors.joining(","));
 
+        if(primitiveArrays.size() > 0) {
+            String SELECT_ARRAY = "";
+            for (String actualAttribute : primitiveArrays) {
+                SELECT_ARRAY = SELECT_ARRAY + "," + actualAttribute;
+            }
+            if (JSONPrimitives.size() == 0) SELECT_ARRAY = SELECT_ARRAY.replaceFirst(",", "");
+            SELECT = SELECT + SELECT_ARRAY;
+        }
+
         String FROM = name;
 
-        String LATERAL = lateralViews.stream()
-                .map(p -> "LATERAL VIEW explode(" + p.getLeft() + ") AS " + p.getRight()).collect(Collectors.joining("\n"));
+        String LATERAL = lateralViews;
         wrapper = "SELECT " + SELECT + " FROM " + FROM + " " + LATERAL;
-
     }
 
     /**
@@ -212,7 +223,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
      */
     private void DataType(JsonValue value, JSON_Aux keyInfo, boolean valueFromArray, String iri_key) {
         if (value.getValueType() == JsonValue.ValueType.OBJECT) Object((JsonObject) value, keyInfo);
-        else if (value.getValueType() == JsonValue.ValueType.ARRAY) Array((JsonArray) value, keyInfo, iri_key);
+        else if (value.getValueType() == JsonValue.ValueType.ARRAY) Array((JsonArray) value, keyInfo, iri_key, "");
         else Primitive(value, keyInfo, valueFromArray);
     }
 
@@ -228,13 +239,8 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         G_source.add(iri_u_prime, RDF.type, JSON_MM.Object);
         G_source.addLiteral(iri_u_prime, RDFS.label, parentInfo.getKey());
 
-        boolean valueFromArray;
-        valueFromArray = parentInfo.getPath().contains("Array_");
-
         jsonObject.forEach((key,value)-> {
-            if (value.getValueType() != JsonValue.ValueType.ARRAY && !parentInfo.getPath().contains("Array_")) {
-                emptyJson = false;
-            }
+            emptyJson = false;
             String k_prime;
             if (!parentInfo.getPath().equals("")) {
                 k_prime = freshAttribute(key, parentInfo.getPath());
@@ -261,28 +267,180 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
                 if (parentInfo.getPath().equals(""))
                     keyPath = key;
             }
-            DataType(value, new JSON_Aux(key, k_prime, keyPath), valueFromArray, iri_k);
+            if (parentInfo.getPath().contains("Array_")) {
+                String closest_father = "";
+                for (int i = fathers.size() - 1; i >= 0; i--) {
+                    String actualFather = fathers.get(i);
+                    int underscoreIndex = actualFather.indexOf("_view");
+                    if (underscoreIndex == -1) {
+                        if (parentInfo.getLabel().contains(fathers.get(i))) {
+                            closest_father = fathers.get(i);
+                            break;
+                        }
+                    } else {
+                        if (parentInfo.getLabel().contains(actualFather.substring(0, underscoreIndex))) {
+                            if (underscoreIndex + 5 < actualFather.length()) {
+                                if (parentInfo.getLabel().contains(actualFather.substring(underscoreIndex + 5))) {
+                                    closest_father = fathers.get(i);
+                                    break;
+                                }
+                            } else {
+                                closest_father = fathers.get(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+                keyPath = closest_father + "." + key;
+            }
+            DataType(value, new JSON_Aux(key, k_prime, keyPath), false, iri_k);
         });
 
         G_source.add(createIRI(parentInfo.getLabel()), JSON_MM.hasValue, iri_u_prime);
     }
 
     /**
+     * Function that updates the lateral views String
+     * @param jsonArray an homogeneous array that is either empty or its elements are of the types of JSON's ValueType
+     * @param parentInfo complete information of the key (original key name, label and path)
+     * @param lastLevelExplode the explode sentence generated on the previous level of the array
+     * @param closest_father the father key that is closer to the level array that we are at
+     * @param firstArray boolean that indicates if we are or not at the 1st level of an array
+     * @return the lastLevelExplode updated so that if needed the array can pass it to its next level
+     */
+    private String updateLateralViews(JsonArray jsonArray, JSON_Aux parentInfo, String lastLevelExplode, String closest_father, boolean firstArray) {
+
+        String underscorePath = parentInfo.getPath().replace('.', '_');
+        if (!parentInfo.getPath().contains(".")) underscorePath = parentInfo.getPath() + "_view";
+        //case of the 1st level of an array of an attribute that it is not inside another array, and its type is not Array
+        if (firstArray && !parentInfo.getLabel().contains("Array_") && !(jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + parentInfo.getPath() + ") AS " + underscorePath + "\n";
+            if (!(jsonArray.get(0).getValueType() == JsonValue.ValueType.OBJECT)) primitiveArrays.add(underscorePath);
+            fathers.add(underscorePath);
+        }
+
+        //case of the 1st level of an array of an attribute that it is inside another array, and its type is not Array
+        else if (firstArray && parentInfo.getLabel().contains("Array_") && !(jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            for (int i = fathers.size() - 1; i >= 0; i--) {
+                String actualFather = fathers.get(i);
+                int underscoreIndex = actualFather.indexOf("_view");
+                if (underscoreIndex == -1) {
+                    if (parentInfo.getLabel().contains(fathers.get(i))) {
+                        closest_father = fathers.get(i);
+                        break;
+                    }
+                } else {
+                    if (parentInfo.getLabel().contains(actualFather.substring(0, underscoreIndex))) {
+                        if (underscoreIndex + 5 < actualFather.length()) {
+                            if (parentInfo.getLabel().contains(actualFather.substring(underscoreIndex + 5))) {
+                                closest_father = fathers.get(i);
+                                break;
+                            }
+                        } else {
+                            closest_father = fathers.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + closest_father + "." + parentInfo.getKey() + ") AS " + underscorePath + "\n";
+            if (!(jsonArray.get(0).getValueType() == JsonValue.ValueType.OBJECT)) primitiveArrays.add(underscorePath + "_view");
+            fathers.add(underscorePath);
+        }
+
+        //case of the 1st level of an attribute that it is inside another array, and its type is Array
+        else if (firstArray && parentInfo.getLabel().contains("Array_") && (jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            for (int i = fathers.size() - 1; i >= 0; i--) {
+                String actualFather = fathers.get(i);
+                int underscoreIndex = actualFather.indexOf("_view");
+                if (underscoreIndex == -1) {
+                    if (parentInfo.getLabel().contains(fathers.get(i))) {
+                        closest_father = fathers.get(i);
+                        break;
+                    }
+                } else {
+                    if (parentInfo.getLabel().contains(actualFather.substring(0, underscoreIndex))) {
+                        if (underscoreIndex + 5 < actualFather.length()) {
+                            if (parentInfo.getLabel().contains(actualFather.substring(underscoreIndex + 5))) {
+                                closest_father = fathers.get(i);
+                                break;
+                            }
+                        } else {
+                            closest_father = fathers.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + closest_father + "." + parentInfo.getKey() + ") AS " + underscorePath + "_explode_" + arrayCounter + "\n";
+            lastLevelExplode = underscorePath + "_explode_" + arrayCounter;
+            fathers.add(underscorePath);
+        }
+
+        //case of the 1st level of an array of an attribute that it is not inside another array, and its type is Array
+        else if (firstArray && !parentInfo.getLabel().contains("Array_") && (jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + parentInfo.getPath() + ") AS " + underscorePath + "_explode_" + arrayCounter + "\n";
+            lastLevelExplode = underscorePath + "_explode_" + arrayCounter;
+            fathers.add(underscorePath);
+        }
+
+        //case of a subarray that has as type another array
+        else if (!firstArray && (jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            int multiarraySize = String.valueOf(arrayCounter-1).length();
+            String nextlastLevelExplode = lastLevelExplode.substring(0, lastLevelExplode.length()-multiarraySize) + arrayCounter;
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + lastLevelExplode + ") AS " + nextlastLevelExplode + "\n";
+            lastLevelExplode = nextlastLevelExplode;
+        }
+
+        //case of a subarray that has as type a non Array
+        else if (!firstArray && !(jsonArray.get(0).getValueType() == JsonValue.ValueType.ARRAY)) {
+            for (int i = fathers.size() - 1; i >= 0; i--) {
+                String actualFather = fathers.get(i);
+                int underscoreIndex = actualFather.indexOf("_view");
+                if (underscoreIndex == -1) {
+                    if (parentInfo.getLabel().contains(fathers.get(i))) {
+                        closest_father = fathers.get(i);
+                        break;
+                    }
+                } else {
+                    if (parentInfo.getLabel().contains(actualFather.substring(0, underscoreIndex))) {
+                        if (underscoreIndex + 5 < actualFather.length()) {
+                            if (parentInfo.getLabel().contains(actualFather.substring(underscoreIndex + 5))) {
+                                closest_father = fathers.get(i);
+                                break;
+                            }
+                        } else {
+                            closest_father = fathers.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            lateralViews = lateralViews + "LATERAL VIEW explode(" + lastLevelExplode + ") AS " + closest_father + "\n";
+            if (!(jsonArray.get(0).getValueType() == JsonValue.ValueType.OBJECT)) primitiveArrays.add(closest_father);
+        }
+
+        return lastLevelExplode;
+    }
+
+    /**
      * instantiates the J:Array with a fresh iri and checks the type of its elements
      * @param jsonArray an homogeneous array that is either empty or its elements are of the types of JSON's ValueType
      * @param parentInfo complete information of the key (original key name, label and path)
-     * @param parentIRI if the function is called from an opbject that is inside another array, this parameter is needed to make the association between that key and its
+     * @param parentIRI if the function is called from an object that is inside another array, this parameter is needed to make the association between that key and its
      * array node.
      */
 
-    private void Array (JsonArray jsonArray, JSON_Aux parentInfo, String parentIRI) {
+    private void Array (JsonArray jsonArray, JSON_Aux parentInfo, String parentIRI, String lastLevelExplode) {
         //boolean to know, in the case of a multidimensional array, if we are at the 1st level
         boolean firstArray = false;
+
         String u_prime_original = "";
         String u_prime = "";
         String u_label = "";
         String u_path = "";
         String iri_u_prime;
+        String closest_father = "";
 
         //if the parent is a Key, we are at the 1st level, hence we also restart the value of the arrayCounter
         if (parentInfo.getLabel().contains("has ")) {
@@ -301,7 +459,8 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             u_path = u_prime;
         } else u_path = parentInfo.getPath() + "." + u_prime_original;
 
-        lateralViews.add(Pair.of(parentInfo.getKey(),parentInfo.getKey()+"_view"));
+        //update the lateral views with the new array level we are at
+        lastLevelExplode = updateLateralViews(jsonArray, parentInfo, lastLevelExplode, closest_father, firstArray);
 
         //if its the 1st level, then we also make the association between the key and the array node and we instantiate the array node ih the source graph
         if (firstArray) {
@@ -340,8 +499,8 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
             else {
                 //Connect the primitive type node with the 1st level of the Array
                 if (firstArray) {
-                    Array((JsonArray) jsonArray.get(0), new JSON_Aux(u_prime, u_label, u_path), "");
-                } else Array((JsonArray) jsonArray.get(0), parentInfo, "");
+                    Array((JsonArray) jsonArray.get(0), new JSON_Aux(u_prime, u_label, u_path), "", lastLevelExplode);
+                } else Array((JsonArray) jsonArray.get(0), parentInfo, "", lastLevelExplode);
             }
         }
     }
@@ -487,7 +646,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
     }
 
     public static void main(String[] args) throws IOException {
-        String path = "src/main/resources/systematic_testing/arrayTest2.json";
+        String path = "src/main/resources/systematic_testing/concesionario.json";
 
         //the dataset name has the same name as the json that is going to be bootstrapped
 
@@ -521,11 +680,20 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         System.out.println("Primitives of the JSON");
         System.out.println(j.getJSONPrimitives());
 
+        System.out.println("Number of primitives of the JSON");
+        System.out.println(j.getJSONPrimitives().size());
+
         System.out.println("Lateral views");
         System.out.println(j.getLateralViews());
 
         System.out.println("Keys with spaces");
         System.out.println(j.getKeysWrongFormatted());
+
+        System.out.println("Arrays that are primitive");
+        System.out.println(j.getPrimitiveArrays().size());
+
+        System.out.println("Number of arrays in the JSON");
+        System.out.println(j.getFathers().size());
 
         //print the wrapper if it can be printed
 

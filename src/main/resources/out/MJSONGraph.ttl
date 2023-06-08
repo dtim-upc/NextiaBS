@@ -1,82 +1,45 @@
 @prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
 @prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
-@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/05/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/55245/> .
 @prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
+nextiaSchema:localidad
+        rdf:type       json:Key ;
+        rdfs:label     "localidad" ;
+        json:hasValue  json:String .
+
 nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
 
-nextiaSchema:title  rdf:type  json:Key ;
-        rdfs:label     "title" ;
+nextiaSchema:calle  rdf:type  json:Key ;
+        rdfs:label     "calle" ;
         json:hasValue  json:String .
 
-nextiaSchema:creator_Array_1_multidimensional
-        rdf:type       json:Key ;
-        rdfs:label     "has creator_Array_1_multidimensional" ;
-        json:hasValue  nextiaSchema:creator_Array_1_multidimensional_Array_1 .
-
-nextiaSchema:Object_2
-        rdf:type     json:Object ;
-        rdfs:label   "creator_Array_1" ;
-        json:hasKey  nextiaSchema:creator_Array_1_complexStuff , nextiaSchema:creator_Array_1_multidimensional , nextiaSchema:creator_Array_1_nationality , nextiaSchema:creator_Array_1_full_name .
-
-nextiaSchema:arrayTest2
-        rdf:type  json:Document .
-
-nextiaSchema:creator_Array_1_complexStuff_Array_1
+nextiaSchema:vehiculos_Array_1
         rdf:type       json:Array ;
-        rdfs:label     "creator_Array_1_complexStuff_Array_1" ;
-        json:hasValue  nextiaSchema:Object_3 .
-
-nextiaSchema:creator_Array_1_multidimensional_Array_1
-        rdf:type       json:Array ;
-        rdfs:label     "creator_Array_1_multidimensional_Array_1" ;
-        json:hasValue  json:Number .
-
-nextiaSchema:creator_Array_1_nationality
-        rdf:type       json:Key ;
-        rdfs:label     "creator_Array_1_nationality" ;
+        rdfs:label     "vehiculos_Array_1" ;
         json:hasValue  json:String .
 
-nextiaSchema:Object_3
-        rdf:type     json:Object ;
-        rdfs:label   "creator_Array_1_complexStuff_Array_1" ;
-        json:hasKey  nextiaSchema:creator_Array_1_complexStuff_Array_1_k .
+nextiaDataSource:55245
+        rdf:type               <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
+        rdfs:label             "concesionario" ;
+        nextiaDataSource:path  "src/main/resources/systematic_testing/concesionario.json" .
 
-nextiaSchema:creator_Array_1_complexStuff_Array_1_k
+nextiaSchema:vehiculos
         rdf:type       json:Key ;
-        rdfs:label     "creator_Array_1_complexStuff_Array_1_k" ;
-        json:hasValue  json:Number .
+        rdfs:label     "has vehiculos" ;
+        json:hasValue  nextiaSchema:vehiculos_Array_1 .
 
-nextiaDataSource:05  rdf:type  <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
-        rdfs:label             "arrayTest2" ;
-        nextiaDataSource:path  "src/main/resources/systematic_testing/arrayTest2.json" .
-
-nextiaSchema:creator_Array_1_full_name
+nextiaSchema:provincia
         rdf:type       json:Key ;
-        rdfs:label     "creator_Array_1_full_name" ;
+        rdfs:label     "provincia" ;
         json:hasValue  json:String .
-
-nextiaSchema:creator  rdf:type  json:Key ;
-        rdfs:label     "has creator" ;
-        json:hasValue  nextiaSchema:creator_Array_1 .
 
 nextiaSchema:Object_1
         rdf:type     json:Object ;
-        rdfs:label   "arrayTest2" ;
-        json:hasKey  nextiaSchema:creator , nextiaSchema:web_url , nextiaSchema:title .
+        rdfs:label   "concesionario" ;
+        json:hasKey  nextiaSchema:vehiculos , nextiaSchema:provincia , nextiaSchema:localidad , nextiaSchema:calle .
 
-nextiaSchema:web_url  rdf:type  json:Key ;
-        rdfs:label     "web_url" ;
-        json:hasValue  json:String .
-
-nextiaSchema:creator_Array_1_complexStuff
-        rdf:type       json:Key ;
-        rdfs:label     "has creator_Array_1_complexStuff" ;
-        json:hasValue  nextiaSchema:creator_Array_1_complexStuff_Array_1 .
-
-nextiaSchema:creator_Array_1
-        rdf:type       json:Array ;
-        rdfs:label     "creator_Array_1" ;
-        json:hasValue  nextiaSchema:Object_2 .
+nextiaSchema:concesionario
+        rdf:type  json:Document .
