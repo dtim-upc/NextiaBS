@@ -117,6 +117,7 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
         if (!emptyJson) {
             createWrapper();
+            printWrapper(this.path, this.name);
         }
 
         generateMetadata();
@@ -174,11 +175,10 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
 
     /**
      * Prints through terminal the wrapper generated using spark
-     * @param j instance of the JSON that is being bootstrapped
      * @param path path of the file that contains the json to be bootstrapped
      * @param nameDataset name of the dataset
      */
-    private static void printWrapper(JSONBootstrap j, String path, String nameDataset) {
+    private void printWrapper(String path, String nameDataset) {
         SparkConf conf = new SparkConf()
                 .setAppName("Java Spark SQL basic example")
                 .setMaster("local[*]");
@@ -194,8 +194,8 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         Dataset<Row> dataset = spark.read().option("multiline", true).json(path);
         dataset.createOrReplaceTempView(nameDataset);
 
-        System.out.println("Wrapper is : " + j.getWrapper());
-        Dataset<Row> namesDF = spark.sql(j.getWrapper());
+        System.out.println("Wrapper is : " + this.getWrapper());
+        Dataset<Row> namesDF = spark.sql(this.getWrapper());
         namesDF.show();
     }
 
@@ -695,10 +695,5 @@ public class JSONBootstrap extends DataSource implements IBootstrap<Graph> {
         System.out.println("Number of arrays in the JSON");
         System.out.println(j.getFathers().size());
 
-        //print the wrapper if it can be printed
-
-        if (!j.emptyJson) {
-            printWrapper(j, path, nameDataset);
-        }
     }
 }

@@ -1,39 +1,37 @@
 @prefix json:             <https://www.essi.upc.edu/dtim/json-metamodel#> .
 @prefix nextiaDataSource: <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/> .
-@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/55245/> .
+@prefix nextiaSchema:     <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource/Schema/78665498/> .
 @prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
 
-nextiaSchema:localidad
-        rdf:type       json:Key ;
-        rdfs:label     "localidad" ;
-        json:hasValue  json:String .
-
-nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
-
 nextiaSchema:calle  rdf:type  json:Key ;
         rdfs:label     "calle" ;
         json:hasValue  json:String .
+
+nextiaSchema:concesionario
+        rdf:type  json:Document .
+
+nextiaSchema:provincia
+        rdf:type       json:Key ;
+        rdfs:label     "provincia" ;
+        json:hasValue  json:String .
+
+nextiaSchema:  json:hasValue  nextiaSchema:Object_1 .
 
 nextiaSchema:vehiculos_Array_1
         rdf:type       json:Array ;
         rdfs:label     "vehiculos_Array_1" ;
         json:hasValue  json:String .
 
-nextiaDataSource:55245
+nextiaDataSource:78665498
         rdf:type               <http://www.essi.upc.edu/DTIM/NextiaDI/DataSource> ;
         rdfs:label             "concesionario" ;
         nextiaDataSource:path  "src/main/resources/systematic_testing/concesionario.json" .
 
-nextiaSchema:vehiculos
+nextiaSchema:localidad
         rdf:type       json:Key ;
-        rdfs:label     "has vehiculos" ;
-        json:hasValue  nextiaSchema:vehiculos_Array_1 .
-
-nextiaSchema:provincia
-        rdf:type       json:Key ;
-        rdfs:label     "provincia" ;
+        rdfs:label     "localidad" ;
         json:hasValue  json:String .
 
 nextiaSchema:Object_1
@@ -41,5 +39,7 @@ nextiaSchema:Object_1
         rdfs:label   "concesionario" ;
         json:hasKey  nextiaSchema:vehiculos , nextiaSchema:provincia , nextiaSchema:localidad , nextiaSchema:calle .
 
-nextiaSchema:concesionario
-        rdf:type  json:Document .
+nextiaSchema:vehiculos
+        rdf:type       json:Key ;
+        rdfs:label     "has vehiculos" ;
+        json:hasValue  nextiaSchema:vehiculos_Array_1 .
