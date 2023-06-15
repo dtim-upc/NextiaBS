@@ -221,7 +221,7 @@ public class SQLBootstrap extends DataSource implements IBootstrap<Graph> {
         SQLBootstrap sql = new SQLBootstrap("18","SQLInterface1",new PostgresSQLImpl(),"localhost...", "user", "psswrd");
         Graph m = sql.bootstrapSchema(true);
 //      m.write(System.out, "turtle");
-        m.write("C:\\Users\\juane\\Documents\\NEXTIA\\src\\main\\resources\\out\\withDataFrameSOURCE.ttl", "Turlte");
+        m.write("src/main/resources/out/withDataFrameSOURCE.ttl", "Turlte");
         DF_MMtoRDFS translate = new DF_MMtoRDFS();
         Graph x = translate.productionRulesDataframe_to_RDFS(m);
         x.setPrefixes(m.getModel().getNsPrefixMap());

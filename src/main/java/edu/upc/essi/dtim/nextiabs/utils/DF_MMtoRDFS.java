@@ -1,6 +1,7 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
 import edu.upc.essi.dtim.nextiabs.metamodels.DataFrame_MM;
+import org.apache.jena.base.Sys;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
@@ -21,26 +22,25 @@ public class DF_MMtoRDFS {
         G_source.runAQuery("SELECT ?df ?d ?label WHERE { ?df <"+DataFrame_MM.hasData+"> ?d. ?d <"+RDFS.label+"> ?label   }").forEachRemaining(res -> {
             G_target.add(res.getResource("d").getURI(),RDF.type,RDF.Property); System.out.println("#3 - "+res.getResource("d").getURI()+", "+RDF.type+", "+RDF.Property);
             G_target.addLiteral(res.getResource("d").getURI(),RDFS.label, res.getLiteral("label") );
-            G_target.add(res.getResource("d").getURI(),RDFS.domain,res.getResource("df").getURI()); System.out.println("#3 - "+res.getResource("d").getURI()+", "+RDFS.domain+", "+res.getResource("df").getURI());
+            G_target.add(res.getResource("d").getURI(),RDFS.domain,res.getResource("df").getURI()); System.out.println("     - "+res.getResource("d").getURI()+", "+RDFS.domain+", "+res.getResource("df").getURI());
         });
 
         // Rule 3. Array keys (from json) are also ContainerMembershipProperty
         G_source.runAQuery("SELECT ?df ?d WHERE { ?df <"+DataFrame_MM.hasData+"> ?d . ?d <"+DataFrame_MM.hasDataType+"> ?a . ?a <"+RDF.type+"> <"+DataFrame_MM.Array+"> }").forEachRemaining(res -> {
-            System.out.println("---------------------------------------\n"+res+"\n----------------------------");
             G_target.add(res.getResource("d").getURI(),RDF.type,RDFS.ContainerMembershipProperty);
         });
 
         //Rule 4. Range of primitives.
-        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+">+ <"+DataFrame_MM.String+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }").forEachRemaining(res -> {
+        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.String+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }").forEachRemaining(res -> {
             G_target.add(res.getResource("d").getURI(),RDFS.range, XSD.xstring); System.out.println("#4 - "+res.getResource("d").getURI()+", "+RDFS.range+", "+XSD.xstring);
         });
-        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+">+ <"+DataFrame_MM.Number+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }").forEachRemaining(res -> {
+        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.Number+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }").forEachRemaining(res -> {
             G_target.add(res.getResource("d").getURI(),RDFS.range,XSD.xint); System.out.println("#4 - "+res.getResource("d").getURI()+", "+RDFS.range+", "+XSD.xint);
         });
 
         //Rule 5. Range of dataframes (i.e. json:objects).
         //        G_source.runAQuery("SELECT ?k ?v WHERE { ?k <"+JSON_MM.hasValue+">+ ?v . ?k <"+RDF.type+"> <"+JSON_MM.Key+"> . ?v <"+RDF.type+"> <"+JSON_MM.Object+"> }").forEachRemaining(res -> {
-        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+">+ ?dt . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> . ?dt <"+RDF.type+"> <"+DataFrame_MM.DataFrame+"> }").forEachRemaining(res -> {
+        G_source.runAQuery("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+"> ?dt . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> . ?dt <"+RDF.type+"> <"+DataFrame_MM.DataFrame+"> }").forEachRemaining(res -> {
             G_target.add(res.getResource("d").getURI(),RDFS.range,res.getResource("dt")); System.out.println("#5 - "+res.getResource("d").getURI()+", "+RDFS.range+", "+res.getResource("dt"));
         });
 
