@@ -43,12 +43,12 @@ public class DF_MMtoRDFS {
         }
 
         //Rule 4. Range of primitives.
-        result = G_source.query("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.String+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }");
+        result = G_source.query("SELECT ?d WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.String+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }");
         for(Map<String, Object> res : result) {
             G_target.addTriple(res.get("d").toString(), RDFS.range, XSD.xstring);
             System.out.println("#4 - "+res.get("d").toString()+", "+RDFS.range+", "+XSD.xstring);
         }
-        result = G_source.query("SELECT ?d ?dt WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.Number+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }");
+        result = G_source.query("SELECT ?d WHERE { ?d <"+DataFrame_MM.hasDataType+"> <"+DataFrame_MM.Number+"> . ?d <"+RDF.type+"> <"+DataFrame_MM.Data+"> }");
         for(Map<String, Object> res : result) {
             G_target.addTriple(res.get("d").toString(), RDFS.range, XSD.xint);
             System.out.println("#4 - "+res.get("d").toString()+", "+RDFS.range+", "+XSD.xint);
