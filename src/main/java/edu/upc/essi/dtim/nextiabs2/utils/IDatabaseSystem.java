@@ -1,0 +1,11 @@
+package edu.upc.essi.dtim.nextiabs2.utils;
+
+import java.util.HashMap;
+
+public interface IDatabaseSystem {
+    void connect(String hostname, String port, String username, String password);
+
+    HashMap<String, SQLTableData> getMetamodel();
+
+    SQLTableData getMetamodelSingleTable(String tablename);
+}

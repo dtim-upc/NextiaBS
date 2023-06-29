@@ -5,7 +5,9 @@ public enum Formats {
 
 
     CSV("CSV"),
-    JSON("JSON");
+    JSON("JSON"),
+
+    SQL("SQL");
 
     private String element;
 
