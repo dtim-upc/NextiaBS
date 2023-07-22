@@ -68,6 +68,9 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 //		if(generateMetadata)
 //			generateMetadata();
 //		G_target.setPrefixes(prefixes);
+
+		DF_MMtoRDFS translate = new DF_MMtoRDFS();
+		G_target = translate.productionRulesDataframe_to_RDFS(G_target);
 		return G_target;
 	}
 
@@ -96,10 +99,10 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena("12","artworks", pathcsv);
 		Graph m =csv.bootstrapSchema(true);
 
-		DF_MMtoRDFS translate = new DF_MMtoRDFS();
-		Graph x = translate.productionRulesDataframe_to_RDFS(m);
+//		DF_MMtoRDFS translate = new DF_MMtoRDFS();
+//		Graph x = translate.productionRulesDataframe_to_RDFS(m);
 
-		PrintGraph.printGraph(x);
+		PrintGraph.printGraph(m);
 
 //		x.setPrefixes(m.getModel().getNsPrefixMap());
 //		x.write("src/main/resources/out/artworkDATAFRAME.ttl", "Turtle");

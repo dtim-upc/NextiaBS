@@ -89,6 +89,10 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
 
         //G_target.setPrefixes(prefixes);
 //        G_source.setPrefixes(prefixes);
+
+        DF_MMtoRDFS translate = new DF_MMtoRDFS();
+        G_source = translate.productionRulesDataframe_to_RDFS(G_source);
+
         return G_source;
     }
 
@@ -333,9 +337,10 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
 //		Model M = j.bootstrapSchema("ds1", D,"/Users/javierflores/Documents/upc/projects/newODIN/datasources/survey_prueba/selected/tate_artist_picasso-pablo-1767.json");
         Graph M = j.bootstrapSchema();
 
-        DF_MMtoRDFS translate = new DF_MMtoRDFS();
-        Graph x = translate.productionRulesDataframe_to_RDFS(M);
-        PrintGraph.printGraph(x);
+//        DF_MMtoRDFS translate = new DF_MMtoRDFS();
+//        Graph x = translate.productionRulesDataframe_to_RDFS(M);
+
+        PrintGraph.printGraph(M);
 
 
 //        x.setPrefixes(M.getModel().getNsPrefixMap());

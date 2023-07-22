@@ -67,6 +67,9 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
             generateMetadata();
         }
 
+        DF_MMtoRDFS translate = new DF_MMtoRDFS();
+        G_target = translate.productionRulesDataframe_to_RDFS(G_target);
+
         return G_target;
     }
 
@@ -176,16 +179,16 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 
 
         Graph m = sql.bootstrapSchema(true);
-        System.out.println("--------------------DATAFRAME----------------------------");
+        System.out.println("--------------------RDFS----------------------------");
         PrintGraph.printGraph(m);
         System.out.println("----------------------------------------------------");
 
 
-        System.out.println("--------------------RDFS----------------------------");
-        DF_MMtoRDFS translate = new DF_MMtoRDFS();
-        Graph x = translate.productionRulesDataframe_to_RDFS(m);
-        PrintGraph.printGraph(x);
-        System.out.println("----------------------------------------------------");
+//        System.out.println("--------------------RDFS----------------------------");
+//        DF_MMtoRDFS translate = new DF_MMtoRDFS();
+//        Graph x = translate.productionRulesDataframe_to_RDFS(m);
+//        PrintGraph.printGraph(x);
+//        System.out.println("----------------------------------------------------");
    }
 }
 
