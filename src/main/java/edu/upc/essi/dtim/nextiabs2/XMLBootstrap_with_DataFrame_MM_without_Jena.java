@@ -64,6 +64,7 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 			e.printStackTrace();
 		}
 
+		//TODO: implement wrapper and metadata
 //		String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
 //		wrapper = "SELECT " + select  + " FROM " + name;
 
@@ -77,11 +78,17 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		return G_target;
 	}
 
+	/**
+	 * Extracts the attributes from an XML element and adds them to the Dataframe_MM instance graph.
+	 * This function gets called recursively until it reaches the leaf nodes of the XML tree (text nodes).
+	 * @param element The XML element to extract the attributes from (either root element or any children of any node)
+	 */
 	private void extractSubElementsFromElement(Element element) {
 		NodeList childNodes = element.getChildNodes();
 		String parentName = element.getNodeName();
-
 		int numChildren = childNodes.getLength();
+
+		//for each children node
 		for (int n = 0; n < numChildren; n++) {
 			Node child = childNodes.item(n);
 			String childName = child.getNodeName();
@@ -106,60 +113,22 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 
 				//If it has only one child TEXT_NODE to process
 				//--> conect that node's domain to his parent
-				//    (the other atributes like type, label or range are set in his TEXT_NODE child if it's not empty)
+				//    (the other atributes like type, label or range are set in his TEXT_NODE child if it's not empty when processed)
 				if(hasOneNonEmptyTextChildren(child)) {
 					G_target.addTriple(createIRI(parentName),DataFrame_MM.hasData,createIRI(childName));
-					debugPrintAllChildren(child);
-
 				}
 
+				//if it's ELEMENT_NODE --> process children recursively
 				if(child.hasChildNodes())extractSubElementsFromElement((Element) child);
 			}
-
-
-//		for (int n = 0; n < numChildren; n++) {
-//			Node child = childNodes.item(n);
-//			String childName = child.getNodeName();
-//
-//			//All nodes have at least a '#text' node as child
-//			//It's almost always empty,
-//			//  but sometimes it contains the text value of the node (treated below)
-//			if(/*!childName.equals("#text")*/ child.getNodeType() != Node.TEXT_NODE) {
-//				G_target.addTriple(createIRI(childName),RDF.type,DataFrame_MM.Data); 	//TODAS elem--type-->DF.Data
-//				G_target.addTripleLiteral(createIRI(childName), RDFS.label,childName);	//TODAS -->label-->elem.name
-//				G_target.addTriple(createIRI(parentName),DataFrame_MM.hasData,createIRI(childName)); //TODAS parentElem--hasData--> elem
-//			}
-//
-//			if(child.getNodeType() == Node.ELEMENT_NODE){
-//				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.Data);
-//			}
-//
-//			//when child node is '#text' and it's not empty, it' value isn't 'null' nor ""
-//			//it's value is "\n   "
-//			if(child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().replaceAll("\n","").isBlank()) {
-//				G_target.addTriple(createIRI(childName),RDF.type,DataFrame_MM.Data); 	//TODAS elem--type-->DF.Data
-//				G_target.addTripleLiteral(createIRI(childName), RDFS.label,childName);	//TODAS -->label-->elem.name
-//				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.String);
-//			}
-//
-//			//recursive call if the child has sub-elements
-//			if(child.hasChildNodes())extractSubElementsFromElement((Element) child);
-
-		}
-
-	}
-
-	private void debugPrintAllChildren(Node node) {
-		NodeList childNodes = node.getChildNodes();
-		int numChildren = childNodes.getLength(), i = 0;
-
-		while(i < numChildren){
-			Node child = childNodes.item(i);
-			System.out.println(child.getNodeName() + " : " + child.getNodeValue().replaceAll("\n","").trim());
-			++i;
 		}
 	}
 
+	/**
+	 * Checks if a node has at least one child TEXT_NODE and that child is not empty
+	 * @param node The node to check
+	 * @return true if the node has at least one child TEXT_NODE and that child is not empty, false otherwise
+	 */
 	private boolean hasOneNonEmptyTextChildren(Node node) {
 		NodeList childNodes = node.getChildNodes();
 		int numChildren = childNodes.getLength(), i = 0;
@@ -174,6 +143,11 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		return hasOneNonEmptyTextChildren;
 	}
 
+	/**
+	 * Checks if a node has at least one child ELEMENT_NODE
+	 * @param node The node to check
+	 * @return true if the node has at least one child ELEMENT_NODE, false otherwise
+	 */
 	private boolean hasElementChildren(Node node) {
 		NodeList childNodes = node.getChildNodes();
 		int numChildren = childNodes.getLength(), i = 0;
