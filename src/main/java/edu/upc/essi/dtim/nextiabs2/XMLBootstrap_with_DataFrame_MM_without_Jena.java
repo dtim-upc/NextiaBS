@@ -8,15 +8,12 @@ import edu.upc.essi.dtim.nextiabs2.temp.RDF;
 import edu.upc.essi.dtim.nextiabs2.temp.RDFS;
 import edu.upc.essi.dtim.nextiabs2.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs2.utils.DataSource;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.Formats;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 /**
  * Generates an RDFS-compliant representation of a CSV file schema
@@ -89,29 +86,106 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 			Node child = childNodes.item(n);
 			String childName = child.getNodeName();
 
-			//All nodes have at least a '#text' node as child
-			//It's almost always empty,
-			//  but sometimes it contains the text value of the node (treated below)
-			if(!childName.equals("#text")) {
-				G_target.addTriple(createIRI(childName),RDF.type,DataFrame_MM.Data); 	//TODAS elem--type-->DF.Data
-				G_target.addTripleLiteral(createIRI(childName), RDFS.label,childName);	//TODAS -->label-->elem.name
-				G_target.addTriple(createIRI(parentName),DataFrame_MM.hasData,createIRI(childName)); //TODAS parentElem--hasData--> elem
+			//If it's TEXT_NODE and it's not empty (if empty-->IGNORE)
+			//--> add Parent Node as property with range string
+			//    (domain gets treated later)
+			if(child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().replaceAll("\n","").isBlank()){
+				G_target.addTriple(createIRI(parentName),RDF.type,DataFrame_MM.Data);
+				G_target.addTripleLiteral(createIRI(parentName), RDFS.label,parentName);
+				G_target.addTriple(createIRI(parentName),DataFrame_MM.hasDataType,DataFrame_MM.String);
 			}
 
-			if(child.getNodeType() == Node.ELEMENT_NODE){
-				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.Data);
+			//If it's ELEMENT_NODE
+			else if (child.getNodeType() == Node.ELEMENT_NODE){
+				//If it has some children NOT TEXT_NODE to process
+				//--> add that node as Class
+				if(hasElementChildren(child)) {
+					G_target.addTriple(createIRI(childName), RDF.type, DataFrame_MM.DataFrame);
+					G_target.addTripleLiteral(createIRI(childName), RDFS.label, childName);
+				}
+
+				//If it has only one child TEXT_NODE to process
+				//--> conect that node's domain to his parent
+				//    (the other atributes like type, label or range are set in his TEXT_NODE child if it's not empty)
+				if(hasOneNonEmptyTextChildren(child)) {
+					G_target.addTriple(createIRI(parentName),DataFrame_MM.hasData,createIRI(childName));
+					debugPrintAllChildren(child);
+
+				}
+
+				if(child.hasChildNodes())extractSubElementsFromElement((Element) child);
 			}
 
-			//when child node is '#text' and it's not empty, it' value isn't 'null' nor ""
-			//it's value is "\n   "
-			if(child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().replaceAll("\n","").isBlank()) {
-				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.String);
-			}
 
-			//recursive call if the child has sub-elements
-			if(child.hasChildNodes())extractSubElementsFromElement((Element) child);
+//		for (int n = 0; n < numChildren; n++) {
+//			Node child = childNodes.item(n);
+//			String childName = child.getNodeName();
+//
+//			//All nodes have at least a '#text' node as child
+//			//It's almost always empty,
+//			//  but sometimes it contains the text value of the node (treated below)
+//			if(/*!childName.equals("#text")*/ child.getNodeType() != Node.TEXT_NODE) {
+//				G_target.addTriple(createIRI(childName),RDF.type,DataFrame_MM.Data); 	//TODAS elem--type-->DF.Data
+//				G_target.addTripleLiteral(createIRI(childName), RDFS.label,childName);	//TODAS -->label-->elem.name
+//				G_target.addTriple(createIRI(parentName),DataFrame_MM.hasData,createIRI(childName)); //TODAS parentElem--hasData--> elem
+//			}
+//
+//			if(child.getNodeType() == Node.ELEMENT_NODE){
+//				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.Data);
+//			}
+//
+//			//when child node is '#text' and it's not empty, it' value isn't 'null' nor ""
+//			//it's value is "\n   "
+//			if(child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().replaceAll("\n","").isBlank()) {
+//				G_target.addTriple(createIRI(childName),RDF.type,DataFrame_MM.Data); 	//TODAS elem--type-->DF.Data
+//				G_target.addTripleLiteral(createIRI(childName), RDFS.label,childName);	//TODAS -->label-->elem.name
+//				G_target.addTriple(createIRI(childName),DataFrame_MM.hasDataType,DataFrame_MM.String);
+//			}
+//
+//			//recursive call if the child has sub-elements
+//			if(child.hasChildNodes())extractSubElementsFromElement((Element) child);
 
 		}
+
+	}
+
+	private void debugPrintAllChildren(Node node) {
+		NodeList childNodes = node.getChildNodes();
+		int numChildren = childNodes.getLength(), i = 0;
+
+		while(i < numChildren){
+			Node child = childNodes.item(i);
+			System.out.println(child.getNodeName() + " : " + child.getNodeValue().replaceAll("\n","").trim());
+			++i;
+		}
+	}
+
+	private boolean hasOneNonEmptyTextChildren(Node node) {
+		NodeList childNodes = node.getChildNodes();
+		int numChildren = childNodes.getLength(), i = 0;
+		boolean hasOneNonEmptyTextChildren = false;
+
+		while(i < numChildren && !hasOneNonEmptyTextChildren){
+			Node child = childNodes.item(i);
+			if(child.getNodeType() == Node.TEXT_NODE && !child.getNodeValue().replaceAll("\n","").isBlank()) hasOneNonEmptyTextChildren = true;
+			++i;
+		}
+
+		return hasOneNonEmptyTextChildren;
+	}
+
+	private boolean hasElementChildren(Node node) {
+		NodeList childNodes = node.getChildNodes();
+		int numChildren = childNodes.getLength(), i = 0;
+		boolean hasElementChildren = false;
+
+		while(i < numChildren && !hasElementChildren){
+			Node child = childNodes.item(i);
+			if(child.getNodeType() == Node.ELEMENT_NODE) hasElementChildren = true;
+			++i;
+		}
+
+		return hasElementChildren;
 	}
 
 	@Override
