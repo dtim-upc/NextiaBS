@@ -38,6 +38,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
     implementation 'org.apache.spark:spark-sql_2.13:3.3.2'
 
+    implementation group: 'org.apache.parquet', name: 'parquet-hadoop', version: '1.10.0'
+    implementation group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.3.6'
+
+
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
