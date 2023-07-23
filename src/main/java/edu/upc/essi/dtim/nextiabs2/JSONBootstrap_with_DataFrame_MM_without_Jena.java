@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.riot.Lang;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -22,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,10 +66,9 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
 
     @Override
     public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
-//        setPrefixes();
+//      setPrefixes();
         Document(path,name);
-//        G_source.getModel().setNsPrefixes(prefixes);
-//		G_source.write("/Users/javierflores/Documents/upc/projects/NextiaDI/source/source_schemas/source.ttl"  , Lang.TURTLE);
+//      G_source.getModel().setNsPrefixes(prefixes);
 
         //productionRules_JSON_to_RDFS();
 

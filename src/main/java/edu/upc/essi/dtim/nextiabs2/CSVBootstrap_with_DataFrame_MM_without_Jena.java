@@ -13,12 +13,10 @@ import edu.upc.essi.dtim.nextiabs2.vocabulary.Formats;
 import edu.upc.essi.dtim.nextiabs2.temp.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.apache.jena.atlas.lib.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
 
-	public String path;
+	public final String path;
 
 	public CSVBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();
@@ -65,6 +63,7 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
 		wrapper = "SELECT " + select  + " FROM " + name;
 
+		//TODO: implement metadata
 //		if(generateMetadata)
 //			generateMetadata();
 //		G_target.setPrefixes(prefixes);
@@ -89,23 +88,12 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		G_target.addTripleLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
 	}
 
-//	public void write(String file, String lang){
-//		G_target.write(file,lang);
-//	}
-
 	public static void main(String[] args) throws IOException {
 
 		String pathcsv = "src/main/resources/artworks.csv";
 		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena("12","artworks", pathcsv);
 		Graph m =csv.bootstrapSchema(true);
-
-//		DF_MMtoRDFS translate = new DF_MMtoRDFS();
-//		Graph x = translate.productionRulesDataframe_to_RDFS(m);
-
 		PrintGraph.printGraph(m);
-
-//		x.setPrefixes(m.getModel().getNsPrefixMap());
-//		x.write("src/main/resources/out/artworkDATAFRAME.ttl", "Turtle");
 	}
 }
 

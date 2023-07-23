@@ -27,7 +27,7 @@ public class PostgresSQLImpl implements IDatabaseSystem {
 
     @Override
     public HashMap<String, SQLTableData> getMetamodel() {
-        HashMap<String, SQLTableData> resultMetamodel = new HashMap<String, SQLTableData>();
+        HashMap<String, SQLTableData> resultMetamodel = new HashMap<>();
 
         List<String> tables = new ArrayList<>();
 

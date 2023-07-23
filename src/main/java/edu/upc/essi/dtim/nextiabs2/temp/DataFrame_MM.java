@@ -7,11 +7,11 @@ public class DataFrame_MM {
      */
     public static final String uri="https://www.essi.upc.edu/dtim/dataframe-metamodel#";
 
-    protected static final String resource(String local )
-    { return new String( uri + local ); }
+    protected static String resource(String local )
+    { return uri + local; }
 
-    protected static final String property (String local )
-    { return new String( uri + local ); }
+    protected static String property (String local )
+    { return uri + local; }
 
 
 

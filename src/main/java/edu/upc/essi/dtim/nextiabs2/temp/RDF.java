@@ -13,7 +13,7 @@ public class RDF {
     }
 
     protected static String resource(String local)
-    { return new String( uri + local ); }
+    { return uri + local; }
 
     public static final String type = Init.type();
 

@@ -9,7 +9,7 @@ public enum Formats {
 
     SQL("SQL");
 
-    private String element;
+    private final String element;
 
     Formats(String element) {
         this.element = element;

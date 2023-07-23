@@ -6,9 +6,7 @@ import edu.upc.essi.dtim.nextiabs2.temp.*;
 
 import java.util.List;
 import java.util.Map;
-//import org.apache.jena.vocabulary.RDF;
-//import org.apache.jena.vocabulary.RDFS;
-//import org.apache.jena.vocabulary.XSD;
+
 
 public class DF_MMtoRDFS {
 

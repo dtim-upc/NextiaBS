@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
 
-	public String path;
+	public final String path;
 
 	public ParquetBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();

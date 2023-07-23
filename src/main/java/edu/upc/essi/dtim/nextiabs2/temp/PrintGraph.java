@@ -16,7 +16,7 @@ public class PrintGraph {
         for(Map<String, Object> t : result){
 
             if(results.get(prefixed(t.get("s").toString())) == null){
-                ArrayList<Pair<String, String>> l = new ArrayList<Pair<String, String>>();
+                ArrayList<Pair<String, String>> l = new ArrayList<>();
                 results.put(prefixed(t.get("s").toString()), l);
             }
 

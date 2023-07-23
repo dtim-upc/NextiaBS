@@ -1,26 +1,12 @@
 package edu.upc.essi.dtim.nextiabs2.utils;
 
-//import edu.upc.essi.dtim.nextiabs2.metamodels.DataFrame_MM;
-//import edu.upc.essi.dtim.nextiabs2.metamodels.JSON_MM;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-
 import edu.upc.essi.dtim.nextiabs2.vocabulary.DataSourceVocabulary;
 import lombok.Getter;
 import lombok.Setter;
 
 
-import edu.upc.essi.dtim.NextiaCore.vocabulary.*;
-
-//import edu.upc.essi.dtim.nextiabs2.vocabulary.RDF;
-//import edu.upc.essi.dtim.nextiabs2.vocabulary.RDFS;
-//import edu.upc.essi.dtim.nextiabs2.vocabulary.XSD;
-
-//import org.apache.jena.vocabulary.RDF;
-//import org.apache.jena.vocabulary.RDFS;
-//import org.apache.jena.vocabulary.XSD;
-
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 @Getter

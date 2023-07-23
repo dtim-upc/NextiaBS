@@ -12,8 +12,6 @@ import org.apache.jena.atlas.lib.Pair;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-//import java.io.WriteAbortedException;
-//import java.sql.*;
 
 
 /**
@@ -176,19 +174,8 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
                         "5432",
                         "postgres",
                         "1234");
-
-
         Graph m = sql.bootstrapSchema(true);
-        System.out.println("--------------------RDFS----------------------------");
         PrintGraph.printGraph(m);
-        System.out.println("----------------------------------------------------");
-
-
-//        System.out.println("--------------------RDFS----------------------------");
-//        DF_MMtoRDFS translate = new DF_MMtoRDFS();
-//        Graph x = translate.productionRulesDataframe_to_RDFS(m);
-//        PrintGraph.printGraph(x);
-//        System.out.println("----------------------------------------------------");
-   }
+    }
 }
 

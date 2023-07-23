@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
 
-	public String path;
+	public final String path;
 
 	public XMLBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();
@@ -176,10 +176,6 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 //		G_target.addTripleLiteral( ds , DataSourceVocabulary.HAS_FORMAT.getURI(), Formats.CSV.val());
 //		G_target.addTripleLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
 	}
-
-//	public void write(String file, String lang){
-//		G_target.write(file,lang);
-//	}
 
 	public static void main(String[] args) throws IOException {
 

@@ -22,7 +22,7 @@ public enum DataSourceVocabulary {
     ALIAS(DataSource.getURI() + "/alias");
 
 
-    private String element;
+    private final String element;
 
     DataSourceVocabulary(String element) {
         this.element = element;
