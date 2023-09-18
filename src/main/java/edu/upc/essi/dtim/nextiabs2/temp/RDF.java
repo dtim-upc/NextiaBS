@@ -21,7 +21,7 @@ public class RDF {
 
 
     public static class Init {
-        public static String type() {return resource("Type");}
+        public static String type() {return resource("type");}
         public static String Property() {return resource ("Property");}
     }
 

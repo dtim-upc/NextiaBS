@@ -23,10 +23,10 @@ public class RDFS {
     public static final String range = Init.range();
 
     public static class Init {
-        public static String label() {return resource("Label");}
-        public static String domain() {return resource ("Domain");}
+        public static String label() {return resource("label");}
+        public static String domain() {return resource ("domain");}
 
-        public static String range() {return resource ("Range");}
+        public static String range() {return resource ("range");}
 
         public static String Class() {return resource("Class");}
         public static String containerMembershipProperty() {return resource("ContainerMembershipProperty");}

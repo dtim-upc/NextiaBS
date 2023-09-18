@@ -193,7 +193,7 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
     private void Primitive (JsonValue D, JSON_Aux p) {
         resourcesLabelSWJ.add(p.getLabel());
         if (D.getValueType() == JsonValue.ValueType.NUMBER) {
-            G_source.addTriple(createIRI(p.getLabel()),DataFrame_MM.hasData,DataFrame_MM.Number);
+            G_source.addTriple(createIRI(p.getLabel()),DataFrame_MM.hasDataType,DataFrame_MM.Number);
             attributesSWJ.put(p.getLabel(),p);
         }
         // Boolean does not exist in the library
