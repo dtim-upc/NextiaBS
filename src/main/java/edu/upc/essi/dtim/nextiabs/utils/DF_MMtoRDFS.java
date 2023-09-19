@@ -2,7 +2,9 @@ package edu.upc.essi.dtim.nextiabs.utils;
 
 import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-import edu.upc.essi.dtim.nextiabs.temp.*;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.XSD;
 
 import java.util.List;
 import java.util.Map;

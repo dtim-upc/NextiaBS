@@ -1,7 +1,7 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import lombok.Getter;
 import lombok.Setter;
 

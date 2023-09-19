@@ -1,15 +1,16 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.XSD;
+import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
 import edu.upc.essi.dtim.nextiabs.utils.*;
-import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs.temp.*;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
 import org.apache.jena.atlas.lib.Pair;
 
-
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,12 +44,12 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
     }
 
     @Override
-    public Graph bootstrapSchema() throws IOException {
+    public Graph bootstrapSchema() {
         return bootstrapSchema(false);
     }
 
     @Override
-    public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
+    public Graph bootstrapSchema(Boolean generateMetadata) {
 
         Database.connect(hostname, port,  username, password);
 
@@ -163,7 +164,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
         G_target.addTripleLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SQLBootstrap_with_DataFrame_MM_without_Jena sql =
                 new SQLBootstrap_with_DataFrame_MM_without_Jena(
                         "18",

@@ -2,10 +2,10 @@ package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
-import edu.upc.essi.dtim.nextiabs.temp.RDF;
-import edu.upc.essi.dtim.nextiabs.temp.RDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 
@@ -13,7 +13,6 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Generates an RDFS-compliant representation of a CSV file schema
@@ -31,12 +30,12 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 	}
 
 	@Override
-	public Graph bootstrapSchema() throws IOException {
+	public Graph bootstrapSchema() {
 		return bootstrapSchema(false);
 	}
 
 	@Override
-	public Graph bootstrapSchema(Boolean generateMetadata) throws IOException {
+	public Graph bootstrapSchema(Boolean generateMetadata) {
 		G_target = CoreGraphFactory.createGraphInstance("local");
 		this.id = id;
 //		setPrefixes();
@@ -177,7 +176,7 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 //		G_target.addTripleLiteral( ds , DataSourceVocabulary.HAS_WRAPPER.getURI(), wrapper);
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 		String pathcsv = "src/main/resources/museums-and-galleries-1.xml";
 		XMLBootstrap_with_DataFrame_MM_without_Jena csv = new XMLBootstrap_with_DataFrame_MM_without_Jena("12","artworks", pathcsv);
