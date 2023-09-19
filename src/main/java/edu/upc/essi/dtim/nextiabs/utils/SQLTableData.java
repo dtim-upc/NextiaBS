@@ -1,6 +1,6 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
-import com.github.andrewoma.dexx.collection.Pair;
+import org.apache.jena.atlas.lib.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

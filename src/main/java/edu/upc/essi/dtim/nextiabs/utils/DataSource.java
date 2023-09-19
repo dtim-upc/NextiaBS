@@ -1,13 +1,10 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
-import edu.upc.essi.dtim.nextiabs.metamodels.DataFrame_MM;
-import edu.upc.essi.dtim.nextiabs.metamodels.JSON_MM;
+import edu.upc.essi.dtim.NextiaCore.graph.*;
 import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
-import org.apache.jena.vocabulary.XSD;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +23,11 @@ public abstract class DataSource implements IDataSource {
     public Map<String, String> prefixes;
 
     public DataSource(){
-        G_target = new Graph();
+//        G_target = new LocalGraph(new URI(""),new HashSet<Triple>());
+        G_target = CoreGraphFactory.createGraphInstance("normal");
         id = "";
         prefixes = new HashMap<>();
-        setPrefixes();
+//        setPrefixes();
     }
 
     public String createIRI(String name){
@@ -39,17 +37,17 @@ public abstract class DataSource implements IDataSource {
         return DataSourceVocabulary.Schema.getURI() + id+"/"+ name;
     }
 
-    public void setPrefixes(){
-
-        if(id.equals(""))
-            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI());
-        else
-            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI()+id+"/");
-        prefixes.put("nextiaDataSource", DataSourceVocabulary.DataSource.getURI() +"/");
-        prefixes.put("rdf", RDF.getURI());
-        prefixes.put("rdfs", RDFS.getURI());
-        prefixes.put("xsd", XSD.getURI());
-        prefixes.put("json", JSON_MM.getURI());
-        prefixes.put("dataFrame", DataFrame_MM.getURI());
-    }
+//    public void setPrefixes(){
+//
+//        if(id.equals(""))
+//            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI());
+//        else
+//            prefixes.put("nextiaSchema", DataSourceVocabulary.Schema.getURI()+id+"/");
+//        prefixes.put("nextiaDataSource", DataSourceVocabulary.DataSource.getURI() +"/");
+//        prefixes.put("rdf", RDF.getUri());
+//        prefixes.put("rdfs", RDFS.getURI());
+//        prefixes.put("xsd", XSD.getURI());
+//        prefixes.put("json", JSON_MM.getURI());
+//        prefixes.put("dataFrame", DataFrame_MM.getURI());
+//    }
 }

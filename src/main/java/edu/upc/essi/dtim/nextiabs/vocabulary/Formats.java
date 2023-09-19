@@ -5,9 +5,11 @@ public enum Formats {
 
 
     CSV("CSV"),
-    JSON("JSON");
+    JSON("JSON"),
 
-    private String element;
+    SQL("SQL");
+
+    private final String element;
 
     Formats(String element) {
         this.element = element;

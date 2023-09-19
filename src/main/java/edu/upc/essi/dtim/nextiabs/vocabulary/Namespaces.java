@@ -6,7 +6,7 @@ public enum Namespaces {
     NextiaDI("http://www.essi.upc.edu/DTIM/NextiaDI/");
 
 
-    private String element;
+    private final String element;
 
     Namespaces(String element) {
         this.element = element;

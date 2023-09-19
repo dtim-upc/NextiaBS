@@ -1,11 +1,11 @@
-package edu.upc.essi.dtim.nextiabs2;
+package edu.upc.essi.dtim.nextiabs;
 
-import edu.upc.essi.dtim.nextiabs2.temp.PrintGraph;
-import edu.upc.essi.dtim.nextiabs2.utils.*;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs2.temp.*;
+import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
+import edu.upc.essi.dtim.nextiabs.utils.*;
+import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
+import edu.upc.essi.dtim.nextiabs.temp.*;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.Formats;
+import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
 import org.apache.jena.atlas.lib.Pair;
 
 

@@ -1,15 +1,13 @@
-package edu.upc.essi.dtim.nextiabs2;
+package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
-import edu.upc.essi.dtim.nextiabs2.temp.DataFrame_MM;
-import edu.upc.essi.dtim.nextiabs2.temp.PrintGraph;
-import edu.upc.essi.dtim.nextiabs2.temp.RDF;
-import edu.upc.essi.dtim.nextiabs2.temp.RDFS;
-import edu.upc.essi.dtim.nextiabs2.utils.DF_MMtoRDFS;
-import edu.upc.essi.dtim.nextiabs2.utils.DataSource;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.Formats;
+import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
+import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
+import edu.upc.essi.dtim.nextiabs.temp.RDF;
+import edu.upc.essi.dtim.nextiabs.temp.RDFS;
+import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
+import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.ParquetFileReader;

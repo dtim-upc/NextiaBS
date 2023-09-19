@@ -1,16 +1,15 @@
-package edu.upc.essi.dtim.nextiabs2;
+package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.NextiaCore.graph.*;
 /*import edu.upc.essi.dtim.Graph.LocalGraph;
 import edu.upc.essi.dtim.Graph.Triple;
 import edu.upc.essi.dtim.Graph.URI;
 import edu.upc.essi.dtim.nextiaEngine.temp.*;*/
-import edu.upc.essi.dtim.nextiabs2.IBootstrap;
-import edu.upc.essi.dtim.nextiabs2.utils.DF_MMtoRDFS;
-import edu.upc.essi.dtim.nextiabs2.utils.DataSource;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.DataSourceVocabulary;
-import edu.upc.essi.dtim.nextiabs2.vocabulary.Formats;
-import edu.upc.essi.dtim.nextiabs2.temp.*;
+import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
+import edu.upc.essi.dtim.nextiabs.utils.DataSource;
+import edu.upc.essi.dtim.nextiabs.vocabulary.DataSourceVocabulary;
+import edu.upc.essi.dtim.nextiabs.vocabulary.Formats;
+import edu.upc.essi.dtim.nextiabs.temp.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 

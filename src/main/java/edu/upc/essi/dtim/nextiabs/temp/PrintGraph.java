@@ -1,4 +1,4 @@
-package edu.upc.essi.dtim.nextiabs2.temp;
+package edu.upc.essi.dtim.nextiabs.temp;
 
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
 import org.apache.jena.atlas.lib.Pair;
