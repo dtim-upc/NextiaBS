@@ -1,6 +1,6 @@
 package edu.upc.essi.dtim.nextiabs.utils;
 
-import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;

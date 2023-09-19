@@ -5,8 +5,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
-import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
-import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import org.apache.commons.csv.CSVFormat;
@@ -16,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.stream.Collectors;
+
+import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
 
 /**
  * Generates an RDFS-compliant representation of a CSV file schema

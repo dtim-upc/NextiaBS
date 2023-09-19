@@ -4,7 +4,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
-import edu.upc.essi.dtim.nextiabs.temp.DataFrame_MM;
+import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
