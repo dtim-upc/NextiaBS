@@ -29,7 +29,10 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
     private final String password;
     private final String tableName;
 
-    public SQLBootstrap_with_DataFrame_MM_without_Jena(String id, String schemaName, String tableName, IDatabaseSystem DBType, String hostname, String port, String username, String password) {
+    private final String databasename;
+
+
+    public SQLBootstrap_with_DataFrame_MM_without_Jena(String id, String schemaName, String tableName, IDatabaseSystem DBType, String hostname, String port, String username, String password, String databasename) {
         super();
         this.id = id;
         this.name = schemaName;
@@ -41,6 +44,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
         this.password = password;
         this.tableName = tableName;
         this.tableData = new SQLTableData(tableName);
+        this.databasename = databasename;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
     @Override
     public Graph bootstrapSchema(Boolean generateMetadata) {
 
-        Database.connect(hostname, port,  username, password);
+        Database.connect(hostname, port,  username, password, databasename);
 
         //Table's raw data
         tableData = Database.getMetamodelSingleTable(tableName);
@@ -174,7 +178,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
                         "localhost",
                         "5432",
                         "postgres",
-                        "1234");
+                        "1234", "");
         Graph m = sql.bootstrapSchema(true);
         PrintGraph.printGraph(m);
     }

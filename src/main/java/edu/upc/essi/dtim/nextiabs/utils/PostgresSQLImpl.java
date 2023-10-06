@@ -7,16 +7,17 @@ import java.util.List;
 
 public class PostgresSQLImpl implements IDatabaseSystem {
     Connection connection;
-    String hostname, port, username, password, tableName;
+    String hostname, port, username, password, tableName, databasename;
 
     @Override
-    public void connect(String hostname, String port, String username, String password) {
+    public void connect(String hostname, String port, String username, String password, String databasename) {
         this.hostname = hostname;
         this.port = port;
         this.username = username;
         this.password = password;
+        this.databasename= databasename;
 
-        String connectionUrl = "jdbc:postgresql://"+hostname+":"+port+"/"+username;
+        String connectionUrl = "jdbc:postgresql://"+hostname+":"+port+"/"+databasename;
 
         try {
             connection = DriverManager.getConnection(connectionUrl, username, password); //postgres
