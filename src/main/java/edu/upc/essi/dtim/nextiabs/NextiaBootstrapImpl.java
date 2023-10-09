@@ -1,9 +1,6 @@
 package edu.upc.essi.dtim.nextiabs;
 
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.CsvDataset;
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.JsonDataset;
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.SQLDataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.*;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.nextiabs.utils.PostgresSQLImpl;
@@ -43,6 +40,9 @@ public class NextiaBootstrapImpl implements NextiaBootstrapInterface{
                             ((SQLDataset) dataset).getPassword(),
                             "odin_test");
             bootstrapG = sql.bootstrapSchema();
+        } else if (dataset.getClass().equals(XmlDataset.class)) {
+            XMLBootstrap_with_DataFrame_MM_without_Jena xml = new XMLBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((XmlDataset) dataset).getPath());
+            bootstrapG = xml.bootstrapSchema();
         }
 
         return bootstrapG;
