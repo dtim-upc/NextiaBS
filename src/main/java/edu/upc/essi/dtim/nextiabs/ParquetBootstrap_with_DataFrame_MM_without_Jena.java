@@ -120,5 +120,10 @@ public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource 
 
 		return bootstrapG;
 	}
+
+	@Override
+	public String getWrapper(Dataset dataset) {
+		return null;
+	}
 }
 

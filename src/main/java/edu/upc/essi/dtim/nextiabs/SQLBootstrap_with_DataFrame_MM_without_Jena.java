@@ -1,5 +1,6 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataRepository.RelationalJDBCRepository;
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.*;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
@@ -200,11 +201,16 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
                         new PostgresSQLImpl(),//Database type: postgres, mysql...
                         ((SQLDataset) dataset).getHostname(),
                         ((SQLDataset) dataset).getPort(),
-                        ((SQLDataset) dataset).getUsername(),
-                        ((SQLDataset) dataset).getPassword(),
+                        ((RelationalJDBCRepository) dataset.getRepository()).getUsername(),
+                        ((RelationalJDBCRepository) dataset.getRepository()).getPassword(),
                         "odin_test");
         bootstrapG = sql.bootstrapSchema();
         return bootstrapG;
+    }
+
+    @Override
+    public String getWrapper(Dataset dataset) {
+        return null;
     }
 
 }

@@ -116,5 +116,10 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 
 		return bootstrapG;
 	}
+
+	@Override
+	public String getWrapper(Dataset dataset) {
+		return null;
+	}
 }
 

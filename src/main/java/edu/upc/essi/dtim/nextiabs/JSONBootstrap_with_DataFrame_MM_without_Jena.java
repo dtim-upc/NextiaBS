@@ -407,4 +407,26 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
 
         return bootstrapG;
     }
+
+    @Override
+    public String getWrapper(Dataset dataset) {
+        // Ensure that the provided dataset is a JSONDataset
+        if (!(dataset instanceof JsonDataset)) {
+            throw new IllegalArgumentException("Invalid dataset type. Expected JSONDataset.");
+        }
+
+        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
+        // Generate the schema and set the 'wrapper' variable if it hasn't been done already
+        if (this.wrapper == null) {
+            try {
+                json.bootstrapSchema();
+            } catch (IOException e) {
+                throw new RuntimeException("Error generating the schema and wrapper.", e);
+            }
+        }
+
+        // Return the 'wrapper' string
+        return this.wrapper;
+    }
+
 }
