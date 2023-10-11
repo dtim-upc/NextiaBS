@@ -1,5 +1,6 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.*;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -11,6 +12,7 @@ import edu.upc.essi.dtim.nextiabs.utils.*;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
 import org.apache.jena.atlas.lib.Pair;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,17 +21,17 @@ import java.util.List;
  * Generates an instance of a DataFrame_Metamodel representation of a postgresSQL database
  * @author juane
  */
-public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
+public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph>, NextiaBootstrapInterface {
 
-    private final IDatabaseSystem Database;
+    private IDatabaseSystem Database;
     private SQLTableData tableData;
-    private final String hostname;
-    private final String port;
-    private final String username;
-    private final String password;
-    private final String tableName;
+    private String hostname;
+    private String port;
+    private String username;
+    private String password;
+    private String tableName;
 
-    private final String databasename;
+    private String databasename;
 
 
     public SQLBootstrap_with_DataFrame_MM_without_Jena(String id, String schemaName, String tableName, IDatabaseSystem DBType, String hostname, String port, String username, String password, String databasename) {
@@ -45,6 +47,9 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
         this.tableName = tableName;
         this.tableData = new SQLTableData(tableName);
         this.databasename = databasename;
+    }
+
+    public SQLBootstrap_with_DataFrame_MM_without_Jena() {
     }
 
     @Override
@@ -182,5 +187,25 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
         Graph m = sql.bootstrapSchema(true);
         PrintGraph.printGraph(m);
     }
+
+    @Override
+    public Graph bootstrap(Dataset dataset) {
+        Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+        SQLBootstrap_with_DataFrame_MM_without_Jena sql =
+                new SQLBootstrap_with_DataFrame_MM_without_Jena(
+                        dataset.getId(),
+                        "odin_test",
+                        ((SQLDataset) dataset).getTableName(),
+                        new PostgresSQLImpl(),//Database type: postgres, mysql...
+                        ((SQLDataset) dataset).getHostname(),
+                        ((SQLDataset) dataset).getPort(),
+                        ((SQLDataset) dataset).getUsername(),
+                        ((SQLDataset) dataset).getPassword(),
+                        "odin_test");
+        bootstrapG = sql.bootstrapSchema();
+        return bootstrapG;
+    }
+
 }
 

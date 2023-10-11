@@ -1,5 +1,6 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -22,15 +23,18 @@ import java.io.IOException;
  * Generates an RDFS-compliant representation of a Parquet file schema
  * @author Juane Olivan
  */
-public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
+public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph>, NextiaBootstrapInterface {
 
-	public final String path;
+	public String path;
 
 	public ParquetBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.path = path;
+	}
+
+	public ParquetBootstrap_with_DataFrame_MM_without_Jena() {
 	}
 
 	@Override
@@ -104,6 +108,17 @@ public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource 
 		ParquetBootstrap_with_DataFrame_MM_without_Jena csv = new ParquetBootstrap_with_DataFrame_MM_without_Jena("12","artworks", pathcsv);
 		Graph m =csv.bootstrapSchema(true);
 		PrintGraph.printGraph(m);
+	}
+
+	@Override
+	public Graph bootstrap(Dataset dataset) {
+		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+		String pathcsv = "src/main/resources/artwork.parquet";
+
+		ParquetBootstrap_with_DataFrame_MM_without_Jena parquet = new ParquetBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), pathcsv);
+
+		return bootstrapG;
 	}
 }
 

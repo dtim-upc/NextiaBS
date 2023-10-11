@@ -1,5 +1,9 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.CsvDataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.SQLDataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.XmlDataset;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
@@ -8,6 +12,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
+import edu.upc.essi.dtim.nextiabs.utils.PostgresSQLImpl;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 
@@ -22,15 +27,18 @@ import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
  * Generates an RDFS-compliant representation of a CSV file schema
  * @author snadal
  */
-public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
+public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph>, NextiaBootstrapInterface {
 
-	public final String path;
+	public String path;
 
 	public CSVBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.path = path;
+	}
+
+	public CSVBootstrap_with_DataFrame_MM_without_Jena() {
 	}
 
 	@Override
@@ -93,6 +101,20 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena("12","artworks", pathcsv);
 		Graph m =csv.bootstrapSchema(true);
 		PrintGraph.printGraph(m);
+	}
+
+	@Override
+	public Graph bootstrap(Dataset dataset) {
+		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((CsvDataset) dataset).getPath());
+		try {
+			bootstrapG = csv.bootstrapSchema();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return bootstrapG;
 	}
 }
 

@@ -1,5 +1,7 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.XmlDataset;
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -18,15 +20,18 @@ import java.io.File;
  * Generates an RDFS-compliant representation of a CSV file schema
  * @author snadal
  */
-public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
+public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph>, NextiaBootstrapInterface {
 
-	public final String path;
+	public String path;
 
 	public XMLBootstrap_with_DataFrame_MM_without_Jena(String id, String name, String path) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.path = path;
+	}
+
+	public XMLBootstrap_with_DataFrame_MM_without_Jena() {
 	}
 
 	@Override
@@ -184,6 +189,16 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 
 		PrintGraph.printGraph(m);
 
+	}
+
+	@Override
+	public Graph bootstrap(Dataset dataset) {
+		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+		XMLBootstrap_with_DataFrame_MM_without_Jena xml = new XMLBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((XmlDataset) dataset).getPath());
+		bootstrapG = xml.bootstrapSchema();
+
+		return bootstrapG;
 	}
 }
 

@@ -1,5 +1,9 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.JsonDataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.SQLDataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.XmlDataset;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -10,6 +14,7 @@ import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
 import edu.upc.essi.dtim.nextiabs.utils.JSON_Aux;
+import edu.upc.essi.dtim.nextiabs.utils.PostgresSQLImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.compress.utils.Lists;
@@ -30,7 +35,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph> {
+public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource implements IBootstrap<Graph>, NextiaBootstrapInterface {
 
     protected Graph G_source; //used for the graph in the source metamodel
 
@@ -58,6 +63,9 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
         attributesSWJ = new HashMap<>();
         resourcesLabelSWJ = new ArrayList<>();
         lateralViews = Lists.newArrayList();
+    }
+
+    public JSONBootstrap_with_DataFrame_MM_without_Jena() {
     }
 
 
@@ -386,4 +394,17 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
 //        j.getG_target().write("src/main/resources/out/stations_target2.ttl", Lang.TURTLE);
     }
 
+    @Override
+    public Graph bootstrap(Dataset dataset) {
+        Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
+        try {
+            bootstrapG = json.bootstrapSchema();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return bootstrapG;
+    }
 }
