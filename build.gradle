@@ -67,10 +67,17 @@ task uberJar(type: Jar) {
 
 
 //para copiar la versión actualizada de NextiaCore y NextiaDI (modificar segun ruta propia)
-def nextiaCoreJarPath = 'C:/Users/victo/Documents/GitHub/NextiaCore/build/libs/nextiacore-0.0.2-SNAPSHOT-uber.jar'
+def nextiaCoreJarPath = '../NextiaCore/build/libs/nextiacore-0.0.2-SNAPSHOT-uber.jar'
 
 task importExternalJar {
     doLast {
+        //creamos la carpeta lib si no existe
+        def libFolder = new File("..\\NextiaBS\\lib")
+
+        if (!libFolder.exists()) {
+            libFolder.mkdir()
+        }
+
         //////////////////////////COPIAR NEXTIACORE JAR
         configurations.compileClasspath.files.find { it.name == 'nextiacore-0.0.2-SNAPSHOT-uber.jar' }?.delete()
         configurations.compileClasspath.files.find { it.name == 'NextiaCore.jar' }?.delete()
@@ -83,5 +90,3 @@ task importExternalJar {
         /////////////////////////////////////////////////
     }
 }
-
-compileJava.dependsOn importExternalJar
