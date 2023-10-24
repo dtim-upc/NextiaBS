@@ -10,6 +10,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
+import edu.upc.essi.dtim.nextiabs.utils.BootstrapResult;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import edu.upc.essi.dtim.nextiabs.utils.PostgresSQLImpl;
@@ -104,8 +105,9 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 	}
 
 	@Override
-	public Graph bootstrap(Dataset dataset) {
+	public BootstrapResult bootstrap(Dataset dataset) {
 		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+		String wrapperG;
 
 		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((CsvDataset) dataset).getPath());
 		try {
@@ -114,12 +116,7 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 			throw new RuntimeException(e);
 		}
 
-		return bootstrapG;
-	}
-
-	@Override
-	public String getWrapper(Dataset dataset) {
-		return null;
+		return new BootstrapResult(bootstrapG, this.wrapper);
 	}
 }
 

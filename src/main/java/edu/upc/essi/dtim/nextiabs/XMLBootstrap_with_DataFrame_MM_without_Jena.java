@@ -8,6 +8,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
+import edu.upc.essi.dtim.nextiabs.utils.BootstrapResult;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 
@@ -192,18 +193,13 @@ public class XMLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 	}
 
 	@Override
-	public Graph bootstrap(Dataset dataset) {
+	public BootstrapResult bootstrap(Dataset dataset) {
 		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
 
 		XMLBootstrap_with_DataFrame_MM_without_Jena xml = new XMLBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((XmlDataset) dataset).getPath());
 		bootstrapG = xml.bootstrapSchema();
 
-		return bootstrapG;
-	}
-
-	@Override
-	public String getWrapper(Dataset dataset) {
-		return null;
+		return new BootstrapResult(bootstrapG, this.wrapper);
 	}
 }
 

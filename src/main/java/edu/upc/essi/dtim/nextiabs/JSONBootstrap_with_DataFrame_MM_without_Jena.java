@@ -10,11 +10,8 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
-import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
-import edu.upc.essi.dtim.nextiabs.utils.DataSource;
+import edu.upc.essi.dtim.nextiabs.utils.*;
 import edu.upc.essi.dtim.NextiaCore.graph.*;
-import edu.upc.essi.dtim.nextiabs.utils.JSON_Aux;
-import edu.upc.essi.dtim.nextiabs.utils.PostgresSQLImpl;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.compress.utils.Lists;
@@ -395,7 +392,7 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
     }
 
     @Override
-    public Graph bootstrap(Dataset dataset) {
+    public BootstrapResult bootstrap(Dataset dataset) {
         Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
 
         JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
@@ -405,28 +402,7 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
             throw new RuntimeException(e);
         }
 
-        return bootstrapG;
-    }
-
-    @Override
-    public String getWrapper(Dataset dataset) {
-        // Ensure that the provided dataset is a JSONDataset
-        if (!(dataset instanceof JsonDataset)) {
-            throw new IllegalArgumentException("Invalid dataset type. Expected JSONDataset.");
-        }
-
-        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
-        // Generate the schema and set the 'wrapper' variable if it hasn't been done already
-        if (this.wrapper == null) {
-            try {
-                json.bootstrapSchema();
-            } catch (IOException e) {
-                throw new RuntimeException("Error generating the schema and wrapper.", e);
-            }
-        }
-
-        // Return the 'wrapper' string
-        return this.wrapper;
+        return new BootstrapResult(bootstrapG, this.wrapper);
     }
 
 }

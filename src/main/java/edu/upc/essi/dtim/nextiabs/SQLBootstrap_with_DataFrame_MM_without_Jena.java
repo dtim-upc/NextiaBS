@@ -190,7 +190,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
     }
 
     @Override
-    public Graph bootstrap(Dataset dataset) {
+    public BootstrapResult bootstrap(Dataset dataset) {
         Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
 
         SQLBootstrap_with_DataFrame_MM_without_Jena sql =
@@ -205,12 +205,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
                         ((RelationalJDBCRepository) dataset.getRepository()).getPassword(),
                         "odin_test");
         bootstrapG = sql.bootstrapSchema();
-        return bootstrapG;
-    }
-
-    @Override
-    public String getWrapper(Dataset dataset) {
-        return null;
+        return new BootstrapResult(bootstrapG, this.wrapper);
     }
 
 }

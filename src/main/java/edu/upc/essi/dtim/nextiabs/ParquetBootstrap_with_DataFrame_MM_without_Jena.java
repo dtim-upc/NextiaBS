@@ -7,6 +7,7 @@ import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDFS;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataFrame_MM;
 import edu.upc.essi.dtim.nextiabs.temp.PrintGraph;
+import edu.upc.essi.dtim.nextiabs.utils.BootstrapResult;
 import edu.upc.essi.dtim.nextiabs.utils.DF_MMtoRDFS;
 import edu.upc.essi.dtim.nextiabs.utils.DataSource;
 import org.apache.hadoop.conf.Configuration;
@@ -111,19 +112,14 @@ public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource 
 	}
 
 	@Override
-	public Graph bootstrap(Dataset dataset) {
+	public BootstrapResult bootstrap(Dataset dataset) {
 		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
 
 		String pathcsv = "src/main/resources/artwork.parquet";
 
 		ParquetBootstrap_with_DataFrame_MM_without_Jena parquet = new ParquetBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), pathcsv);
 
-		return bootstrapG;
-	}
-
-	@Override
-	public String getWrapper(Dataset dataset) {
-		return null;
+		return new BootstrapResult(bootstrapG, this.wrapper);
 	}
 }
 
