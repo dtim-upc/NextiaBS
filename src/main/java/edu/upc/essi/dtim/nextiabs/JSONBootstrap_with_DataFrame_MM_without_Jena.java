@@ -159,7 +159,7 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
             String iri_k = createIRI( k_prime );
             G_source.addTriple(iri_k, RDF.type,DataFrame_MM.Data);
             if( v.getValueType() == JsonValue.ValueType.OBJECT || v.getValueType() == JsonValue.ValueType.ARRAY)
-                G_source.addTripleLiteral(iri_k, RDFS.label, "has "+k_prime);
+                G_source.addTripleLiteral(iri_k, RDFS.label, "has_"+k_prime);
             else {
                 G_source.addTripleLiteral(iri_k, RDFS.label, k_prime);
             }
