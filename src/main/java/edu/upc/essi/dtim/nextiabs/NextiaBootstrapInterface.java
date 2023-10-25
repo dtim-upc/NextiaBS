@@ -6,4 +6,6 @@ import edu.upc.essi.dtim.nextiabs.utils.BootstrapResult;
 
 public interface NextiaBootstrapInterface {
     BootstrapResult bootstrap(Dataset dataset);
+
+    Graph bootstrapGraph(Dataset dataset);
 }

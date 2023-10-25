@@ -1,6 +1,7 @@
 package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.ParquetDataset;
 import edu.upc.essi.dtim.NextiaCore.graph.CoreGraphFactory;
 import edu.upc.essi.dtim.NextiaCore.graph.Graph;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -115,11 +116,24 @@ public class ParquetBootstrap_with_DataFrame_MM_without_Jena extends DataSource 
 	public BootstrapResult bootstrap(Dataset dataset) {
 		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
 
-		String pathcsv = "src/main/resources/artwork.parquet";
-
-		ParquetBootstrap_with_DataFrame_MM_without_Jena parquet = new ParquetBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), pathcsv);
+		ParquetBootstrap_with_DataFrame_MM_without_Jena parquet = new ParquetBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((ParquetDataset) dataset).getPath());
 
 		return new BootstrapResult(bootstrapG, this.wrapper);
+	}
+
+	@Override
+	public Graph bootstrapGraph(Dataset dataset) {
+		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+
+		ParquetBootstrap_with_DataFrame_MM_without_Jena parquet = new ParquetBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((ParquetDataset) dataset).getPath());
+
+		try {
+			bootstrapG = parquet.bootstrapSchema();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return bootstrapG;
 	}
 }
 

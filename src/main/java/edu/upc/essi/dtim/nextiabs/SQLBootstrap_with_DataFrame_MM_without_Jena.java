@@ -192,6 +192,7 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
     @Override
     public BootstrapResult bootstrap(Dataset dataset) {
         Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+        String wrapperG;
 
         SQLBootstrap_with_DataFrame_MM_without_Jena sql =
                 new SQLBootstrap_with_DataFrame_MM_without_Jena(
@@ -205,7 +206,31 @@ public class SQLBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
                         ((RelationalJDBCRepository) dataset.getRepository()).getPassword(),
                         "odin_test");
         bootstrapG = sql.bootstrapSchema();
-        return new BootstrapResult(bootstrapG, this.wrapper);
+        wrapperG = sql.wrapper;
+
+        return new BootstrapResult(bootstrapG, wrapperG);
+    }
+
+    @Override
+    public Graph bootstrapGraph(Dataset dataset) {
+        Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+        String wrapperG;
+
+        SQLBootstrap_with_DataFrame_MM_without_Jena sql =
+                new SQLBootstrap_with_DataFrame_MM_without_Jena(
+                        dataset.getId(),
+                        "odin_test",
+                        ((SQLDataset) dataset).getTableName(),
+                        new PostgresSQLImpl(),//Database type: postgres, mysql...
+                        ((SQLDataset) dataset).getHostname(),
+                        ((SQLDataset) dataset).getPort(),
+                        ((RelationalJDBCRepository) dataset.getRepository()).getUsername(),
+                        ((RelationalJDBCRepository) dataset.getRepository()).getPassword(),
+                        "odin_test");
+        bootstrapG = sql.bootstrapSchema();
+        wrapperG = sql.wrapper;
+
+        return bootstrapG;
     }
 
 }

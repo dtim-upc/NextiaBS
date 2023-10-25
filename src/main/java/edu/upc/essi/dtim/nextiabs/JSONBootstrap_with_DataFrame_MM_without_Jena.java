@@ -2,8 +2,6 @@ package edu.upc.essi.dtim.nextiabs;
 
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.JsonDataset;
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.SQLDataset;
-import edu.upc.essi.dtim.NextiaCore.datasources.dataset.XmlDataset;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.Formats;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.RDF;
@@ -394,15 +392,33 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
     @Override
     public BootstrapResult bootstrap(Dataset dataset) {
         Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+        String wrapperG;
 
         JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
         try {
             bootstrapG = json.bootstrapSchema();
+            wrapperG = json.wrapper;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return new BootstrapResult(bootstrapG, this.wrapper);
+        return new BootstrapResult(bootstrapG, wrapperG);
+    }
+
+    @Override
+    public Graph bootstrapGraph(Dataset dataset) {
+        Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+        String wrapperG;
+
+        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
+        try {
+            bootstrapG = json.bootstrapSchema();
+            wrapperG = json.wrapper;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return bootstrapG;
     }
 
 }

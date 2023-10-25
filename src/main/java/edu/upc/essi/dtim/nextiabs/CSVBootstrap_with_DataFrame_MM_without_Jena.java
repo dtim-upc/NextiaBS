@@ -112,11 +112,28 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((CsvDataset) dataset).getPath());
 		try {
 			bootstrapG = csv.bootstrapSchema();
+			wrapperG = csv.wrapper;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
-		return new BootstrapResult(bootstrapG, this.wrapper);
+        return new BootstrapResult(bootstrapG, wrapperG);
+	}
+
+	@Override
+	public Graph bootstrapGraph(Dataset dataset) {
+		Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
+		String wrapperG;
+
+		CSVBootstrap_with_DataFrame_MM_without_Jena csv = new CSVBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((CsvDataset) dataset).getPath());
+		try {
+			bootstrapG = csv.bootstrapSchema();
+			wrapperG = csv.wrapper;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return bootstrapG;
 	}
 }
 
