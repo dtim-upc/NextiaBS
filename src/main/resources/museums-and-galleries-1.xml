@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museums>
+  <somethingElse>
+          <lvl1>
+            <lvl2>
+              <lvl3.1>
+                aaaaaaaaaaaaaaaa
+              </lvl3.1>
+                <lvl3.2>
+                    bbbbbbbbbbbbbbbb
+                </lvl3.2>
+            </lvl2>
+          </lvl1>
+  </somethingElse>
+  <museum>
+    <name>
+      American Folk Art Museum
+    </name>
+    <phone>
+      212-265-1040
+    </phone>
+    <address>
+      45 W. 53rd St. (at Fifth Ave.)
+    </address>
+    <closing>
+      Closed: Monday
+    </closing>
+    <rates>
+      admission: $9; seniors/students, $7; under 12, free
+    </rates>
+    <specials>
+      Pay-what-you-wish: Friday after 5:30pm; refreshments and music available
+    </specials>
+  </museum>
+  <museum>
+    <name>
+      American Museum of Natural History
+    </name>
+    <phone>
+      212-769-5200
+    </phone>
+    <address>
+      Central Park West (at W. 79th St.)
+    </address>
+    <closing>
+      Closed: Thanksgiving Day and Christmas Day
+    </closing>
+    <rates>
+      suggested admission: $16; seniors/students, $12; kids 2-12, $9; under 2, free
+    </rates>
+    <specials>
+      Pay-what-you-wish: Friday after 5:30pm; refreshments and music available
+    </specials>
+  </museum>
+</museums>

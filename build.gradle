@@ -25,8 +25,22 @@ dependencies {
     implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4'
     implementation group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
 
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    //implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+//    implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.24'
+
+
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
     implementation 'org.apache.spark:spark-sql_2.13:3.3.2'
+
+    implementation group: 'org.apache.parquet', name: 'parquet-hadoop', version: '1.10.0'
+    implementation group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.3.6'
+
 
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
@@ -36,4 +50,43 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+task uberJar(type: Jar) {
+    duplicatesStrategy = 'exclude'
+    archiveClassifier = 'uber'
+    zip64(true)
+
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+
+//para copiar la versión actualizada de NextiaCore y NextiaDI (modificar segun ruta propia)
+def nextiaCoreJarPath = '../NextiaCore/build/libs/nextiacore-0.0.2-SNAPSHOT-uber.jar'
+
+task importExternalJar {
+    doLast {
+        //creamos la carpeta lib si no existe
+        def libFolder = new File("..\\NextiaBS\\lib")
+
+        if (!libFolder.exists()) {
+            libFolder.mkdir()
+        }
+
+        //////////////////////////COPIAR NEXTIACORE JAR
+        configurations.compileClasspath.files.find { it.name == 'nextiacore-0.0.2-SNAPSHOT-uber.jar' }?.delete()
+        configurations.compileClasspath.files.find { it.name == 'NextiaCore.jar' }?.delete()
+
+        copy {
+            from nextiaCoreJarPath
+            into "..\\NextiaBS\\lib"
+            rename { 'NextiaCore.jar' }
+        }
+        /////////////////////////////////////////////////
+    }
 }
