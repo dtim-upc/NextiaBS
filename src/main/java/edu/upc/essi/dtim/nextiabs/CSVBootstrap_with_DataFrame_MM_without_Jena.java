@@ -68,8 +68,8 @@ public class CSVBootstrap_with_DataFrame_MM_without_Jena extends DataSource impl
 
 		});
 
-		String select =  parser.getHeaderNames().stream().map(a ->{ return  a +" AS "+ a.replace(".","_"); }).collect(Collectors.joining(","));
-		wrapper = "SELECT " + select  + " FROM " + name;
+		String select =  parser.getHeaderNames().stream().map(a ->{ return  "`" + a + "` AS `" + a.replace(".","_") + "`"; }).collect(Collectors.joining(","));
+		wrapper = "SELECT " + select  + " FROM `" + name + "`";
 
 		//TODO: implement metadata
 //		if(generateMetadata)
