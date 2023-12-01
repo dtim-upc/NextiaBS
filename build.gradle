@@ -61,9 +61,16 @@ task uberJar(type: Jar) {
 
     dependsOn configurations.runtimeClasspath
     from {
-        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect {
+            zipTree(it).matching {
+                exclude 'org/slf4j/**'
+                exclude 'log4j/**'
+                // Add more exclusions as needed
+            }
+        }
     }
 }
+
 
 
 //para copiar la versión actualizada de NextiaCore y NextiaDI (modificar segun ruta propia)
