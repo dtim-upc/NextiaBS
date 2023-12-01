@@ -12,7 +12,7 @@ public class BootstrapFactory {
     public static NextiaBootstrapInterface getInstance(Dataset dataset) throws Exception {
         if (dataset instanceof CsvDataset) {
             instance = new CSVBootstrap_with_DataFrame_MM_without_Jena();
-        } else if (dataset instanceof JsonDataset) {
+        } else if (dataset instanceof JsonDataset || dataset instanceof APIDataset) {
             instance = new JSONBootstrap_with_DataFrame_MM_without_Jena();
         } else if (dataset instanceof SQLDataset) {
             instance = new SQLBootstrap_with_DataFrame_MM_without_Jena();

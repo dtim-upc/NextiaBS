@@ -1,5 +1,6 @@
 package edu.upc.essi.dtim.nextiabs;
 
+import edu.upc.essi.dtim.NextiaCore.datasources.dataset.APIDataset;
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.Dataset;
 import edu.upc.essi.dtim.NextiaCore.datasources.dataset.JsonDataset;
 import edu.upc.essi.dtim.NextiaCore.vocabulary.DataSourceVocabulary;
@@ -393,8 +394,16 @@ public class JSONBootstrap_with_DataFrame_MM_without_Jena extends DataSource imp
     public BootstrapResult bootstrap(Dataset dataset) {
         Graph bootstrapG = CoreGraphFactory.createGraphInstance("normal");
         String wrapperG;
+        String path = "";
+        if (dataset instanceof APIDataset) {
+            path = ((APIDataset) dataset).getJsonPath();
+        }
+        else if (dataset instanceof JsonDataset) {
+            path = ((JsonDataset) dataset).getPath();
+        }
+        System.out.println("PATHHHHHHHHHH " + path);
+        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), path);
 
-        JSONBootstrap_with_DataFrame_MM_without_Jena json = new JSONBootstrap_with_DataFrame_MM_without_Jena(dataset.getId(), dataset.getDatasetName(), ((JsonDataset) dataset).getPath());
         try {
             bootstrapG = json.bootstrapSchema();
             wrapperG = json.wrapper;
